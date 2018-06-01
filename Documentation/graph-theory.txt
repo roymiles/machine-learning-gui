@@ -1,0 +1,37 @@
+Relevant graph theory derivations
+
+Let x=[x_1   x_2   x_3 … x_N ]
+Where x is the blocks in the graph
+
+The edges can be represented as an N×N matrix, where the columns are the directed edges coming out of vertex x_n
+
+
+	e.g. [x_1   x_2   x_3 ][0 0 0; 1 0 0; 0 1 0]
+	
+This represents the vertices x_1,x_2,x_3  connected in order
+
+For simplicity (at early stage) there shall be no loops and no more than one edge coming out of any given vertex
+
+No Loops
+	- E.g. A=[0 0 0; 1 0 0; 0 1 0],  indicates a self loop, the leading diagonal should be all zeros
+	
+	-  A=[0 0 1; 1 0 0; 0 1 0],  x_3  is connected back to x_1  indicating a loop
+
+There should always be a source and a sink. A sink exists if there is a row in the edge matrix that is all zeros
+The lack of symmetry along the leading diagonal (which is typical in an adjacency matrix) is because of each node has a distinct input and output port.
+	- In fact, there should not be any symmetry about the leading diagonal, else this will indicate a loop
+
+	- A self-loop (verifying the non-symmetric nature of the graph) can be identified if A^2?0 
+	
+[0 0 1; 1 0 0; 0 1 0][0 0 1; 1 0 0; 0 1 0] = [0 0 0]
+
+[0 1 0; 1 0 0; 0 1 0][0 1 0; 1 0 0; 0 1 0] = [1 0 0]
+
+
+More complex loops are more difficult to identify, as in the x_1?x_2?x_3?x_1  example.
+
+I think, if the graph has a non-zero determinant, then a loop must exist.
+
+det[0 0 0; 1 0 0; 0 1 0] = 0
+
+det[0 0 1; 1 0 0; 0 1 0] = 1 ? non-zero determinant, therefore a loop?

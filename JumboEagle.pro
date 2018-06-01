@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
+QT       += opengl
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = JumboEagle
@@ -22,20 +22,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    Graph/graphicsscene.cpp \
-    Graph/graphcontroller.cpp \
-    Graph/block.cpp
+    block.cpp \
+    graphwidget.cpp
 
 HEADERS += \
         mainwindow.h \
     debug.h \
-    Graph/graphicsscene.h \
-    Graph/graphcontroller.h \
-    Graph/block.h
+    block.h \
+    mainwindow.h \
+    graphwidget.h
 
 FORMS += \
         mainwindow.ui \
@@ -45,3 +43,5 @@ DISTFILES += \
 
 SUBDIRS += \
     JumboEagle.pro
+
+LIBS += opengl32.lib

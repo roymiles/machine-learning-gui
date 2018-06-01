@@ -4,8 +4,10 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QWidget>
+#include <QSlider>
 
-#include "Graph/graphcontroller.h"
+#include "graphwidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,13 +21,18 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    void keyPressEvent(QKeyEvent *event);
+
 private slots:
     void on_addBlock_clicked();
 
 private:
     Ui::MainWindow *ui;
 
-    GraphController *gc;
+    //GraphController *gc;
+    //GLWidget *glWidget;
+    GraphWidget *graphWidget;
 };
 
 #endif // MAINWINDOW_H

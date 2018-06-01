@@ -1,0 +1,63 @@
+======================================
+idea proposal and unique selling point
+======================================
+
+To build a graphical interface for connecting machine learning blocks together to form a complete model.
+The model can then be trained and evaluating using forward inference and back-propagation.
+Custom blocks can be designed and integrated into the environment.
+The application will leverage the Tensorflow framework to enable all the modern ML features.
+
+Complete machine learning models can then be abstracted away to form a black box, which can then be used to build higher-order machine learning models.
+
+GNU Radio
+GNU radio is an open-source toolkit that provides signal processing blocks to implement software radios.
+	- C++ or Python
+	- Real-time, high throughput requirements
+	- Lots of built in blocks
+	- Easy to use GUI
+	- Can add new custom blocks
+	- Tagged streams for synchronised output
+	- Data expressed as samples in floating point, complex, integer format
+	- Not really any focus on ML components, inference, training etc
+
+NVIDIA DIGITS
+Browser based application for visually designing neural networks (predominantly CNNs)
+	- GPU acceleration
+	- Good visualisation and performance metrics
+	- Completely interactive
+	- No room for extending functionality, adding custom blocks
+
+Excel Net
+www.deepexcel.net/paper.pdf
+
+Neural network console (Sony)
+https://dl.sony.com
+	- Very clean, modern user interface
+	- No room for abstraction
+	- Clear training and evaluation stages
+	- Does not offer room for extending functionality / integrating into existing projects
+	- Only on windows (maybe a disadvantage)
+
+Aetros
+www.aetros.com May be relevant
+
+Cadence
+	- Once blocks are tested, they can be reused and abstracted away
+	- This type of approach can be used after blocks are trained
+
+MATLAB Neural Network Toolbox
+	- MATLAB is slow
+	- More of a ML library really
+
+Unique selling point (USP)
+	- Leverage upon Tensorflow framework.
+		? This aids in the integration into existing ML projects
+		? Unlike existing applications which completely abstract away the programming and internal models
+	- Hierarchical structure, similar to cadence, for aiding in component reuse and abstraction.
+		? Models can be concatenated together and abstracted away to hide the internals.
+
+	- Other useful complimentary features
+	- Effective deployment onto heterogeneous applications.
+		? A sequential series of block computation could be accelerated 
+		on an FGPA device using HLS (this would mean that the data structures must be synthesizable)
+	- Cross platform (including embedded environment) using Qt.

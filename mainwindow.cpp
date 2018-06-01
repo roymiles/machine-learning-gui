@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QGraphicsRectItem>
+#include <QKeyEvent>
+#include <iostream>
 
 #include "debug.h"
 
@@ -9,9 +10,22 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    // Add the widget elements that have been added graphically
     ui->setupUi(this);
 
-    gc = new GraphController(ui->graphicsView);
+    graphWidget = new GraphWidget(this);
+    ui->gridLayout->addWidget(graphWidget);
+
+
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *e)
+{
+    // Exit application if user presses ESC
+    if (e->key() == Qt::Key_Escape)
+        close();
+    else
+        QWidget::keyPressEvent(e);
 }
 
 MainWindow::~MainWindow()
@@ -21,7 +35,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_addBlock_clicked()
 {
-    Debug::Log("Button clicked");
-
-    gc->addBlock();
+    std::cout << "Adding block" << std::endl;
+    graphWidget->addBlock();
 }
