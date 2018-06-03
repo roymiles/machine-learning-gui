@@ -26,17 +26,24 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     block.cpp \
-    graphwidget.cpp
+    graphwidget.cpp \
+    link.cpp \
+    filemanager.cpp \
+    addblockdialog.cpp
 
 HEADERS += \
         mainwindow.h \
     debug.h \
     block.h \
     mainwindow.h \
-    graphwidget.h
+    graphwidget.h \
+    link.h \
+    filemanager.h \
+    addblockdialog.h
 
 FORMS += \
         mainwindow.ui \
+    addblockdialog.ui
 
 DISTFILES += \
     bg.svg
@@ -45,3 +52,32 @@ SUBDIRS += \
     JumboEagle.pro
 
 LIBS += opengl32.lib
+
+INCLUDEPATH += Dependencies\opencv-2.4.13.6\opencv\build\include
+INCLUDEPATH += Dependencies\darkstyle\framelesswindow
+INCLUDEPATH += Dependencies\darkstyle
+
+LIBS += -L"C:/Users/Roy/Documents/JumboEagle/Dependencies/opencv-2.4.13.6/opencv/build/x86/vc14/lib"
+#        LIBS += "-lopencv_calib3d2413"
+#        LIBS += "-lopencv_contrib2413"
+        LIBS += -lopencv_core2413
+#        LIBS += "-lopencv_features2d2413"
+#        LIBS += "-lopencv_flann2413"
+#        LIBS += "-lopencv_gpu2413"
+#        LIBS += "-lopencv_highgui2413"
+#        LIBS += "-lopencv_imgproc2413"
+#        LIBS += "-lopencv_legacy2413"
+#        LIBS += "-lopencv_ml2413"
+#        LIBS += "-lopencv_nonfree2413"
+#        LIBS += "-lopencv_objdetect2413"
+#        LIBS += "-lopencv_ocl2413"
+#        LIBS += "-lopencv_photo2413"
+#        LIBS += "-lopencv_stitching2413"
+#        LIBS += "-lopencv_superres2413"
+#        LIBS += "-lopencv_ts2413"
+#        LIBS += "-lopencv_video2413"
+#        LIBS += "-lopencv_videostab2413"
+
+RESOURCES += \
+    Dependencies/darkstyle/framelesswindow.qrc \
+    Dependencies/darkstyle/darkstyle.qrc

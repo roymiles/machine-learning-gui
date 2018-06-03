@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "debug.h"
+#include "addblockdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -36,5 +37,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_addBlock_clicked()
 {
     std::cout << "Adding block" << std::endl;
-    graphWidget->addBlock();
+    /*AddBlockDialog addBlockDialog;
+    addBlockDialog.setModal(true);
+    addBlockDialog.exec();*/
+
+    graphWidget->addBlock("hi");
 }

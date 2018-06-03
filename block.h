@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPoint>
+#include <string>
 
 class Block
 {
@@ -20,6 +21,12 @@ public:
     int getW();
     int getH();
 
+    QPoint getInputPos();
+    QPoint getOutputPos();
+
+    void setName(std::string name);
+    std::string getName();
+
     // Returns true if the coordinates are inside this block
     bool insideBlock(QPoint point);
 
@@ -27,6 +34,9 @@ public:
 
 private:
     int x, y, w, h;
+    int portWidth, portHeight;
+
+    std::string name;
 };
 
 #endif // BLOCK_H
