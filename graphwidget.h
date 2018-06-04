@@ -7,9 +7,10 @@
 #include <string>
 
 #include "block.h"
+#include "mycustomblock.h" //TODO: can't include every type of block
 #include "link.h"
 
-#include <opencv2/opencv.hpp>
+//#include <opencv2/opencv.hpp>
 
 class GraphWidget : public QWidget
 {

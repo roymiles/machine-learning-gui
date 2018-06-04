@@ -11,7 +11,7 @@ GraphWidget::GraphWidget(QWidget *parent) : QWidget(parent)
 
 void GraphWidget::addBlock(std::string name)
 {
-    Block *b = new Block(0, 0, 50, 50);
+    Block *b = static_cast<Block*>(new MyCustomBlock(0, 0, 50, 50));
     b->setName(name);
 
     blocks.push_back(b);
@@ -37,16 +37,16 @@ void GraphWidget::paintEvent(QPaintEvent* e)
     //std::cout << "Painting" << std::endl;
     for(auto const &b : blocks)
     {
-        b->draw(this);
+        b->draw(&painter);
     }
 
-    // TEST
-    if(blocks.size() == 2)
-    {
-        QPainter painter2(this);
-        //painter2.drawLine(blocks[0]->getX(), blocks[0]->getY(), blocks[1]->getX(), blocks[1]->getY());
-        painter2.drawLine(blocks[0]->getOutputPos(), blocks[1]->getInputPos());
-    }
+//    // TEST
+//    if(blocks.size() == 2)
+//    {
+//        QPainter painter2(this);
+//        //painter2.drawLine(blocks[0]->getX(), blocks[0]->getY(), blocks[1]->getX(), blocks[1]->getY());
+//        painter2.drawLine(blocks[0]->getOutputPos(), blocks[1]->getInputPos());
+//    }
 }
 
 void GraphWidget::mousePressEvent(QMouseEvent* e)

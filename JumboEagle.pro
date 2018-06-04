@@ -25,21 +25,29 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    block.cpp \
     graphwidget.cpp \
     link.cpp \
     filemanager.cpp \
-    addblockdialog.cpp
+    addblockdialog.cpp \
+    inputport.cpp \
+    port.cpp \
+    customblock.cpp \
+    block.cpp \
+    mycustomblock.cpp
 
 HEADERS += \
         mainwindow.h \
     debug.h \
-    block.h \
     mainwindow.h \
     graphwidget.h \
     link.h \
     filemanager.h \
-    addblockdialog.h
+    addblockdialog.h \
+    inputport.h \
+    port.h \
+    customblock.h \
+    block.h \
+    mycustomblock.h
 
 FORMS += \
         mainwindow.ui \
@@ -51,16 +59,16 @@ DISTFILES += \
 SUBDIRS += \
     JumboEagle.pro
 
-LIBS += opengl32.lib
+#LIBS += opengl32.lib
 
-INCLUDEPATH += Dependencies\opencv-2.4.13.6\opencv\build\include
-INCLUDEPATH += Dependencies\darkstyle\framelesswindow
-INCLUDEPATH += Dependencies\darkstyle
+#INCLUDEPATH += Dependencies\opencv-2.4.13.6\opencv\build\include
+#INCLUDEPATH += Dependencies\darkstyle\framelesswindow
+#INCLUDEPATH += Dependencies\darkstyle
 
-LIBS += -L"C:/Users/Roy/Documents/JumboEagle/Dependencies/opencv-2.4.13.6/opencv/build/x86/vc14/lib"
+#LIBS += -L"C:/Users/Roy/Documents/JumboEagle/Dependencies/opencv-2.4.13.6/opencv/build/x86/vc14/lib"
 #        LIBS += "-lopencv_calib3d2413"
 #        LIBS += "-lopencv_contrib2413"
-        LIBS += -lopencv_core2413
+#        LIBS += -lopencv_core2413
 #        LIBS += "-lopencv_features2d2413"
 #        LIBS += "-lopencv_flann2413"
 #        LIBS += "-lopencv_gpu2413"
@@ -78,6 +86,6 @@ LIBS += -L"C:/Users/Roy/Documents/JumboEagle/Dependencies/opencv-2.4.13.6/opencv
 #        LIBS += "-lopencv_video2413"
 #        LIBS += "-lopencv_videostab2413"
 
-RESOURCES += \
-    Dependencies/darkstyle/framelesswindow.qrc \
-    Dependencies/darkstyle/darkstyle.qrc
+#RESOURCES += \
+#    Dependencies/darkstyle/framelesswindow.qrc \
+#    Dependencies/darkstyle/darkstyle.qrc

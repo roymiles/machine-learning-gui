@@ -1,7 +1,7 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
-#include <QWidget>
+#include <QPainter>
 #include <QPoint>
 #include <string>
 
@@ -11,7 +11,7 @@ public:
     Block();
     Block(int x, int y, int width, int height);
 
-    void draw(QWidget *canvas);
+    virtual void draw(QPainter *painter) = 0;
 
     void setX(int x);
     void setY(int y);
@@ -21,8 +21,8 @@ public:
     int getW();
     int getH();
 
-    QPoint getInputPos();
-    QPoint getOutputPos();
+//    QPoint getInputPos();
+//    QPoint getOutputPos();
 
     void setName(std::string name);
     std::string getName();
@@ -34,7 +34,6 @@ public:
 
 private:
     int x, y, w, h;
-    int portWidth, portHeight;
 
     std::string name;
 };
