@@ -26,8 +26,6 @@ public:
     GraphWidget(QWidget *parent=0);
 
     void addBlock(std::string name);
-    // Connect two blocks together. Output of block1 is connected to input of block2
-    void connectBlocks(Block *block1, Block *block2);
 
 protected:
     void paintEvent(QPaintEvent*);
@@ -43,7 +41,7 @@ private:
     std::vector<Edge*> edges;
 
     // The current block that is being moved around, see mousePressEvent
-    Block* activeBlock;
+    Block **activeBlock;
 
     state curState;
 

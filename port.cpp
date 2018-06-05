@@ -26,5 +26,5 @@ int Port::getH()
 }
 
 QPoint Port::getCenter(){
-    return QPoint(x+ w/2, y+ h/2);
+    return QPoint(x + w/2, y + h/2);
 }

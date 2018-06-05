@@ -10,8 +10,6 @@ Block::Block()
     y = 0;
     w = 50;
     h = 50;
-
-    active = false;
 }
 
 Block::Block(int x, int y, int width, int height)
@@ -20,8 +18,6 @@ Block::Block(int x, int y, int width, int height)
     this->y = y;
     this->w = width;
     this->h = height;
-
-    active = false;
 }
 
 void Block::setX(int x)
@@ -70,5 +66,3 @@ std::string Block::getName()
 {
     return this->name;
 }
-
-

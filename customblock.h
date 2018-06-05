@@ -26,8 +26,6 @@ public:
     std::vector<InputPort*> inputPorts;
     std::vector<OutputPort*> outputPorts;
 
-
-private:
     Port* activePort;
 };
 

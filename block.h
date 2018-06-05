@@ -36,12 +36,6 @@ public:
     void setName(std::string name);
     std::string getName();
 
-    // Returns true if the coordinates are inside this block
-    bool insideBlock(QPoint point);
-
-    // True if the block is being dragged
-    bool active;
-
 private:
     int x, y, w, h;
     std::string name;

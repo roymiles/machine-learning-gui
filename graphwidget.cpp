@@ -5,14 +5,15 @@
 #include <iostream>
 #include "inputport.h"
 #include "outputport.h"
+#include <QDebug>
 
 GraphWidget::GraphWidget(QWidget *parent) : QWidget(parent)
 {
+    setMouseTracking(false);
     curState = state::IDLE;
     std::cout << "Width = " << width() << ", Height = " << height() << std::endl;
     start = nullptr;
-    end = nullptr;
-    setMouseTracking(true);
+    end   = nullptr;
 }
 
 void GraphWidget::addBlock(std::string name)
@@ -22,8 +23,6 @@ void GraphWidget::addBlock(std::string name)
 
     blocks.push_back(b);
 
-    // Expand the size of the adjacency Mat
-
     this->update(); // Re-paints the canvas
 }
 
@@ -31,8 +30,7 @@ void GraphWidget::paintEvent(QPaintEvent* e)
 {
     // Draw the background
     QPainter painter(this);
-    QPixmap pixmap("Resources/bg.png");
-    //painter.drawLine(0, 0, 20, 20);
+    QPixmap pixmap(":/Resources/bg.png");
     // Tile the background
     const int width = 50;
     const int height = 50;
@@ -53,41 +51,42 @@ void GraphWidget::paintEvent(QPaintEvent* e)
 
     if(curState == state::DRAWING){
         if(start == nullptr && end != nullptr){
-            //painter.drawLine(end->getCenter(), cursorPos);
-            painter.drawLine(0, 0, 100, 100);
+            painter.drawLine(end->getCenter(), cursorPos);
         }
         else if (end == nullptr && start != nullptr) {
-            painter.drawLine(0, 0, 100, 100);
+            painter.drawLine(start->getCenter(), cursorPos);
         }
     }
 }
 
 void GraphWidget::mousePressEvent(QMouseEvent* e)
 {
-    //std::cout << "Mouse press" << std::endl;
+    std::cout << "Mouse press" << std::endl;
     // Check if clicking on a block
-    for(auto const &b : blocks)
+    for(size_t i = 0; i < blocks.size(); i++)
     {
         bool hit = true;
-        switch(b->mousePressEvent(e->pos()))
+        switch(blocks[i]->mousePressEvent(e->pos()))
         {
             case clickType::block:
-                activeBlock = b;
-                activeBlock->active = true;
+                activeBlock = &(blocks[i]);
                 break;
             case clickType::inPort:
+                activeBlock = nullptr;
                 // Clicking on port for first time
                 if(curState == state::IDLE){
                     curState = state::DRAWING;
-                    end = (InputPort*)b->getActivePort();
+                    setMouseTracking(true); // Trigger mouse event without mouse click when in drawing state
+                    end = (InputPort*)blocks[i]->getActivePort();
                     std::cout << "Start drawing line" << std::endl;
                 }
                 // Clicking on port for second time, making the edge
                 else if(curState == state::DRAWING){
                     curState = state::IDLE;
-                    end = (InputPort*)b->getActivePort();
+                    setMouseTracking(false);
+                    end = (InputPort*)blocks[i]->getActivePort();
 
-                    if(!(start == nullptr || end == nullptr)){
+                    if(start != nullptr && end != nullptr){
                         Edge* edge = new Edge(start, end);
                         edges.push_back(edge);
 
@@ -99,16 +98,19 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 }
                 break;
             case clickType::outPort:
+                activeBlock = nullptr;
                 if(curState == state::IDLE){
                     curState = state::DRAWING;
-                    start = (OutputPort*)b->getActivePort();
+                    setMouseTracking(true); // Trigger mouse event without mouse click when in drawing state
+                    start = (OutputPort*)blocks[i]->getActivePort();
                     std::cout << "Start drawing line" << std::endl;
                 }
                 else if(curState == state::DRAWING){
                     curState = state::IDLE;
-                    start = (OutputPort*)b->getActivePort(); // TODO: downcasting is bad
+                    setMouseTracking(false);
+                    start = (OutputPort*)blocks[i]->getActivePort(); // TODO: downcasting is bad
 
-                    if(!(start == nullptr || end == nullptr)){
+                    if(start != nullptr && end != nullptr){
                         Edge* edge = new Edge(start, end);
                         edges.push_back(edge);
 
@@ -120,32 +122,37 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 }
                 break;
             case clickType::none:
+                activeBlock = nullptr;
                 hit = false;
                 break;
         }
 
         if(hit) break;
     }
+
 }
 
 void GraphWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if(curState == state::DRAWING){
         cursorPos = e->pos();
+        this->update(); // Re-draw canvas
     }
-//    std::cout << "Mouse move, x = " << e->pos().x() << ", y = " << e->pos().y() << std::endl;
+    std::cout << "Mouse move, x = " << e->pos().x() << ", y = " << e->pos().y() << std::endl;
     if(activeBlock != nullptr)
     {
         // Need to offset the position by half the width and height of the box
         QPoint p = e->pos();
-        p.setX(p.x() - activeBlock->getW()/2);
-        p.setY(p.y() - activeBlock->getH()/2);
+        p.setX(p.x() - (*activeBlock)->getW()/2);
+        p.setY(p.y() - (*activeBlock)->getH()/2);
 
         // Move the block
-        activeBlock->setPos(p);
-    }
+        (*activeBlock)->setPos(p);
 
-    this->update();
+        // Redraw canvas
+        this->update();
+
+    }
 }
 
 void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
@@ -153,7 +160,7 @@ void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
     //std::cout << "Mouse release" << std::endl;
     if(activeBlock != nullptr)
     {
-        activeBlock->active = false;
+        std::cout << (*activeBlock)->getName() << std::endl;
         activeBlock = nullptr;
     }
 }
