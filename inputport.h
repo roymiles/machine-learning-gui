@@ -9,8 +9,7 @@ class InputPort : public Port
 {
 public:
     InputPort(Block *parentBlock);
-    void draw(QPainter *painter);
-
+    void draw(QPainter *painter) override;
 private:
     Block *parentBlock;
 };

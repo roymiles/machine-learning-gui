@@ -60,23 +60,6 @@ int Block::getH()
     return h;
 }
 
-//QPoint Block::getInputPos()
-//{
-//   const int inputX = x - portWidth;
-//   const int inputY = y + h/2;
-//   QPoint centerPoint(inputX, inputY);
-
-//   return centerPoint;
-//}
-
-//QPoint Block::getOutputPos()
-//{
-//    const int outputX = x + w + portWidth;
-//    const int outputY = y + h/2;
-//    QPoint centerPoint(outputX, outputY);
-
-//    return centerPoint;
-//}
 
 void Block::setName(std::string name)
 {

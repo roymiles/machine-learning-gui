@@ -8,10 +8,10 @@ OutputPort::OutputPort(Block *parentBlock)
 
 void OutputPort::draw(QPainter *painter)
 {
-    const int w = parentBlock->getW() /4;
-    const int h = parentBlock->getH()/4;
-    const int x = parentBlock->getX() + parentBlock->getW();
-    const int y = parentBlock->getY() + parentBlock->getH()/2 - h/2;
+    w = parentBlock->getW() /4;
+    h = parentBlock->getH()/4;
+    x = parentBlock->getX() + parentBlock->getW();
+    y = parentBlock->getY() + parentBlock->getH()/2 - h/2;
 
     QRect rectangle(x, y, w, h);
 

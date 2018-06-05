@@ -9,7 +9,7 @@ class OutputPort : public Port
 {
 public:
     OutputPort(Block *parentBlock);
-    void draw(QPainter *painter);
+    void draw(QPainter *painter) override;
 private:
     Block *parentBlock;
 };

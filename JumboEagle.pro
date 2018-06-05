@@ -49,7 +49,8 @@ HEADERS += \
     customblock.h \
     block.h \
     mycustomblock.h \
-    outputport.h
+    outputport.h \
+    utilities.h
 
 FORMS += \
         mainwindow.ui \

@@ -55,12 +55,25 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
     // Check if clicking on a block
     for(auto const &b : blocks)
     {
-        if(b->insideBlock(e->pos()))
-        {
-            activeBlock = b;
-            activeBlock->active = true;
-            break;
+//        if(b->insideBlock(e->pos()))
+//        {
+//            activeBlock = b;
+//            activeBlock->active = true;
+//            break;
+//        }
+        switch(b->mousePressEvent(e->pos())){
+            case clickType::block:
+                activeBlock = b;
+                activeBlock->active = true;
+                break;
+            case clickType::inPort:
+                std::cout << "Clicked input port" << std::endl;
+                break;
+            case clickType::outPort:
+                std::cout << "Clicked output port" << std::endl;
+                break;
         }
+
     }
 }
 
