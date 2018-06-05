@@ -20,11 +20,15 @@ public:
     CustomBlock();
     CustomBlock(int x, int y, int width, int height);
     void draw(QPainter *painter) override;
-    clickType mousePressEvent(QPoint point);
-
-private:
+    void setActivePort(Port* port) override;
+    Port* getActivePort() override;
+    clickType mousePressEvent(QPoint point) override;
     std::vector<InputPort*> inputPorts;
     std::vector<OutputPort*> outputPorts;
+
+
+private:
+    Port* activePort;
 };
 
 #endif // CUSTOMBLOCK_H

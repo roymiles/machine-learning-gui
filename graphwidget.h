@@ -8,7 +8,8 @@
 
 #include "block.h"
 #include "mycustomblock.h" //TODO: can't include every type of block
-#include "link.h"
+#include "edge.h"
+#include "port.h"
 
 //#include <opencv2/opencv.hpp>
 
@@ -29,26 +30,29 @@ public:
     void connectBlocks(Block *block1, Block *block2);
 
 protected:
-  void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*);
 
-  virtual void mousePressEvent(QMouseEvent*);
-  virtual void mouseMoveEvent(QMouseEvent*);
-  virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
 
-  void drawConnection();
+    void drawConnection();
 
 private:
-  std::vector<Block*> blocks;
+    std::vector<Block*> blocks;
+    std::vector<Edge*> edges;
 
-  // This matrix describes all the connections between blocks
-  //Matb adjacencyMat;
-  //cv::Mat a;
+    // The current block that is being moved around, see mousePressEvent
+    Block* activeBlock;
 
-  // The current block that is being moved around, see mousePressEvent
-  Link* link;
-  Block* activeBlock;
+    state curState;
 
-  state curState;
+    // This is for drawing a link between two ports
+    OutputPort *start;
+    InputPort *end;
+
+    // Mouse position
+    QPoint cursorPos;
 
 };
 

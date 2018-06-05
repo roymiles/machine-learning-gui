@@ -26,7 +26,6 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     graphwidget.cpp \
-    link.cpp \
     filemanager.cpp \
     addblockdialog.cpp \
     inputport.cpp \
@@ -34,14 +33,14 @@ SOURCES += \
     customblock.cpp \
     block.cpp \
     mycustomblock.cpp \
-    outputport.cpp
+    outputport.cpp \
+    edge.cpp
 
 HEADERS += \
         mainwindow.h \
     debug.h \
     mainwindow.h \
     graphwidget.h \
-    link.h \
     filemanager.h \
     addblockdialog.h \
     inputport.h \
@@ -50,7 +49,8 @@ HEADERS += \
     block.h \
     mycustomblock.h \
     outputport.h \
-    utilities.h
+    utilities.h \
+    edge.h
 
 FORMS += \
         mainwindow.ui \

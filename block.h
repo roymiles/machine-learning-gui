@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QPoint>
 #include <string>
+#include "port.h"
 
 // Checks where a click takes place
 enum clickType{
@@ -21,6 +22,8 @@ public:
 
     virtual void draw(QPainter *painter) = 0;
     virtual clickType mousePressEvent(QPoint point) = 0;
+    virtual void setActivePort(Port *port) = 0;
+    virtual Port* getActivePort() = 0;
 
     void setX(int x);
     void setY(int y);
@@ -36,6 +39,7 @@ public:
     // Returns true if the coordinates are inside this block
     bool insideBlock(QPoint point);
 
+    // True if the block is being dragged
     bool active;
 
 private:

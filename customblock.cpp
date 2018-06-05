@@ -38,16 +38,24 @@ clickType CustomBlock::mousePressEvent(QPoint point){
     for(auto const &ip : inputPorts){
         if(point.x() > ip->getX() && point.y() > ip->getY() && point.x() < ip->getX() + ip->getW() && point.y() < ip->getY() + ip->getH())
         {
-            ip->activePort = true;
+            setActivePort(ip);
             return clickType::inPort;
         }
     }
     for(auto const &op : outputPorts){
         if(point.x() > op->getX() && point.y() > op->getY() && point.x() < op->getX() + op->getW() && point.y() < op->getY() + op->getH())
         {
-            op->activePort = true;
+            setActivePort(op);
             return clickType::outPort;
         }
     }
     return clickType::none;
+}
+
+void CustomBlock::setActivePort(Port* port){
+    activePort = port;
+}
+
+Port* CustomBlock::getActivePort(){
+    return activePort;
 }

@@ -3,11 +3,16 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <iostream>
+#include "inputport.h"
+#include "outputport.h"
 
 GraphWidget::GraphWidget(QWidget *parent) : QWidget(parent)
 {
     curState = state::IDLE;
     std::cout << "Width = " << width() << ", Height = " << height() << std::endl;
+    start = nullptr;
+    end = nullptr;
+    setMouseTracking(true);
 }
 
 void GraphWidget::addBlock(std::string name)
@@ -35,19 +40,26 @@ void GraphWidget::paintEvent(QPaintEvent* e)
         for(int y = 0; y < this->height(); y += height)
             painter.drawPixmap(x, y, width, height, pixmap);
 
-    //std::cout << "Painting" << std::endl;
+    // Draw ports and blocks
     for(auto const &b : blocks)
     {
         b->draw(&painter);
     }
+    // Draw all edges
+    for(auto const &e : edges)
+    {
+        e->draw(&painter);
+    }
 
-//    // TEST
-//    if(blocks.size() == 2)
-//    {
-//        QPainter painter2(this);
-//        //painter2.drawLine(blocks[0]->getX(), blocks[0]->getY(), blocks[1]->getX(), blocks[1]->getY());
-//        painter2.drawLine(blocks[0]->getOutputPos(), blocks[1]->getInputPos());
-//    }
+    if(curState == state::DRAWING){
+        if(start == nullptr && end != nullptr){
+            //painter.drawLine(end->getCenter(), cursorPos);
+            painter.drawLine(0, 0, 100, 100);
+        }
+        else if (end == nullptr && start != nullptr) {
+            painter.drawLine(0, 0, 100, 100);
+        }
+    }
 }
 
 void GraphWidget::mousePressEvent(QMouseEvent* e)
@@ -64,12 +76,48 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 activeBlock->active = true;
                 break;
             case clickType::inPort:
-                curState = state::DRAWING;
-                std::cout << "Clicked input port" << std::endl;
+                // Clicking on port for first time
+                if(curState == state::IDLE){
+                    curState = state::DRAWING;
+                    end = (InputPort*)b->getActivePort();
+                    std::cout << "Start drawing line" << std::endl;
+                }
+                // Clicking on port for second time, making the edge
+                else if(curState == state::DRAWING){
+                    curState = state::IDLE;
+                    end = (InputPort*)b->getActivePort();
+
+                    if(!(start == nullptr || end == nullptr)){
+                        Edge* edge = new Edge(start, end);
+                        edges.push_back(edge);
+
+                        // The edge has been created so clear previous start and end
+                        start = nullptr;
+                        end = nullptr;
+                    }
+                    std::cout << "End drawing line" << std::endl;
+                }
                 break;
             case clickType::outPort:
-                curState = state::DRAWING;
-                std::cout << "Clicked output port" << std::endl;
+                if(curState == state::IDLE){
+                    curState = state::DRAWING;
+                    start = (OutputPort*)b->getActivePort();
+                    std::cout << "Start drawing line" << std::endl;
+                }
+                else if(curState == state::DRAWING){
+                    curState = state::IDLE;
+                    start = (OutputPort*)b->getActivePort(); // TODO: downcasting is bad
+
+                    if(!(start == nullptr || end == nullptr)){
+                        Edge* edge = new Edge(start, end);
+                        edges.push_back(edge);
+
+                        // The edge has been created so clear previous start and end
+                        start = nullptr;
+                        end = nullptr;
+                    }
+                    std::cout << "End drawing line" << std::endl;
+                }
                 break;
             case clickType::none:
                 hit = false;
@@ -82,7 +130,10 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
 
 void GraphWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    //std::cout << "Mouse move, x = " << e->pos().x() << ", y = " << e->pos().y() << std::endl;
+    if(curState == state::DRAWING){
+        cursorPos = e->pos();
+    }
+//    std::cout << "Mouse move, x = " << e->pos().x() << ", y = " << e->pos().y() << std::endl;
     if(activeBlock != nullptr)
     {
         // Need to offset the position by half the width and height of the box

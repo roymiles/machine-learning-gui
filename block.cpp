@@ -71,15 +71,4 @@ std::string Block::getName()
     return this->name;
 }
 
-bool Block::insideBlock(QPoint point)
-{
-    // Boundary check to see if coordinates lie inside the block
-    if(point.x() > this->x && point.y() > this->y && point.x() < this->x + this->w && point.y() < this->y + this->h)
-    {
-        return true;
-    }else{
-        return false;
-    }
-}
-
 

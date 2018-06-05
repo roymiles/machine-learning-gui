@@ -13,6 +13,8 @@ public:
     int getW();
     int getH();
     bool activePort;
+    QPoint getCenter();
+
 protected:
     int x, y, w, h; //TODO: add setters
 };
