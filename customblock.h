@@ -7,7 +7,9 @@
 #include "block.h"
 #include "port.h"
 
-// All user generated blocks are inherited from this
+/***
+ * Generic block with one input and one output port. All user blocks must inherit from this.
+ ***/
 
 class CustomBlock : public Block
 {

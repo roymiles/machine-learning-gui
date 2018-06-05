@@ -33,7 +33,8 @@ SOURCES += \
     port.cpp \
     customblock.cpp \
     block.cpp \
-    mycustomblock.cpp
+    mycustomblock.cpp \
+    outputport.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -47,7 +48,8 @@ HEADERS += \
     port.h \
     customblock.h \
     block.h \
-    mycustomblock.h
+    mycustomblock.h \
+    outputport.h
 
 FORMS += \
         mainwindow.ui \

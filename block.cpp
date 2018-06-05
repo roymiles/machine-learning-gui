@@ -8,8 +8,8 @@ Block::Block()
 {
     x = 0;
     y = 0;
-    w = 0;
-    h = 0;
+    w = 50;
+    h = 50;
 
     active = false;
 }

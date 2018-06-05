@@ -1,5 +1,6 @@
 #include "customblock.h"
 #include "inputport.h"
+#include "outputport.h"
 
 CustomBlock::CustomBlock() : Block(){
 
@@ -8,6 +9,8 @@ CustomBlock::CustomBlock() : Block(){
 CustomBlock::CustomBlock(int x, int y, int w, int h) : Block(x, y, w, h) {
     InputPort *ip = new InputPort(this); // "this" gets upcasted to Block
     ports.push_back(ip);
+    OutputPort *op = new OutputPort(this); // "this" gets upcasted to Block
+    ports.push_back(op);
 }
 
 void CustomBlock::draw(QPainter *painter){

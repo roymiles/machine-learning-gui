@@ -11,7 +11,7 @@ GraphWidget::GraphWidget(QWidget *parent) : QWidget(parent)
 
 void GraphWidget::addBlock(std::string name)
 {
-    Block *b = static_cast<Block*>(new MyCustomBlock(0, 0, 50, 50));
+    Block *b = static_cast<Block*>(new MyCustomBlock(100, 100, 100, 100));
     b->setName(name);
 
     blocks.push_back(b);
@@ -25,7 +25,7 @@ void GraphWidget::paintEvent(QPaintEvent* e)
 {
     // Draw the background
     QPainter painter(this);
-    QPixmap pixmap("C:/Users/Roy/Documents/JumboEagle/bg.png");
+    QPixmap pixmap("Resources/bg.png");
     //painter.drawLine(0, 0, 20, 20);
     // Tile the background
     const int width = 50;
