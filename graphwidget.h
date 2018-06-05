@@ -12,6 +12,11 @@
 
 //#include <opencv2/opencv.hpp>
 
+enum state {
+    IDLE,
+    DRAWING
+};
+
 class GraphWidget : public QWidget
 {
   Q_OBJECT
@@ -42,6 +47,8 @@ private:
   // The current block that is being moved around, see mousePressEvent
   Link* link;
   Block* activeBlock;
+
+  state curState;
 
 };
 

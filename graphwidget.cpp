@@ -6,6 +6,7 @@
 
 GraphWidget::GraphWidget(QWidget *parent) : QWidget(parent)
 {
+    curState = state::IDLE;
     std::cout << "Width = " << width() << ", Height = " << height() << std::endl;
 }
 
@@ -55,25 +56,27 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
     // Check if clicking on a block
     for(auto const &b : blocks)
     {
-//        if(b->insideBlock(e->pos()))
-//        {
-//            activeBlock = b;
-//            activeBlock->active = true;
-//            break;
-//        }
-        switch(b->mousePressEvent(e->pos())){
+        bool hit = true;
+        switch(b->mousePressEvent(e->pos()))
+        {
             case clickType::block:
                 activeBlock = b;
                 activeBlock->active = true;
                 break;
             case clickType::inPort:
+                curState = state::DRAWING;
                 std::cout << "Clicked input port" << std::endl;
                 break;
             case clickType::outPort:
+                curState = state::DRAWING;
                 std::cout << "Clicked output port" << std::endl;
+                break;
+            case clickType::none:
+                hit = false;
                 break;
         }
 
+        if(hit) break;
     }
 }
 

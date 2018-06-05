@@ -1,3 +1,4 @@
 Dependencies/opencv-3.4.1/
 Dependencies/
 *.DS_Store
+mainwindow.ui.autosave
