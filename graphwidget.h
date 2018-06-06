@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QMouseEvent>
+#include <QTabWidget>
 #include <vector>
 #include <string>
 
@@ -24,7 +25,7 @@ class GraphWidget : public QWidget
   Q_OBJECT
 
 public:
-    GraphWidget(QWidget *parent=0);
+    GraphWidget(QWidget *parent=0, QTabWidget *tabWidget=0); // Takes in tabWidget, because need graphWidget to add new tabs and stuff
 
     void addBlock(std::string name);
 
@@ -37,8 +38,7 @@ protected:
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void mouseReleaseEvent(QMouseEvent*);
-
-    void drawConnection();
+    virtual void mouseDoubleClickEvent(QMouseEvent*);
 
 private:
     std::vector<Block*> blocks;
@@ -61,6 +61,8 @@ private:
 
     float zoomX, zoomY;
     int translateX, translateY;
+
+    QTabWidget *tabWidget;
 
 };
 

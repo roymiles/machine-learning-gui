@@ -14,10 +14,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // Add the widget elements that have been added graphically
     ui->setupUi(this);
 
-    graphWidget = new GraphWidget(this);
-    ui->gridLayout->addWidget(graphWidget);
-
-
+    graphWidget = new GraphWidget(this, ui->tabWidget);
+    //ui->gridLayout->addWidget(graphWidget);
+    ui->tabWidget->addTab(graphWidget, "Flow graph");
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)

@@ -7,8 +7,9 @@
 #include "outputport.h"
 #include <QDebug>
 #include <QMatrix>
+#include <QPlainTextEdit>
 
-GraphWidget::GraphWidget(QWidget *parent) : QWidget(parent)
+GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(parent)
 {
     setMouseTracking(false);
     curState = state::IDLE;
@@ -19,6 +20,7 @@ GraphWidget::GraphWidget(QWidget *parent) : QWidget(parent)
     zoomY = 1.0;
     translateX = 1;
     translateY = 1;
+    this->tabWidget = tabWidget;
 }
 
 void GraphWidget::addBlock(std::string name)
@@ -31,6 +33,9 @@ void GraphWidget::addBlock(std::string name)
     this->update(); // Re-paints the canvas
 }
 
+/*
+ *  All painting to the graph widget must be done within this function
+ */
 void GraphWidget::paintEvent(QPaintEvent* e)
 {
     // Draw the background
@@ -60,6 +65,7 @@ void GraphWidget::paintEvent(QPaintEvent* e)
         e->draw(&painter);
     }
 
+    // If in the DRAWING state, want to draw from the previously clicked port to the mouse position
     if(curState == state::DRAWING){
         if(start == nullptr && end != nullptr){
             painter.drawLine(end->getCenter(), cursorPos);
@@ -70,6 +76,13 @@ void GraphWidget::paintEvent(QPaintEvent* e)
     }
 }
 
+/*
+ * When pressing the mouse button, loop through all the blocks and check if clicking on the block itself,
+ * or any of its ports.
+ * If clicking on a block, want to be able to drag and move the block around
+ * If clicking on a port (for the first time) want to enter the DRAWING state, where a line is drawn from the port to the mouse
+ * Then, after clicking another port, create the link between these two ports.
+ */
 void GraphWidget::mousePressEvent(QMouseEvent* e)
 {
     std::cout << "Mouse press" << std::endl;
@@ -77,28 +90,39 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
     // Check if clicking on a block
     for(size_t i = 0; i < blocks.size(); i++)
     {
-        bool hit = true;
-        switch(blocks[i]->mousePressEvent(e->pos()))
+        bool hit = true; // Once a click event has been triggered (on either a block or a port), exit out of the loop
+        clickType c = blocks[i]->mousePressEvent(e->pos());
+        switch(c)
         {
             case clickType::block:
                 activeBlock = &(blocks[i]);
                 break;
+
+            // The following click events have similar functionality, and so are grouped together
             case clickType::inPort:
+            case clickType::outPort:
+
+                // Set the start and end port depending on the click event
+                if(c == clickType::inPort)
+                {
+                    end   = (InputPort*)blocks[i]->getActivePort();
+                }else{
+                    start = (OutputPort*)blocks[i]->getActivePort(); // TODO: downcasting is bad
+                }
+
                 activeBlock = nullptr;
                 // Clicking on port for first time
                 if(curState == state::IDLE){
                     curState = state::DRAWING;
                     setMouseTracking(true); // Trigger mouse event without mouse click when in drawing state
-                    end = (InputPort*)blocks[i]->getActivePort();
                     std::cout << "Start drawing line" << std::endl;
                 }
                 // Clicking on port for second time, making the edge
                 else if(curState == state::DRAWING){
                     curState = state::IDLE;
                     setMouseTracking(false);
-                    end = (InputPort*)blocks[i]->getActivePort();
 
-                    if(start != nullptr && end != nullptr){
+                    if(start != nullptr && end != nullptr){ // Only create the edge, if we have both the input and outport ports
                         Edge* edge = new Edge(start, end);
                         edges.push_back(edge);
 
@@ -106,38 +130,16 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                         start = nullptr;
                         end = nullptr;
                     }
+
                     std::cout << "End drawing line" << std::endl;
                 }
                 break;
-            case clickType::outPort:
-                activeBlock = nullptr;
-                if(curState == state::IDLE){
-                    curState = state::DRAWING;
-                    setMouseTracking(true); // Trigger mouse event without mouse click when in drawing state
-                    start = (OutputPort*)blocks[i]->getActivePort();
-                    std::cout << "Start drawing line" << std::endl;
-                }
-                else if(curState == state::DRAWING){
-                    curState = state::IDLE;
-                    setMouseTracking(false);
-                    start = (OutputPort*)blocks[i]->getActivePort(); // TODO: downcasting is bad
 
-                    if(start != nullptr && end != nullptr){
-                        Edge* edge = new Edge(start, end);
-                        edges.push_back(edge);
-
-                        // The edge has been created so clear previous start and end
-                        start = nullptr;
-                        end = nullptr;
-                    }
-                    std::cout << "End drawing line" << std::endl;
-                }
-                break;
             case clickType::none:
                 //curState = state::PANNING;
                 //panPos = e->pos(); // Reference pos
                 activeBlock = nullptr;
-                hit = false;
+                hit = false; // No click events triggered, go onto the next block
                 break;
         }
 
@@ -146,6 +148,10 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
 
 }
 
+/*
+ * If in the DRAWING state, update the cursorPos based on the current mouse position
+ * If there is an active block (dragging and moving a block) then move this block to the mouse position
+ */
 void GraphWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if(curState == state::DRAWING)
@@ -184,6 +190,9 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
     }*/
 }
 
+/*
+ * When releasing the mouse button, remove any active blocks.
+ */
 void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
 {
     //std::cout << "Mouse release" << std::endl;
@@ -198,6 +207,24 @@ void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
         // Exit out of the panning state
         curState = state::IDLE;
     }*/
+}
+
+/*
+ * When double clicking on a block, want to open the text editor for the block.
+ */
+void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
+{
+    std::cout << "Doubling clicking" << std::endl;
+    for(auto const &b : blocks)
+    {
+        if(b->mousePressEvent(e->pos()) == clickType::block)
+        {
+            QPlainTextEdit *textEdit = new QPlainTextEdit();
+            this->tabWidget->addTab(textEdit, "new ting");
+            std::cout << "You clicked on a block" << std::endl;
+            break;
+        }
+    }
 }
 
 void GraphWidget::zoomIn()
