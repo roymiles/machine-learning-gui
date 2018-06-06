@@ -43,3 +43,13 @@ void MainWindow::on_addBlock_clicked()
 
     graphWidget->addBlock("hi");
 }
+
+void MainWindow::on_zoomOut_clicked()
+{
+    graphWidget->zoomOut();
+}
+
+void MainWindow::on_zoomIn_clicked()
+{
+    graphWidget->zoomIn();
+}

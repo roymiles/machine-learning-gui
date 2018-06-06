@@ -6,6 +6,7 @@
 #include "inputport.h"
 #include "outputport.h"
 #include <QDebug>
+#include <QMatrix>
 
 GraphWidget::GraphWidget(QWidget *parent) : QWidget(parent)
 {
@@ -14,6 +15,10 @@ GraphWidget::GraphWidget(QWidget *parent) : QWidget(parent)
     std::cout << "Width = " << width() << ", Height = " << height() << std::endl;
     start = nullptr;
     end   = nullptr;
+    zoomX = 1.0;
+    zoomY = 1.0;
+    translateX = 1;
+    translateY = 1;
 }
 
 void GraphWidget::addBlock(std::string name)
@@ -30,6 +35,12 @@ void GraphWidget::paintEvent(QPaintEvent* e)
 {
     // Draw the background
     QPainter painter(this);
+
+    QMatrix matrix;
+    matrix.translate(translateX, translateY);
+    matrix.scale(zoomX, zoomY);
+    painter.setMatrix(matrix);
+
     QPixmap pixmap(":/Resources/bg.png");
     // Tile the background
     const int width = 50;
@@ -62,6 +73,7 @@ void GraphWidget::paintEvent(QPaintEvent* e)
 void GraphWidget::mousePressEvent(QMouseEvent* e)
 {
     std::cout << "Mouse press" << std::endl;
+
     // Check if clicking on a block
     for(size_t i = 0; i < blocks.size(); i++)
     {
@@ -122,6 +134,8 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 }
                 break;
             case clickType::none:
+                curState = state::PANNING;
+                panPos = e->pos(); // Reference pos
                 activeBlock = nullptr;
                 hit = false;
                 break;
@@ -134,11 +148,13 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
 
 void GraphWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    if(curState == state::DRAWING){
+    if(curState == state::DRAWING)
+    {
         cursorPos = e->pos();
         this->update(); // Re-draw canvas
     }
-    std::cout << "Mouse move, x = " << e->pos().x() << ", y = " << e->pos().y() << std::endl;
+
+    //std::cout << "Mouse move, x = " << e->pos().x() << ", y = " << e->pos().y() << std::endl;
     if(activeBlock != nullptr)
     {
         // Need to offset the position by half the width and height of the box
@@ -153,6 +169,19 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
         this->update();
 
     }
+
+    if(curState == state::PANNING)
+    {
+        // Panning the canvas
+
+        // Update the translation based on how much panned from click
+        translateX -= (panPos.x() - e->pos().x());
+        translateY -= (panPos.y() - e->pos().y());
+
+        panPos = e->pos(); // Update panning reference
+
+        this->update();
+    }
 }
 
 void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
@@ -163,4 +192,24 @@ void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
         std::cout << (*activeBlock)->getName() << std::endl;
         activeBlock = nullptr;
     }
+
+    if(curState == state::PANNING)
+    {
+        // Exit out of the panning state
+        curState = state::IDLE;
+    }
+}
+
+void GraphWidget::zoomIn()
+{
+    zoomX += 0.1;
+    zoomY += 0.1;
+    this->update();
+}
+
+void GraphWidget::zoomOut()
+{
+    zoomX -= 0.1;
+    zoomY -= 0.1;
+    this->update();
 }

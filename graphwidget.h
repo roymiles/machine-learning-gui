@@ -15,7 +15,8 @@
 
 enum state {
     IDLE,
-    DRAWING
+    DRAWING,
+    PANNING
 };
 
 class GraphWidget : public QWidget
@@ -26,6 +27,9 @@ public:
     GraphWidget(QWidget *parent=0);
 
     void addBlock(std::string name);
+
+    void zoomIn();
+    void zoomOut();
 
 protected:
     void paintEvent(QPaintEvent*);
@@ -49,8 +53,14 @@ private:
     OutputPort *start;
     InputPort *end;
 
-    // Mouse position
+    // The last position for panning reference
+    QPoint panPos;
+
+    // Mouse position for when in the DRAWING state
     QPoint cursorPos;
+
+    float zoomX, zoomY;
+    int translateX, translateY;
 
 };
 

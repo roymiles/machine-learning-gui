@@ -27,6 +27,10 @@ protected:
 private slots:
     void on_addBlock_clicked();
 
+    void on_zoomOut_clicked();
+
+    void on_zoomIn_clicked();
+
 private:
     Ui::MainWindow *ui;
 
