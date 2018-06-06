@@ -36,10 +36,10 @@ void GraphWidget::paintEvent(QPaintEvent* e)
     // Draw the background
     QPainter painter(this);
 
-    QMatrix matrix;
-    matrix.translate(translateX, translateY);
-    matrix.scale(zoomX, zoomY);
-    painter.setMatrix(matrix);
+    //QMatrix matrix;
+    //matrix.translate(translateX, translateY);
+    //matrix.scale(zoomX, zoomY);
+    //painter.setMatrix(matrix);
 
     QPixmap pixmap(":/Resources/bg.png");
     // Tile the background
@@ -134,8 +134,8 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 }
                 break;
             case clickType::none:
-                curState = state::PANNING;
-                panPos = e->pos(); // Reference pos
+                //curState = state::PANNING;
+                //panPos = e->pos(); // Reference pos
                 activeBlock = nullptr;
                 hit = false;
                 break;
@@ -170,7 +170,7 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
 
     }
 
-    if(curState == state::PANNING)
+    /*if(curState == state::PANNING)
     {
         // Panning the canvas
 
@@ -181,7 +181,7 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
         panPos = e->pos(); // Update panning reference
 
         this->update();
-    }
+    }*/
 }
 
 void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
@@ -193,23 +193,25 @@ void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
         activeBlock = nullptr;
     }
 
-    if(curState == state::PANNING)
+    /*if(curState == state::PANNING)
     {
         // Exit out of the panning state
         curState = state::IDLE;
-    }
+    }*/
 }
 
 void GraphWidget::zoomIn()
 {
-    zoomX += 0.1;
+    /*zoomX += 0.1;
     zoomY += 0.1;
-    this->update();
+    this->update();*/
+    std::cout << "Zooming disabled" << std::endl;
 }
 
 void GraphWidget::zoomOut()
 {
-    zoomX -= 0.1;
+    /*zoomX -= 0.1;
     zoomY -= 0.1;
-    this->update();
+    this->update();*/
+    std::cout << "Zooming disabled" << std::endl;
 }

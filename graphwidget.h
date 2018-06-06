@@ -15,8 +15,8 @@
 
 enum state {
     IDLE,
-    DRAWING,
-    PANNING
+    DRAWING
+    //PANNING
 };
 
 class GraphWidget : public QWidget
@@ -54,9 +54,9 @@ private:
     InputPort *end;
 
     // The last position for panning reference
-    QPoint panPos;
+    //QPoint panPos;
 
-    // Mouse position for when in the DRAWING state
+    // Mouse position for when in the DRAWING state. Will draw from a port to this point
     QPoint cursorPos;
 
     float zoomX, zoomY;
