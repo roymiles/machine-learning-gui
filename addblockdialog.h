@@ -2,6 +2,7 @@
 #define ADDBLOCKDIALOG_H
 
 #include <QDialog>
+#include "graphwidget.h"
 
 namespace Ui {
 class AddBlockDialog;
@@ -15,8 +16,19 @@ public:
     explicit AddBlockDialog(QWidget *parent = 0);
     ~AddBlockDialog();
 
+    void setGraphWidget(GraphWidget *graphWidget);
+
+private slots:
+    void on_AddBlockDialog_finished(int result);
+
+    void on_AddBlockConfirmButton_accepted();
+
+    void on_AddBlockConfirmButton_rejected();
+
 private:
     Ui::AddBlockDialog *ui;
+
+    GraphWidget *graphWidget;
 };
 
-#endif // ADDBLOCK_H
+#endif // ADDBLOCKDIALOG_H

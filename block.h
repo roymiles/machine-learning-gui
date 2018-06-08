@@ -3,7 +3,7 @@
 
 #include <QPainter>
 #include <QPoint>
-#include <string>
+#include <QString>
 #include "port.h"
 
 // Checks where a click takes place
@@ -33,12 +33,12 @@ public:
     int getW();
     int getH();
 
-    void setName(std::string name);
-    std::string getName();
+    void setName(QString name);
+    QString getName();
 
 private:
     int x, y, w, h;
-    std::string name;
+    QString name;
 };
 
 #endif // BLOCK_H

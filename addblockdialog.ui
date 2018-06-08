@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>AddBlockDialog</class>
- <widget class="QDialog" name="addBlock">
+ <widget class="QDialog" name="AddBlockDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -53,38 +53,5 @@
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>AddBlockConfirmButton</sender>
-   <signal>accepted()</signal>
-   <receiver>AddBlockDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>AddBlockConfirmButton</sender>
-   <signal>rejected()</signal>
-   <receiver>AddBlockDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

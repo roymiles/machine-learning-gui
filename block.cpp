@@ -57,12 +57,12 @@ int Block::getH()
 }
 
 
-void Block::setName(std::string name)
+void Block::setName(QString name)
 {
     this->name = name;
 }
 
-std::string Block::getName()
+QString Block::getName()
 {
     return this->name;
 }

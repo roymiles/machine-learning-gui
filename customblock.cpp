@@ -20,6 +20,9 @@ void CustomBlock::draw(QPainter *painter){
     painter->fillRect(rectangle, Qt::white);
     painter->drawRect(rectangle);
 
+    // Write name inside block
+    painter->drawText(rectangle, Qt::AlignCenter, getName());
+
     // Draw ports
     for(auto const &ip : inputPorts){
         ip->draw(painter);

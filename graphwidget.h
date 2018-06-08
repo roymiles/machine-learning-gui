@@ -4,8 +4,9 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QTabWidget>
+#include <QString>
 #include <vector>
-#include <string>
+//#include <string> Use QString instead of std::string, as more restrictive on encoding
 
 #include "block.h"
 #include "mycustomblock.h" //TODO: can't include every type of block
@@ -27,7 +28,7 @@ class GraphWidget : public QWidget
 public:
     GraphWidget(QWidget *parent=0, QTabWidget *tabWidget=0); // Takes in tabWidget, because need graphWidget to add new tabs and stuff
 
-    void addBlock(std::string name);
+    void addBlock(QString name);
 
     void zoomIn();
     void zoomOut();

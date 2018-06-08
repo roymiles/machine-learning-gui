@@ -2,7 +2,7 @@
 
 #include <QPainter>
 #include <QMouseEvent>
-#include <iostream>
+//#include <iostream> Use qDebug instead
 #include "inputport.h"
 #include "outputport.h"
 #include <QDebug>
@@ -13,7 +13,7 @@ GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(paren
 {
     setMouseTracking(false);
     curState = state::IDLE;
-    std::cout << "Width = " << width() << ", Height = " << height() << std::endl;
+    //std::cout << "Width = " << width() << ", Height = " << height() << std::endl;
     start = nullptr;
     end   = nullptr;
     zoomX = 1.0;
@@ -23,8 +23,9 @@ GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(paren
     this->tabWidget = tabWidget;
 }
 
-void GraphWidget::addBlock(std::string name)
+void GraphWidget::addBlock(QString name)
 {
+    qDebug() << "Block name = " << name;
     Block *b = static_cast<Block*>(new MyCustomBlock(100, 100, 100, 100));
     b->setName(name);
 
@@ -85,7 +86,7 @@ void GraphWidget::paintEvent(QPaintEvent* e)
  */
 void GraphWidget::mousePressEvent(QMouseEvent* e)
 {
-    std::cout << "Mouse press" << std::endl;
+    //std::cout << "Mouse press" << std::endl;
 
     // Check if clicking on a block
     for(size_t i = 0; i < blocks.size(); i++)
@@ -115,7 +116,7 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 if(curState == state::IDLE){
                     curState = state::DRAWING;
                     setMouseTracking(true); // Trigger mouse event without mouse click when in drawing state
-                    std::cout << "Start drawing line" << std::endl;
+                    //std::cout << "Start drawing line" << std::endl;
                 }
                 // Clicking on port for second time, making the edge
                 else if(curState == state::DRAWING){
@@ -131,7 +132,7 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                         end = nullptr;
                     }
 
-                    std::cout << "End drawing line" << std::endl;
+                    //std::cout << "End drawing line" << std::endl;
                 }
                 break;
 
@@ -198,7 +199,7 @@ void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
     //std::cout << "Mouse release" << std::endl;
     if(activeBlock != nullptr)
     {
-        std::cout << (*activeBlock)->getName() << std::endl;
+        qDebug() << (*activeBlock)->getName();
         activeBlock = nullptr;
     }
 
@@ -214,14 +215,14 @@ void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
  */
 void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
 {
-    std::cout << "Doubling clicking" << std::endl;
+    //std::cout << "Doubling clicking" << std::endl;
     for(auto const &b : blocks)
     {
         if(b->mousePressEvent(e->pos()) == clickType::block)
         {
             QPlainTextEdit *textEdit = new QPlainTextEdit();
-            this->tabWidget->addTab(textEdit, "new ting");
-            std::cout << "You clicked on a block" << std::endl;
+            this->tabWidget->addTab(textEdit, b->getName());
+            //std::cout << "You clicked on a block" << std::endl;
             break;
         }
     }
@@ -232,7 +233,7 @@ void GraphWidget::zoomIn()
     /*zoomX += 0.1;
     zoomY += 0.1;
     this->update();*/
-    std::cout << "Zooming disabled" << std::endl;
+    qDebug() << "Zooming disabled";
 }
 
 void GraphWidget::zoomOut()
@@ -240,5 +241,5 @@ void GraphWidget::zoomOut()
     /*zoomX -= 0.1;
     zoomY -= 0.1;
     this->update();*/
-    std::cout << "Zooming disabled" << std::endl;
+    qDebug() << "Zooming disabled";
 }
