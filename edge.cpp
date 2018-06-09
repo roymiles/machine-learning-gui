@@ -5,7 +5,7 @@ Edge::Edge()
 
 }
 
-Edge::Edge(OutputPort *start, InputPort *end)
+Edge::Edge(std::shared_ptr<OutputPort> start, std::shared_ptr<InputPort> end)
 {
     this->start = start;
     this->end   = end;

@@ -2,6 +2,7 @@
 #define EDGE_H
 
 #include <QPainter>
+#include <memory>
 #include "inputport.h"
 #include "outputport.h"
 
@@ -9,13 +10,13 @@ class Edge
 {
 public:
     Edge();
-    Edge(OutputPort *start, InputPort *end);
+    Edge(std::shared_ptr<OutputPort> start, std::shared_ptr<InputPort> end);
 
     void draw(QPainter *painter);
 
 private:
-    OutputPort *start;
-    InputPort *end;
+    std::shared_ptr<OutputPort> start;
+    std::shared_ptr<InputPort> end;
 };
 
 #endif // EDGE_H

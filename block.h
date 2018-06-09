@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QPoint>
 #include <QString>
+#include <memory>
 #include "port.h"
 
 // Checks where a click takes place
@@ -22,8 +23,8 @@ public:
 
     virtual void draw(QPainter *painter) = 0;
     virtual clickType mousePressEvent(QPoint point) = 0;
-    virtual void setActivePort(Port *port) = 0;
-    virtual Port* getActivePort() = 0;
+    virtual void setActivePort(std::shared_ptr<Port> port) = 0;
+    virtual std::shared_ptr<Port> getActivePort() = 0;
 
     void setX(int x);
     void setY(int y);

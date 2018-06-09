@@ -26,10 +26,12 @@ GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(paren
 void GraphWidget::addBlock(QString name)
 {
     qDebug() << "Block name = " << name;
-    Block *b = static_cast<Block*>(new MyCustomBlock(100, 100, 100, 100));
-    b->setName(name);
+    // Probably lots of unnecessary copying, which can be optimised out
+    std::shared_ptr<MyCustomBlock> block = std::make_shared<MyCustomBlock>(100, 100, 100, 100);
+    //std::unique_ptr<Block> b(myCustomBlock);
+    block->setName(name);
 
-    blocks.push_back(b);
+    blocks.push_back(block);
 
     this->update(); // Re-paints the canvas
 }
@@ -89,14 +91,14 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
     //std::cout << "Mouse press" << std::endl;
 
     // Check if clicking on a block
-    for(size_t i = 0; i < blocks.size(); i++)
+    for(auto const &block : blocks)
     {
         bool hit = true; // Once a click event has been triggered (on either a block or a port), exit out of the loop
-        clickType c = blocks[i]->mousePressEvent(e->pos());
+        clickType c = block->mousePressEvent(e->pos());
         switch(c)
         {
             case clickType::block:
-                activeBlock = &(blocks[i]);
+                activeBlock = block;
                 break;
 
             // The following click events have similar functionality, and so are grouped together
@@ -106,9 +108,9 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 // Set the start and end port depending on the click event
                 if(c == clickType::inPort)
                 {
-                    end   = (InputPort*)blocks[i]->getActivePort();
+                    end   = std::static_pointer_cast<InputPort>(block->getActivePort());
                 }else{
-                    start = (OutputPort*)blocks[i]->getActivePort(); // TODO: downcasting is bad
+                    start = std::static_pointer_cast<OutputPort>(block->getActivePort()); // TODO: downcasting is bad
                 }
 
                 activeBlock = nullptr;
@@ -124,12 +126,12 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                     setMouseTracking(false);
 
                     if(start != nullptr && end != nullptr){ // Only create the edge, if we have both the input and outport ports
-                        Edge* edge = new Edge(start, end);
-                        edges.push_back(edge);
+                        std::unique_ptr<Edge> edge = std::make_unique<Edge>(start, end);
+                        edges.push_back(std::move(edge));
 
                         // The edge has been created so clear previous start and end
                         start = nullptr;
-                        end = nullptr;
+                        end   = nullptr;
                     }
 
                     //std::cout << "End drawing line" << std::endl;
@@ -166,11 +168,11 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
     {
         // Need to offset the position by half the width and height of the box
         QPoint p = e->pos();
-        p.setX(p.x() - (*activeBlock)->getW()/2);
-        p.setY(p.y() - (*activeBlock)->getH()/2);
+        p.setX(p.x() - activeBlock->getW()/2);
+        p.setY(p.y() - activeBlock->getH()/2);
 
         // Move the block
-        (*activeBlock)->setPos(p);
+        activeBlock->setPos(p);
 
         // Redraw canvas
         this->update();
@@ -199,7 +201,7 @@ void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
     //std::cout << "Mouse release" << std::endl;
     if(activeBlock != nullptr)
     {
-        qDebug() << (*activeBlock)->getName();
+        qDebug() << activeBlock->getName();
         activeBlock = nullptr;
     }
 
@@ -216,12 +218,12 @@ void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
 void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
 {
     //std::cout << "Doubling clicking" << std::endl;
-    for(auto const &b : blocks)
+    for(auto const &block : blocks)
     {
-        if(b->mousePressEvent(e->pos()) == clickType::block)
+        if(block->mousePressEvent(e->pos()) == clickType::block)
         {
             QPlainTextEdit *textEdit = new QPlainTextEdit();
-            this->tabWidget->addTab(textEdit, b->getName());
+            this->tabWidget->addTab(textEdit, block->getName());
             //std::cout << "You clicked on a block" << std::endl;
             break;
         }

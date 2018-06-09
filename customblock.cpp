@@ -5,9 +5,9 @@ CustomBlock::CustomBlock() : Block(){
 }
 
 CustomBlock::CustomBlock(int x, int y, int w, int h) : Block(x, y, w, h) {
-    InputPort *ip = new InputPort(this); // "this" gets upcasted to Block
+    std::shared_ptr<InputPort> ip = std::make_shared<InputPort>(this); // "this" gets upcasted to Block
     inputPorts.push_back(ip);
-    OutputPort *op = new OutputPort(this); // "this" gets upcasted to Block
+    std::shared_ptr<OutputPort> op = std::make_shared<OutputPort>(this); // "this" gets upcasted to Block
     outputPorts.push_back(op);
 }
 
@@ -55,10 +55,10 @@ clickType CustomBlock::mousePressEvent(QPoint point){
     return clickType::none;
 }
 
-void CustomBlock::setActivePort(Port* port){
+void CustomBlock::setActivePort(std::shared_ptr<Port> port){
     activePort = port;
 }
 
-Port* CustomBlock::getActivePort(){
+std::shared_ptr<Port> CustomBlock::getActivePort(){
     return activePort;
 }

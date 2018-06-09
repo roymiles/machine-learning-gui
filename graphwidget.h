@@ -6,6 +6,7 @@
 #include <QTabWidget>
 #include <QString>
 #include <vector>
+#include <memory>
 //#include <string> Use QString instead of std::string, as more restrictive on encoding
 
 #include "block.h"
@@ -42,17 +43,18 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent*);
 
 private:
-    std::vector<Block*> blocks;
-    std::vector<Edge*> edges;
+    std::vector<std::shared_ptr<Block>> blocks;
+    std::vector<std::unique_ptr<Edge>> edges;
 
     // The current block that is being moved around, see mousePressEvent
-    Block **activeBlock;
+    //Block **activeBlock;
+    std::shared_ptr<Block> activeBlock;
 
     state curState;
 
     // This is for drawing a link between two ports
-    OutputPort *start;
-    InputPort *end;
+    std::shared_ptr<OutputPort> start;
+    std::shared_ptr<InputPort> end;
 
     // The last position for panning reference
     //QPoint panPos;
