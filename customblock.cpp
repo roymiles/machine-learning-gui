@@ -5,9 +5,10 @@ CustomBlock::CustomBlock() : Block(){
 }
 
 CustomBlock::CustomBlock(int x, int y, int w, int h) : Block(x, y, w, h) {
-    std::shared_ptr<InputPort> ip = std::make_shared<InputPort>(this); // "this" gets upcasted to Block
+    // In both cases, "this" gets upcasted to Block
+    std::shared_ptr<InputPort> ip = std::make_shared<InputPort>(this);
     inputPorts.push_back(ip);
-    std::shared_ptr<OutputPort> op = std::make_shared<OutputPort>(this); // "this" gets upcasted to Block
+    std::shared_ptr<OutputPort> op = std::make_shared<OutputPort>(this);
     outputPorts.push_back(op);
 }
 

@@ -2,7 +2,8 @@
 #include "ui_addblockdialog.h"
 
 #include <QDebug>
-#include <iostream>
+#include <QMessageBox>
+#include "filemanager.h"
 
 AddBlockDialog::AddBlockDialog(QWidget *parent) :
     QDialog(parent),
@@ -26,13 +27,27 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
 {
     if(this->graphWidget != nullptr)
     {
-        this->graphWidget->addBlock(ui->BlockNameLineEdit->text());
+        // Validate file name
+        const QString fileName = ui->BlockNameLineEdit->text();
+        std::unique_ptr<FileManager> fileManager = std::make_unique<FileManager>(fileName);
+        if(fileManager->isValidFileName())
+        {
+            // Create the source file
+            fileManager->createSourceFile(); // Build boiler plate code
+
+            this->graphWidget->addBlock(fileName, std::move(fileManager));
+            this->close();
+        }else{
+            QMessageBox msgBox;
+            msgBox.setText("Invalid block name."); // Give more detail...
+            msgBox.exec();
+            // Don't close the add block dialog
+        }
     }else{
         // Give error message
         qDebug() << "graphWidget is null";
+        this->close();
     }
-
-    this->close();
 }
 
 void AddBlockDialog::setGraphWidget(GraphWidget *graphWidget)

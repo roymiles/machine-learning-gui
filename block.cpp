@@ -10,6 +10,7 @@ Block::Block()
     y = 0;
     w = 50;
     h = 50;
+    fileManager = nullptr;
 }
 
 Block::Block(int x, int y, int width, int height)
@@ -18,6 +19,7 @@ Block::Block(int x, int y, int width, int height)
     this->y = y;
     this->w = width;
     this->h = height;
+    fileManager = nullptr;
 }
 
 void Block::setX(int x)
@@ -62,7 +64,25 @@ void Block::setName(QString name)
     this->name = name;
 }
 
+void Block::setFileManager(std::unique_ptr<FileManager> fileManager)
+{
+    this->fileManager = std::move(fileManager);
+}
+
 QString Block::getName()
 {
     return this->name;
+}
+
+bool Block::loadSource()
+{
+    if(fileManager == nullptr)
+        return false;
+
+    return fileManager->loadSourceFile();
+}
+
+QPlainTextEdit* Block::getSource()
+{
+    return fileManager->getContent();
 }

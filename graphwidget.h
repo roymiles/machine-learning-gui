@@ -13,6 +13,7 @@
 #include "mycustomblock.h" //TODO: can't include every type of block
 #include "edge.h"
 #include "port.h"
+#include "filemanager.h"
 
 //#include <opencv2/opencv.hpp>
 
@@ -29,7 +30,7 @@ class GraphWidget : public QWidget
 public:
     GraphWidget(QWidget *parent=0, QTabWidget *tabWidget=0); // Takes in tabWidget, because need graphWidget to add new tabs and stuff
 
-    void addBlock(QString name);
+    void addBlock(QString name, std::unique_ptr<FileManager> fileManager);
 
     void zoomIn();
     void zoomOut();
@@ -66,6 +67,8 @@ private:
     int translateX, translateY;
 
     QTabWidget *tabWidget;
+
+    std::unique_ptr<FileManager> fileManager;
 
 };
 

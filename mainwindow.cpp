@@ -35,13 +35,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_addBlock_clicked()
 {
-    std::cout << "Adding block" << std::endl;
     AddBlockDialog addBlockDialog;
     addBlockDialog.setGraphWidget(this->graphWidget); // Inject graph widget so that dialog can call addBlock
     addBlockDialog.setModal(true);
     addBlockDialog.exec();
-
-    //graphWidget->addBlock("hi");
 }
 
 void MainWindow::on_zoomOut_clicked()

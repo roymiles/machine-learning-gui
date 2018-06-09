@@ -4,8 +4,10 @@
 #include <QPainter>
 #include <QPoint>
 #include <QString>
+#include <QTextEdit>
 #include <memory>
 #include "port.h"
+#include "filemanager.h"
 
 // Checks where a click takes place
 enum clickType{
@@ -36,10 +38,17 @@ public:
 
     void setName(QString name);
     QString getName();
+    void setFileManager(std::unique_ptr<FileManager> fileManager);
+
+    // Attempt to load source content
+    bool loadSource();
+    // After successfully loading the source, put it into a QTextEdit
+    QPlainTextEdit* getSource();
 
 private:
     int x, y, w, h;
     QString name;
+    std::unique_ptr<FileManager> fileManager; // Definately a unique pointer as only block needs to access
 };
 
 #endif // BLOCK_H

@@ -23,13 +23,13 @@ GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(paren
     this->tabWidget = tabWidget;
 }
 
-void GraphWidget::addBlock(QString name)
+void GraphWidget::addBlock(QString name, std::unique_ptr<FileManager> fileManager)
 {
     qDebug() << "Block name = " << name;
     // Probably lots of unnecessary copying, which can be optimised out
     std::shared_ptr<MyCustomBlock> block = std::make_shared<MyCustomBlock>(100, 100, 100, 100);
-    //std::unique_ptr<Block> b(myCustomBlock);
     block->setName(name);
+    block->setFileManager(std::move(fileManager));
 
     blocks.push_back(block);
 
@@ -108,9 +108,10 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 // Set the start and end port depending on the click event
                 if(c == clickType::inPort)
                 {
+                    // Downcasting could be avoided?
                     end   = std::static_pointer_cast<InputPort>(block->getActivePort());
                 }else{
-                    start = std::static_pointer_cast<OutputPort>(block->getActivePort()); // TODO: downcasting is bad
+                    start = std::static_pointer_cast<OutputPort>(block->getActivePort());
                 }
 
                 activeBlock = nullptr;
@@ -118,7 +119,6 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 if(curState == state::IDLE){
                     curState = state::DRAWING;
                     setMouseTracking(true); // Trigger mouse event without mouse click when in drawing state
-                    //std::cout << "Start drawing line" << std::endl;
                 }
                 // Clicking on port for second time, making the edge
                 else if(curState == state::DRAWING){
@@ -222,9 +222,11 @@ void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
     {
         if(block->mousePressEvent(e->pos()) == clickType::block)
         {
-            QPlainTextEdit *textEdit = new QPlainTextEdit();
-            this->tabWidget->addTab(textEdit, block->getName());
-            //std::cout << "You clicked on a block" << std::endl;
+            if(block->loadSource())
+            {
+                QPlainTextEdit* textEdit = block->getSource();
+                this->tabWidget->addTab(textEdit, block->getName());
+            }
             break;
         }
     }
