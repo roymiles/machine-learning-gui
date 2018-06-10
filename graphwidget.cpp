@@ -2,7 +2,6 @@
 
 #include <QPainter>
 #include <QMouseEvent>
-//#include <iostream> Use qDebug instead
 #include "inputport.h"
 #include "outputport.h"
 #include <QDebug>
@@ -226,6 +225,8 @@ void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
             {
                 QPlainTextEdit* textEdit = block->getSource();
                 this->tabWidget->addTab(textEdit, block->getName());
+                const int i = this->tabWidget->count(); // Total number of tabs open
+                this->tabWidget->setCurrentIndex(i-1);
             }
             break;
         }

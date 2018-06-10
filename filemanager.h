@@ -14,7 +14,9 @@ class FileManager
 public:
     FileManager();
     FileManager(QString fileName);
+    ~FileManager();
 
+    QString getCompleteFilePath();
     bool isValidFileName();
     bool createSourceFile();
 

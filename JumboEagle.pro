@@ -64,6 +64,7 @@ SUBDIRS += \
 
 #LIBS += opengl32.lib
 
+INCLUDEPATH += Dependencies\
 #INCLUDEPATH += Dependencies\opencv-2.4.13.6\opencv\build\include
 #INCLUDEPATH += Dependencies\darkstyle\framelesswindow
 #INCLUDEPATH += Dependencies\darkstyle

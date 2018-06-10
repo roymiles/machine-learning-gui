@@ -22,6 +22,7 @@ class Block
 public:
     Block();
     Block(int x, int y, int width, int height);
+    ~Block();
 
     virtual void draw(QPainter *painter) = 0;
     virtual clickType mousePressEvent(QPoint point) = 0;

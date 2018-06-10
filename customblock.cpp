@@ -1,4 +1,5 @@
 #include "customblock.h"
+#include "utilities.h" // insideRect
 
 CustomBlock::CustomBlock() : Block(){
 
@@ -10,6 +11,14 @@ CustomBlock::CustomBlock(int x, int y, int w, int h) : Block(x, y, w, h) {
     inputPorts.push_back(ip);
     std::shared_ptr<OutputPort> op = std::make_shared<OutputPort>(this);
     outputPorts.push_back(op);
+}
+
+CustomBlock::~CustomBlock()
+{
+    // Free up memory
+    inputPorts.clear();
+    outputPorts.clear();
+    activePort = nullptr;
 }
 
 void CustomBlock::draw(QPainter *painter){
@@ -35,19 +44,19 @@ void CustomBlock::draw(QPainter *painter){
 
 clickType CustomBlock::mousePressEvent(QPoint point){
     // TODO: make this neater by adding helper function that checks whether point is in box
-    if(point.x() > this->getX() && point.y() > this->getY() && point.x() < this->getX() + this->getW() && point.y() < this->getY() + this->getH())
+    if(insideRect(this, point)) // this, has the same interface as QRect
     {
         return clickType::block;
     }
     for(auto const &ip : inputPorts){
-        if(point.x() > ip->getX() && point.y() > ip->getY() && point.x() < ip->getX() + ip->getW() && point.y() < ip->getY() + ip->getH())
+        if(insideRect(ip, point))
         {
             setActivePort(ip);
             return clickType::inPort;
         }
     }
     for(auto const &op : outputPorts){
-        if(point.x() > op->getX() && point.y() > op->getY() && point.x() < op->getX() + op->getW() && point.y() < op->getY() + op->getH())
+        if(insideRect(op, point))
         {
             setActivePort(op);
             return clickType::outPort;

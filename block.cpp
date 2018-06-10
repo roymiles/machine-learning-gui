@@ -22,6 +22,12 @@ Block::Block(int x, int y, int width, int height)
     fileManager = nullptr;
 }
 
+Block::~Block()
+{
+    // Free up memory
+    fileManager = nullptr;
+}
+
 void Block::setX(int x)
 {
     this->x = x;

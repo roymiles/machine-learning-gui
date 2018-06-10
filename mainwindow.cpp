@@ -14,8 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // Add the widget elements that have been added graphically
     ui->setupUi(this);
 
+    ui->tabWidget->setTabsClosable(true);
     graphWidget = new GraphWidget(this, ui->tabWidget);
-    //ui->gridLayout->addWidget(graphWidget);
     ui->tabWidget->addTab(graphWidget, "Flow graph");
 }
 
@@ -49,4 +49,10 @@ void MainWindow::on_zoomOut_clicked()
 void MainWindow::on_zoomIn_clicked()
 {
     graphWidget->zoomIn();
+}
+
+void MainWindow::on_tabWidget_tabCloseRequested(int index)
+{
+    // Check for memory leaks...
+    ui->tabWidget->removeTab(index);
 }

@@ -31,6 +31,8 @@ private slots:
 
     void on_zoomIn_clicked();
 
+    void on_tabWidget_tabCloseRequested(int index);
+
 private:
     Ui::MainWindow *ui;
 
