@@ -6,7 +6,6 @@
 
 FileManager::FileManager()
 {
-
 }
 
 FileManager::FileManager(QString fileName)

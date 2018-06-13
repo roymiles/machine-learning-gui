@@ -25,7 +25,7 @@ public:
     ~Block();
 
     virtual void draw(QPainter *painter) = 0;
-    virtual clickType mousePressEvent(QPoint point) = 0;
+    virtual clickType mousePressEvent(QPoint &point) = 0;
     virtual void setActivePort(std::shared_ptr<Port> port) = 0;
     virtual std::shared_ptr<Port> getActivePort() = 0;
 
@@ -45,6 +45,8 @@ public:
     bool loadSource();
     // After successfully loading the source, put it into a QTextEdit
     QPlainTextEdit* getSource();
+
+    int tabIndex; // Current tab index, -1 if not in tab
 
 private:
     int x, y, w, h;

@@ -25,7 +25,7 @@ public:
     void draw(QPainter *painter) override;
     void setActivePort(std::shared_ptr<Port> port) override;
     std::shared_ptr<Port> getActivePort() override;
-    clickType mousePressEvent(QPoint point) override;
+    clickType mousePressEvent(QPoint &point) override;
 
     std::vector<std::shared_ptr<InputPort>> inputPorts;
     std::vector<std::shared_ptr<OutputPort>> outputPorts;

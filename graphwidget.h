@@ -35,6 +35,8 @@ public:
     void zoomIn();
     void zoomOut();
 
+    std::shared_ptr<Block> getBlock(const int index);
+
 protected:
     void paintEvent(QPaintEvent*);
 

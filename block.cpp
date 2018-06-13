@@ -11,15 +11,17 @@ Block::Block()
     w = 50;
     h = 50;
     fileManager = nullptr;
+    tabIndex = -1; // Duplicate constructor code
 }
 
-Block::Block(int x, int y, int width, int height)
+Block::Block(int x, int y, int width, int height) // Maybe add constructor initialisation?
 {
     this->x = x;
     this->y = y;
     this->w = width;
     this->h = height;
     fileManager = nullptr;
+    tabIndex = -1;
 }
 
 Block::~Block()

@@ -87,8 +87,6 @@ void GraphWidget::paintEvent(QPaintEvent* e)
  */
 void GraphWidget::mousePressEvent(QMouseEvent* e)
 {
-    //std::cout << "Mouse press" << std::endl;
-
     // Check if clicking on a block
     for(auto const &block : blocks)
     {
@@ -132,8 +130,6 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                         start = nullptr;
                         end   = nullptr;
                     }
-
-                    //std::cout << "End drawing line" << std::endl;
                 }
                 break;
 
@@ -221,12 +217,23 @@ void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
     {
         if(block->mousePressEvent(e->pos()) == clickType::block)
         {
-            if(block->loadSource())
+            // Check if the source is not already open
+            const int tabIndex = block->tabIndex;
+            if(tabIndex == -1)
             {
-                QPlainTextEdit* textEdit = block->getSource();
-                this->tabWidget->addTab(textEdit, block->getName());
-                const int i = this->tabWidget->count(); // Total number of tabs open
-                this->tabWidget->setCurrentIndex(i-1);
+                // Not in a tab
+                if(block->loadSource())
+                {
+                    QPlainTextEdit* textEdit = block->getSource();
+                    this->tabWidget->addTab(textEdit, block->getName());
+                    const int i = this->tabWidget->count(); // Total number of tabs open
+                    block->tabIndex = i-1; // Update the tab index
+                    this->tabWidget->setCurrentIndex(i-1);
+                }
+
+            }else{
+                // Already in a tab, so set it as the active tab
+                this->tabWidget->setCurrentIndex(tabIndex);
             }
             break;
         }
@@ -247,4 +254,13 @@ void GraphWidget::zoomOut()
     zoomY -= 0.1;
     this->update();*/
     qDebug() << "Zooming disabled";
+}
+
+// Is a look necessary? any alternatives?
+std::shared_ptr<Block> GraphWidget::getBlock(const int index)
+{
+    for(auto &block : blocks)
+        if(block->tabIndex == index) return block;
+
+    return nullptr;
 }
