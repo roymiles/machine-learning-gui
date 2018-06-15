@@ -38,10 +38,13 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
             this->graphWidget->addBlock(fileName, std::move(fileManager));
             this->close();
         }else{
-            QMessageBox msgBox;
-            msgBox.setText("Invalid block name."); // Give more detail...
-            msgBox.exec();
+            // TODO: FIX THIS BUG (CRASHES APPLICATION)
+            //QMessageBox msgBox;
+            //msgBox.setText("Invalid block name."); // Give more detail...
+            //msgBox.exec();
+
             // Don't close the add block dialog
+            this->close();
         }
     }else{
         // Give error message

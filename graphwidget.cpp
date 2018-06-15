@@ -256,7 +256,7 @@ void GraphWidget::zoomOut()
     qDebug() << "Zooming disabled";
 }
 
-// Is a look necessary? any alternatives?
+// Is a loop necessary? any alternatives?
 std::shared_ptr<Block> GraphWidget::getBlock(const int index)
 {
     for(auto &block : blocks)
