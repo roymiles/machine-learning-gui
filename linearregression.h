@@ -4,8 +4,6 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 
-#include "utilities.h"
-
 using namespace boost::numeric::ublas;
 
 namespace je{
@@ -20,6 +18,7 @@ public:
     // [ROWS x COLUMNS] -> [size1 x size2]
     // Takes the output column vector [N x 1] and the input matrix [N x (p+1)] for training
     // The coefficients B will therefore be a [(p+1) x 1]
+    // The constructor is the TRAINING step
     LinearRegression(matrix<T> &Y, matrix<T> &X)
     {
         // e.g. for single output Y = [1 X1 X2 ... Xp][B0; B1; ... Bp]
@@ -50,7 +49,7 @@ public:
     /*
      * Calculate Y based on the learnt coefficients
      */
-    inline matrix<T> calculate(const matrix<T> &X) const
+    matrix<T> calculate(const matrix<T> &X)
     {
         // Verify X dimensions, should be a single p+1 row vector
         assert(X.size1() == 1 && X.size2() == B.size1());
@@ -59,14 +58,18 @@ public:
         return prod(X, B);
     }
 
-    matrix<T> operator()(const matrix<T> &X) const
+    // TODO: Get this working, would be a lot easier to just call f(x), where f is an instance of this class
+    matrix<T> operator()(const matrix<T> &X)
     {
         return this->calculate(X);
     }
 
 private:
-    matrix<T> B;
+    matrix<T> B; // Regression coefficients
 };
+
+template<typename T>
+using calc_t = std::function<matrix<T>(matrix<T> const&)>;
 
 } // je
 

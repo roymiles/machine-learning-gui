@@ -6,7 +6,7 @@
 
 QT       += core gui
 QT       += opengl # Maybe dont need?
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = JumboEagle
 TEMPLATE = app
@@ -36,7 +36,8 @@ SOURCES += \
     outputport.cpp \
     edge.cpp \
     linearregression.cpp \
-    utilities.cpp
+    utilities.cpp \
+    Dependencies/qcustomplot-source/qcustomplot.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -54,7 +55,9 @@ HEADERS += \
     utilities.h \
     edge.h \
     matrix.h \
-    linearregression.h
+    linearregression.h \
+    Dependencies/qcustomplot-source/qcustomplot.h \
+    plot.h
 
 FORMS += \
         mainwindow.ui \
@@ -69,6 +72,7 @@ SUBDIRS += \
 #LIBS += opengl32.lib
 
 INCLUDEPATH += Dependencies\
+#INCLUDEPATH += Dependencies\qcustomplot-source
 #INCLUDEPATH += Dependencies\opencv-2.4.13.6\opencv\build\include
 #INCLUDEPATH += Dependencies\darkstyle\framelesswindow
 #INCLUDEPATH += Dependencies\darkstyle

@@ -6,6 +6,7 @@
 
 #include "debug.h"
 #include "addblockdialog.h"
+#include "utilities.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->setTabsClosable(true);
     graphWidget = new GraphWidget(this, ui->tabWidget);
     ui->tabWidget->addTab(graphWidget, "Flow graph");
+
+    je::testLinearRegression(ui->tabWidget);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)

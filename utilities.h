@@ -2,6 +2,7 @@
 
 #include <QRect>
 #include <QPoint>
+#include <QTabWidget>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/vector_proxy.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
@@ -76,5 +77,7 @@ void [[ deprecated ]] printMat(const matrix<T>& mat)
     }
     std::cout << "}" << std::endl;
 }
+
+void testLinearRegression(QTabWidget *tabWidget);
 
 } // je
