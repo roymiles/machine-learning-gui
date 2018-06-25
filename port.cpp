@@ -1,30 +1,35 @@
 #include "port.h"
 
+namespace je {
+
 Port::Port()
 {
     activePort = false;
 }
 
-int Port::getX()
+const int Port::getX() const
 {
     return x;
 }
 
-int Port::getY()
+const int Port::getY() const
 {
     return y;
 }
 
-int Port::getW()
+const int Port::getW() const
 {
     return w;
 }
 
-int Port::getH()
+const int Port::getH() const
 {
     return h;
 }
 
-QPoint Port::getCenter(){
+QPoint Port::getCenter() const
+{
     return QPoint(x + w/2, y + h/2);
 }
+
+} // je

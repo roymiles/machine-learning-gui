@@ -3,6 +3,7 @@
 
 #include "customblock.h"
 
+using namespace je;
 
 class MyCustomBlock : public CustomBlock
 {

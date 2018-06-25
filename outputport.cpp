@@ -1,5 +1,7 @@
 #include "outputport.h"
 
+namespace je {
+
 OutputPort::OutputPort(Block *parentBlock)
 {
     this->parentBlock = parentBlock;
@@ -19,3 +21,5 @@ void OutputPort::draw(QPainter *painter)
     painter->fillRect(rectangle, Qt::yellow);
     painter->drawRect(rectangle);
 }
+
+} // je

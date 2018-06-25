@@ -17,6 +17,8 @@
 
 //#include <opencv2/opencv.hpp>
 
+namespace je {
+
 enum state {
     IDLE,
     DRAWING
@@ -73,5 +75,7 @@ private:
     std::unique_ptr<FileManager> fileManager;
 
 };
+
+} // je
 
 #endif // GRAPHWIDGET_H

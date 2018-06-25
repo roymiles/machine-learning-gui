@@ -8,6 +8,8 @@
 #include <QMatrix>
 #include <QPlainTextEdit>
 
+namespace je {
+
 GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(parent)
 {
     setMouseTracking(false);
@@ -48,7 +50,7 @@ void GraphWidget::paintEvent(QPaintEvent* e)
     //matrix.scale(zoomX, zoomY);
     //painter.setMatrix(matrix);
 
-    QPixmap pixmap(":/Resources/bg.png");
+    QPixmap pixmap("Resources/bg.png");
     // Tile the background
     const int width = 50;
     const int height = 50;
@@ -264,3 +266,5 @@ std::shared_ptr<Block> GraphWidget::getBlock(const int index)
 
     return nullptr;
 }
+
+} // je

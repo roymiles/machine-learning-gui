@@ -4,6 +4,8 @@
 #include <iostream>
 #include <sstream>
 
+namespace je {
+
 class Debug
 {
 public:
@@ -13,5 +15,7 @@ public:
         std::cout << value << std::endl;
     }
 };
+
+} // je
 
 #endif

@@ -11,6 +11,8 @@
 #include "inputport.h"
 #include "outputport.h"
 
+namespace je {
+
 /***
  * Generic block with one input and one output port. All user blocks must inherit from this.
  ***/
@@ -25,11 +27,13 @@ public:
     void draw(QPainter *painter) override;
     void setActivePort(std::shared_ptr<Port> port) override;
     std::shared_ptr<Port> getActivePort() override;
-    clickType mousePressEvent(QPoint &point) override;
+    clickType mousePressEvent(QPoint point) override;
 
     std::vector<std::shared_ptr<InputPort>> inputPorts;
     std::vector<std::shared_ptr<OutputPort>> outputPorts;
     std::shared_ptr<Port> activePort;
 };
+
+} // je
 
 #endif // CUSTOMBLOCK_H

@@ -4,6 +4,8 @@
 #include <QTextStream>
 #include <QTextCodec>
 
+namespace je {
+
 FileManager::FileManager()
 {
 }
@@ -19,13 +21,13 @@ FileManager::~FileManager()
     delete plainTextEdit;
 }
 
-inline QString FileManager::getCompleteFilePath()
+inline const QString FileManager::getCompleteFilePath() const
 {
     // TODO: This needs to be changed
     return "C:\\Users\\Roy\\Documents\\JumboEagle\\" + this->fileName + ".txt";
 }
 
-bool FileManager::isValidFileName()
+bool FileManager::isValidFileName() const
 {
     // TODO: Add extra validation, such as filename length
     // True if fileName only contains alphanumeric characters
@@ -74,4 +76,5 @@ bool FileManager::loadSourceFile()
     return true;
 }
 
+} // je
 

@@ -4,6 +4,8 @@
 #include <QPainter>
 #include <QRect>
 
+namespace je {
+
 Block::Block()
 {
     x = 0;
@@ -46,22 +48,22 @@ void Block::setPos(QPoint point)
     this->y = point.y();
 }
 
-int Block::getX()
+int Block::getX() const
 {
     return x;
 }
 
-int Block::getY()
+int Block::getY() const
 {
     return y;
 }
 
-int Block::getW()
+int Block::getW() const
 {
     return w;
 }
 
-int Block::getH()
+int Block::getH() const
 {
     return h;
 }
@@ -77,7 +79,7 @@ void Block::setFileManager(std::unique_ptr<FileManager> fileManager)
     this->fileManager = std::move(fileManager);
 }
 
-QString Block::getName()
+const QString& Block::getName() const
 {
     return this->name;
 }
@@ -94,3 +96,5 @@ QPlainTextEdit* Block::getSource()
 {
     return fileManager->getContent();
 }
+
+} // je

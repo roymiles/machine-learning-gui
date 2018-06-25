@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-QT       += opengl
+QT       += opengl # Maybe dont need?
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = JumboEagle
@@ -34,7 +34,9 @@ SOURCES += \
     block.cpp \
     mycustomblock.cpp \
     outputport.cpp \
-    edge.cpp
+    edge.cpp \
+    linearregression.cpp \
+    utilities.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -50,7 +52,9 @@ HEADERS += \
     mycustomblock.h \
     outputport.h \
     utilities.h \
-    edge.h
+    edge.h \
+    matrix.h \
+    linearregression.h
 
 FORMS += \
         mainwindow.ui \
@@ -69,27 +73,10 @@ INCLUDEPATH += Dependencies\
 #INCLUDEPATH += Dependencies\darkstyle\framelesswindow
 #INCLUDEPATH += Dependencies\darkstyle
 
-#LIBS += -L"C:/Users/Roy/Documents/JumboEagle/Dependencies/opencv-2.4.13.6/opencv/build/x86/vc14/lib"
-#        LIBS += "-lopencv_calib3d2413"
-#        LIBS += "-lopencv_contrib2413"
-#        LIBS += -lopencv_core2413
-#        LIBS += "-lopencv_features2d2413"
-#        LIBS += "-lopencv_flann2413"
-#        LIBS += "-lopencv_gpu2413"
-#        LIBS += "-lopencv_highgui2413"
-#        LIBS += "-lopencv_imgproc2413"
-#        LIBS += "-lopencv_legacy2413"
-#        LIBS += "-lopencv_ml2413"
-#        LIBS += "-lopencv_nonfree2413"
-#        LIBS += "-lopencv_objdetect2413"
-#        LIBS += "-lopencv_ocl2413"
-#        LIBS += "-lopencv_photo2413"
-#        LIBS += "-lopencv_stitching2413"
-#        LIBS += "-lopencv_superres2413"
-#        LIBS += "-lopencv_ts2413"
-#        LIBS += "-lopencv_video2413"
-#        LIBS += "-lopencv_videostab2413"
-
 #RESOURCES += \
 #    Dependencies/darkstyle/framelesswindow.qrc \
 #    Dependencies/darkstyle/darkstyle.qrc
+
+
+#LIBS += -L$$PWD/Dependencies/opencv-2.4.13.6/opencv/build/x86/vc14/lib -lopencv_core2413d
+#INCLUDEPATH += $$PWD/Dependencies/opencv-2.4.13.6/opencv/build/include

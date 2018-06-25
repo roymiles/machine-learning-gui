@@ -1,5 +1,7 @@
 #include "inputport.h"
 
+namespace je {
+
 InputPort::InputPort(Block *parentBlock)
 {
     this->parentBlock = parentBlock;
@@ -19,3 +21,5 @@ void InputPort::draw(QPainter *painter)
     painter->fillRect(rectangle, Qt::yellow);
     painter->drawRect(rectangle);
 }
+
+} // je

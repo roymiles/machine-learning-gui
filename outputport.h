@@ -5,6 +5,8 @@
 #include "block.h"
 #include <QPainter>
 
+namespace je {
+
 class OutputPort : public Port
 {
 public:
@@ -13,5 +15,7 @@ public:
 private:
     Block *parentBlock;
 };
+
+} // je
 
 #endif // OUTPUTPORT_H

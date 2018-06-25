@@ -1,5 +1,7 @@
 #include "edge.h"
 
+namespace je {
+
 Edge::Edge()
 {
 
@@ -15,3 +17,5 @@ void Edge::draw(QPainter *painter)
 {
     painter->drawLine(start->getX(), start->getY(), end->getX(), end->getY());
 }
+
+} // je

@@ -9,6 +9,8 @@
 #include "port.h"
 #include "filemanager.h"
 
+namespace je {
+
 // Checks where a click takes place
 enum clickType{
     inPort,
@@ -25,20 +27,20 @@ public:
     ~Block();
 
     virtual void draw(QPainter *painter) = 0;
-    virtual clickType mousePressEvent(QPoint &point) = 0;
+    virtual clickType mousePressEvent(QPoint point) = 0;
     virtual void setActivePort(std::shared_ptr<Port> port) = 0;
     virtual std::shared_ptr<Port> getActivePort() = 0;
 
     void setX(int x);
     void setY(int y);
     void setPos(QPoint point);
-    int getX();
-    int getY();
-    int getW();
-    int getH();
+    int getX() const;
+    int getY() const;
+    int getW() const;
+    int getH() const;
 
     void setName(QString name);
-    QString getName();
+    const QString& getName() const;
     void setFileManager(std::unique_ptr<FileManager> fileManager);
 
     // Attempt to load source content
@@ -53,5 +55,7 @@ private:
     QString name;
     std::unique_ptr<FileManager> fileManager; // Definately a unique pointer as only block needs to access
 };
+
+} // je
 
 #endif // BLOCK_H

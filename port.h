@@ -3,21 +3,25 @@
 
 #include <QPainter>
 
+namespace je {
+
 class Port
 {
 public:
     Port();
     virtual void draw(QPainter *painter) = 0;
-    int getX();
-    int getY();
-    int getW();
-    int getH();
-    QPoint getCenter();
+    const int getX() const;
+    const int getY() const;
+    const int getW() const;
+    const int getH() const;
+    QPoint getCenter() const;
 
     bool activePort;
 
 protected:
     int x, y, w, h; // TODO: add setters
 };
+
+} // je
 
 #endif // PORT_H

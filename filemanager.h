@@ -5,6 +5,8 @@
 #include <QPlainTextEdit>
 #include <memory>
 
+namespace je {
+
 /*
  * Responsible for creating the block source files (adding boilerplate code)
  * and validating file names
@@ -16,8 +18,8 @@ public:
     FileManager(QString fileName);
     ~FileManager();
 
-    QString getCompleteFilePath();
-    bool isValidFileName();
+    const QString getCompleteFilePath() const;
+    bool isValidFileName() const;
     bool createSourceFile();
 
     bool loadSourceFile(); // Attempt to load the source file (and place in textEdit)
@@ -27,5 +29,7 @@ private:
     QString fileName;
     QPlainTextEdit* plainTextEdit;
 };
+
+} // je
 
 #endif // FILEMANAGER_H

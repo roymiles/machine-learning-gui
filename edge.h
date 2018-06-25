@@ -6,6 +6,8 @@
 #include "inputport.h"
 #include "outputport.h"
 
+namespace je {
+
 class Edge
 {
 public:
@@ -18,5 +20,7 @@ private:
     std::shared_ptr<OutputPort> start;
     std::shared_ptr<InputPort> end;
 };
+
+} // je
 
 #endif // EDGE_H
