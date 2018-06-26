@@ -46,7 +46,9 @@ void CustomBlock::draw(QPainter *painter){
 
 clickType CustomBlock::mousePressEvent(QPoint point){
     // TODO: make this neater by adding helper function that checks whether point is in box
-    if(insideRect(this, point)) // this, has the same interface as QRect
+
+    bool condition = (point.x() > this->getX() && point.y() > this->getY() && point.x() < this->getX() + this->getW() && point.y() < this->getY() + this->getH());
+    if(condition) // this, has the same interface as QRect
     {
         return clickType::block;
     }

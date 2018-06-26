@@ -8,6 +8,7 @@ QT       += core gui
 QT       += opengl # Maybe dont need?
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
+CONFIG += c++14
 TARGET = JumboEagle
 TEMPLATE = app
 
@@ -37,7 +38,11 @@ SOURCES += \
     Core/main.cpp \
     Core/mainwindow.cpp \
     Core/utilities.cpp \
-    Dependencies/qcustomplot-source/qcustomplot.cpp
+    Dependencies/qcustomplot-source/qcustomplot.cpp \
+    Core/testsuite.cpp \
+    Dependencies/darkstyle/DarkStyle.cpp \
+    Dependencies/darkstyle/framelesswindow/framelesswindow.cpp \
+    Dependencies/darkstyle/framelesswindow/windowdragger.cpp
 
 HEADERS += \
     Core/Graph/block.h \
@@ -55,11 +60,16 @@ HEADERS += \
     Core/mainwindow.h \
     Core/plot.h \
     Core/utilities.h \
-    Dependencies/qcustomplot-source/qcustomplot.h
+    Dependencies/qcustomplot-source/qcustomplot.h \
+    Core/testsuite.h \
+    Dependencies/darkstyle/DarkStyle.h \
+    Dependencies/darkstyle/framelesswindow/framelesswindow.h \
+    Dependencies/darkstyle/framelesswindow/windowdragger.h
 
 FORMS += \
     Core/UI/addblockdialog.ui \
-    Core/mainwindow.ui
+    Core/mainwindow.ui \
+    Dependencies/darkstyle/framelesswindow/framelesswindow.ui
 
 DISTFILES += \
     bg.svg
@@ -67,18 +77,8 @@ DISTFILES += \
 SUBDIRS += \
     JumboEagle.pro
 
-#LIBS += opengl32.lib
-
 INCLUDEPATH += Dependencies\
-#INCLUDEPATH += Dependencies\qcustomplot-source
-#INCLUDEPATH += Dependencies\opencv-2.4.13.6\opencv\build\include
-#INCLUDEPATH += Dependencies\darkstyle\framelesswindow
-#INCLUDEPATH += Dependencies\darkstyle
 
-#RESOURCES += \
-#    Dependencies/darkstyle/framelesswindow.qrc \
-#    Dependencies/darkstyle/darkstyle.qrc
-
-
-#LIBS += -L$$PWD/Dependencies/opencv-2.4.13.6/opencv/build/x86/vc14/lib -lopencv_core2413d
-#INCLUDEPATH += $$PWD/Dependencies/opencv-2.4.13.6/opencv/build/include
+RESOURCES += \
+    Dependencies/darkstyle/darkstyle.qrc \
+    Dependencies/darkstyle/framelesswindow.qrc
