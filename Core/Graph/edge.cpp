@@ -1,6 +1,6 @@
 #include "edge.h"
 
-namespace je {
+namespace je { namespace graph {
 
 Edge::Edge()
 {
@@ -18,4 +18,4 @@ void Edge::draw(QPainter *painter)
     painter->drawLine(start->getX(), start->getY(), end->getX(), end->getY());
 }
 
-} // je
+} } // graph, je

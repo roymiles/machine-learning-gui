@@ -5,7 +5,7 @@
 #include "block.h"
 #include <QPainter>
 
-namespace je {
+namespace je { namespace graph {
 
 class InputPort : public Port
 {
@@ -16,6 +16,6 @@ private:
     Block *parentBlock;
 };
 
-} // je
+} } // graph, je
 
 #endif // INPUTPORT_H

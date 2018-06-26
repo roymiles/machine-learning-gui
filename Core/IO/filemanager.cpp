@@ -4,7 +4,7 @@
 #include <QTextStream>
 #include <QTextCodec>
 
-namespace je {
+namespace je { namespace io {
 
 FileManager::FileManager()
 {
@@ -76,5 +76,5 @@ bool FileManager::loadSourceFile()
     return true;
 }
 
-} // je
+} } // io, je
 

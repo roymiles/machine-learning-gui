@@ -9,7 +9,7 @@
 #include "port.h"
 #include "../IO/filemanager.h"
 
-namespace je {
+namespace je { namespace graph {
 
 // Checks where a click takes place
 enum clickType{
@@ -41,7 +41,7 @@ public:
 
     void setName(QString name);
     const QString& getName() const;
-    void setFileManager(std::unique_ptr<FileManager> fileManager);
+    void setFileManager(std::unique_ptr<io::FileManager> fileManager);
 
     // Attempt to load source content
     bool loadSource();
@@ -53,9 +53,9 @@ public:
 private:
     int x, y, w, h;
     QString name;
-    std::unique_ptr<FileManager> fileManager; // Definately a unique pointer as only block needs to access
+    std::unique_ptr<io::FileManager> fileManager; // Definately a unique pointer as only block needs to access
 };
 
-} // je
+} } // graph, je
 
 #endif // BLOCK_H

@@ -8,7 +8,7 @@
 #include <QMatrix>
 #include <QPlainTextEdit>
 
-namespace je {
+namespace je { namespace graph {
 
 GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(parent)
 {
@@ -24,7 +24,7 @@ GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(paren
     this->tabWidget = tabWidget;
 }
 
-void GraphWidget::addBlock(QString name, std::unique_ptr<FileManager> fileManager)
+void GraphWidget::addBlock(QString name, std::unique_ptr<io::FileManager> fileManager)
 {
     qDebug() << "Block name = " << name;
     // Probably lots of unnecessary copying, which can be optimised out
@@ -267,4 +267,4 @@ std::shared_ptr<Block> GraphWidget::getBlock(const int index)
     return nullptr;
 }
 
-} // je
+} } // graph, je

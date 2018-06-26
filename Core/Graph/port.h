@@ -3,7 +3,7 @@
 
 #include <QPainter>
 
-namespace je {
+namespace je { namespace graph {
 
 class Port
 {
@@ -22,6 +22,6 @@ protected:
     int x, y, w, h; // TODO: add setters
 };
 
-} // je
+} } // graph, je
 
 #endif // PORT_H

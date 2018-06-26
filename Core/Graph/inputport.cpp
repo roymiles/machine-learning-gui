@@ -1,6 +1,6 @@
 #include "inputport.h"
 
-namespace je {
+namespace je { namespace graph {
 
 InputPort::InputPort(Block *parentBlock)
 {
@@ -22,4 +22,4 @@ void InputPort::draw(QPainter *painter)
     painter->drawRect(rectangle);
 }
 
-} // je
+} } // graph, je

@@ -31,7 +31,7 @@ public:
         // Verify X dimensions, should be a single p+1 row vector
         assert(X.size1() == 1 && X.size2() == B.size1());
 
-        // y = XB
+        // y = XB (X includes a column of all 1s to encapsulate the y-intercept)
         return prod(X, B);
     }
 

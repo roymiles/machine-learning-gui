@@ -11,11 +11,13 @@
 #include "inputport.h"
 #include "outputport.h"
 
-namespace je {
+namespace je { // Not in graph sub namespace to reduce user boilerplate code
 
 /***
  * Generic block with one input and one output port. All user blocks must inherit from this.
  ***/
+
+using namespace je::graph;
 
 class CustomBlock : public Block
 {

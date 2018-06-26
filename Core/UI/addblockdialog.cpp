@@ -29,7 +29,7 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
     {
         // Validate file name
         const QString fileName = ui->BlockNameLineEdit->text();
-        std::unique_ptr<FileManager> fileManager = std::make_unique<FileManager>(fileName);
+        std::unique_ptr<io::FileManager> fileManager = std::make_unique<io::FileManager>(fileName);
         if(fileManager->isValidFileName())
         {
             // Create the source file

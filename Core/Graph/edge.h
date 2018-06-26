@@ -6,7 +6,7 @@
 #include "inputport.h"
 #include "outputport.h"
 
-namespace je {
+namespace je { namespace graph {
 
 class Edge
 {
@@ -21,6 +21,6 @@ private:
     std::shared_ptr<InputPort> end;
 };
 
-} // je
+} } // graph, je
 
 #endif // EDGE_H

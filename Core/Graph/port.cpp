@@ -1,6 +1,6 @@
 #include "port.h"
 
-namespace je {
+namespace je { namespace graph {
 
 Port::Port()
 {
@@ -32,4 +32,4 @@ QPoint Port::getCenter() const
     return QPoint(x + w/2, y + h/2);
 }
 
-} // je
+} } // graph, je

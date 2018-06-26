@@ -36,7 +36,8 @@ SOURCES += \
     Core/linearregression.cpp \
     Core/main.cpp \
     Core/mainwindow.cpp \
-    Core/utilities.cpp
+    Core/utilities.cpp \
+    Dependencies/qcustomplot-source/qcustomplot.cpp
 
 HEADERS += \
     Core/Graph/block.h \
@@ -53,7 +54,8 @@ HEADERS += \
     Core/linearregression.h \
     Core/mainwindow.h \
     Core/plot.h \
-    Core/utilities.h
+    Core/utilities.h \
+    Dependencies/qcustomplot-source/qcustomplot.h
 
 FORMS += \
     Core/UI/addblockdialog.ui \

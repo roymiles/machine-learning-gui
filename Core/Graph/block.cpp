@@ -4,7 +4,7 @@
 #include <QPainter>
 #include <QRect>
 
-namespace je {
+namespace je { namespace graph {
 
 Block::Block()
 {
@@ -74,7 +74,7 @@ void Block::setName(QString name)
     this->name = name;
 }
 
-void Block::setFileManager(std::unique_ptr<FileManager> fileManager)
+void Block::setFileManager(std::unique_ptr<io::FileManager> fileManager)
 {
     this->fileManager = std::move(fileManager);
 }
@@ -97,4 +97,4 @@ QPlainTextEdit* Block::getSource()
     return fileManager->getContent();
 }
 
-} // je
+} } // graph, je

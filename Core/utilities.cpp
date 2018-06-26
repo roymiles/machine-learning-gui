@@ -1,11 +1,11 @@
 #include "utilities.h"
 
-#include "qcustomplot-source/qcustomplot.h"
 #include "linearregression.h"
 #include "plot.h"
 
 #include <boost/random.hpp>
 #include <boost/random/normal_distribution.hpp>
+#include <qcustomplot-source/qcustomplot.h>
 
 namespace je {
 
@@ -47,7 +47,7 @@ void testLinearRegression(QTabWidget *tabWidget)
     const int P = 1; // Dimensions
 
     boost::mt19937 rng; // Not seeded
-    boost::normal_distribution<> nd(0.0, 1.0);
+    boost::normal_distribution<> nd(0.0, 5.0);
     boost::variate_generator<boost::mt19937&,
                              boost::normal_distribution<> > var_nor(rng, nd);
 

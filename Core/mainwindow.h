@@ -36,8 +36,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    //GraphController *gc;
-    //GLWidget *glWidget;
     GraphWidget *graphWidget;
 };
 

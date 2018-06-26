@@ -17,7 +17,7 @@
 
 //#include <opencv2/opencv.hpp>
 
-namespace je {
+namespace je { namespace graph {
 
 enum state {
     IDLE,
@@ -32,7 +32,7 @@ class GraphWidget : public QWidget
 public:
     GraphWidget(QWidget *parent=0, QTabWidget *tabWidget=0); // Takes in tabWidget, because need graphWidget to add new tabs and stuff
 
-    void addBlock(QString name, std::unique_ptr<FileManager> fileManager);
+    void addBlock(QString name, std::unique_ptr<io::FileManager> fileManager);
 
     void zoomIn();
     void zoomOut();
@@ -52,7 +52,6 @@ private:
     std::vector<std::unique_ptr<Edge>> edges;
 
     // The current block that is being moved around, see mousePressEvent
-    //Block **activeBlock;
     std::shared_ptr<Block> activeBlock;
 
     state curState;
@@ -72,10 +71,10 @@ private:
 
     QTabWidget *tabWidget;
 
-    std::unique_ptr<FileManager> fileManager;
+    std::unique_ptr<io::FileManager> fileManager;
 
 };
 
-} // je
+} } // graph, je
 
 #endif // GRAPHWIDGET_H

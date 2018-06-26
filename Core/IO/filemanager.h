@@ -5,7 +5,7 @@
 #include <QPlainTextEdit>
 #include <memory>
 
-namespace je {
+namespace je { namespace io {
 
 /*
  * Responsible for creating the block source files (adding boilerplate code)
@@ -30,6 +30,6 @@ private:
     QPlainTextEdit* plainTextEdit;
 };
 
-} // je
+} } // io, je
 
 #endif // FILEMANAGER_H
