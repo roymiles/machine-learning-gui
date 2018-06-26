@@ -54,6 +54,10 @@ void MainWindow::on_zoomIn_clicked()
     graphWidget->zoomIn();
 }
 
+/*
+ * Breaks if close any other type of tab
+ * Not all tabs will be text editors! (blocks)
+ */
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
     // Check for memory leaks...

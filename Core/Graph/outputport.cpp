@@ -10,7 +10,7 @@ OutputPort::OutputPort(Block *parentBlock)
 
 void OutputPort::draw(QPainter *painter)
 {
-    w = parentBlock->getW() /4;
+    w = parentBlock->getW()/4;
     h = parentBlock->getH()/4;
     x = parentBlock->getX() + parentBlock->getW();
     y = parentBlock->getY() + parentBlock->getH()/2 - h/2;

@@ -10,12 +10,14 @@
 #include <string>
 #include "linearregression.h"
 #include <boost/numeric/ublas/matrix.hpp>
-#include "qcustomplot-source/qcustomplot.h"
+#include <qcustomplot-source/qcustomplot.h>
+#include <opencv2/core.hpp>
 
 using namespace je;
 
 int main(int argc, char *argv[])
 {
+    cv::Mat a;
     QApplication app(argc, argv);
 
     // Style our application with custom dark style
@@ -23,7 +25,7 @@ int main(int argc, char *argv[])
 
     // Create frameless window (and set windowState or title)
     FramelessWindow framelessWindow;
-    framelessWindow.setWindowState(Qt::WindowMaximized);
+    //framelessWindow.setWindowState(Qt::WindowMaximized);
     framelessWindow.setWindowTitle("test title");
     framelessWindow.setWindowIcon(app.style()->standardIcon(QStyle::SP_DesktopIcon));
 

@@ -7,15 +7,12 @@
 #include <QString>
 #include <vector>
 #include <memory>
-//#include <string> Use QString instead of std::string, as more restrictive on encoding
 
 #include "block.h"
-#include "mycustomblock.h" //TODO: can't include every type of block
+#include "mycustomblock.h" //TODO: can't include every type of block, need some loader .h
 #include "edge.h"
 #include "port.h"
 #include "../IO/filemanager.h"
-
-//#include <opencv2/opencv.hpp>
 
 namespace je { namespace graph {
 
@@ -42,6 +39,7 @@ public:
 protected:
     void paintEvent(QPaintEvent*);
 
+    // All the Qt mouse events
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void mouseReleaseEvent(QMouseEvent*);
@@ -49,7 +47,7 @@ protected:
 
 private:
     std::vector<std::shared_ptr<Block>> blocks;
-    std::vector<std::unique_ptr<Edge>> edges;
+    std::vector<std::unique_ptr<Edge>> edges; // TODO: Move this over to using boost::graph
 
     // The current block that is being moved around, see mousePressEvent
     std::shared_ptr<Block> activeBlock;

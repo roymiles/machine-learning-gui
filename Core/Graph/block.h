@@ -26,6 +26,7 @@ public:
     Block(int x, int y, int width, int height);
     ~Block();
 
+    // All blocks (that inherit from this class) must override these functions
     virtual void draw(QPainter *painter) = 0;
     virtual clickType mousePressEvent(QPoint point) = 0;
     virtual void setActivePort(std::shared_ptr<Port> port) = 0;

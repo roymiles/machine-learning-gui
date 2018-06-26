@@ -23,7 +23,7 @@ public:
     bool createSourceFile();
 
     bool loadSourceFile(); // Attempt to load the source file (and place in textEdit)
-    QPlainTextEdit* getContent(); // getter for textEdit
+    QPlainTextEdit* getContent() const; // getter for textEdit
 
 private:
     QString fileName;

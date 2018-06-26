@@ -11,13 +11,16 @@ namespace je{
 // Find the linear relationship between an input vector and an output
 // The feature size is p+1, and the # outputs = N
 // This fixes the relationship to a linear model
+// TODO: Allow multi-output data
 template<typename T>
 class LinearRegression
 {
 public:
 
+    /*
+     * Must specify the X, Y data
+     */
     LinearRegression() = delete;
-
     LinearRegression(matrix<T> &Y, matrix<T> &X)
     {
         train(Y, X);

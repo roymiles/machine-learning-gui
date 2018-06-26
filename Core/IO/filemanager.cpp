@@ -48,7 +48,7 @@ bool FileManager::createSourceFile()
     return true;
 }
 
-QPlainTextEdit* FileManager::getContent()
+QPlainTextEdit* FileManager::getContent() const
 {
     return plainTextEdit;
 }

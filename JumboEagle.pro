@@ -42,7 +42,8 @@ SOURCES += \
     Core/testsuite.cpp \
     Dependencies/darkstyle/DarkStyle.cpp \
     Dependencies/darkstyle/framelesswindow/framelesswindow.cpp \
-    Dependencies/darkstyle/framelesswindow/windowdragger.cpp
+    Dependencies/darkstyle/framelesswindow/windowdragger.cpp \
+    Core/histogram.cpp
 
 HEADERS += \
     Core/Graph/block.h \
@@ -64,7 +65,8 @@ HEADERS += \
     Core/testsuite.h \
     Dependencies/darkstyle/DarkStyle.h \
     Dependencies/darkstyle/framelesswindow/framelesswindow.h \
-    Dependencies/darkstyle/framelesswindow/windowdragger.h
+    Dependencies/darkstyle/framelesswindow/windowdragger.h \
+    Core/histogram.h
 
 FORMS += \
     Core/UI/addblockdialog.ui \
@@ -82,3 +84,10 @@ INCLUDEPATH += Dependencies\
 RESOURCES += \
     Dependencies/darkstyle/darkstyle.qrc \
     Dependencies/darkstyle/framelesswindow.qrc
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Dependencies/opencv-3.4.1/opencv/build/x64/vc14/lib/ -lopencv_world341
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Dependencies/opencv-3.4.1/opencv/build/x64/vc14/lib/ -lopencv_world341d
+else:unix: LIBS += -L$$PWD/Dependencies/opencv-3.4.1/opencv/build/x64/vc14/lib/ -lopencv_world341
+
+INCLUDEPATH += Dependencies/opencv-3.4.1/opencv/build/include
+DEPENDPATH += Dependencies/opencv-3.4.1/opencv/build/include
