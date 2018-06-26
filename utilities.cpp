@@ -63,12 +63,12 @@ void testLinearRegression(QTabWidget *tabWidget)
 
     auto customPlot = new QCustomPlot();
     Plot<double> p(customPlot);
+
     // Draw the input training data as a scatter pot
     p.scatterPlot(Y, X);
+
     // And overlay the linear model prediction
-    //calc_t<double> fptr = &LinearRegression<double>::calculate;
     using namespace std::placeholders;  // For e.g. _1
-    //auto fptr2 = std::bind(&LinearRegression<double>::hello, f);
     calc_t<double> fptr = std::bind(&LinearRegression<double>::calculate, f, _1);
     p.drawLine(0, 100, 1, fptr);
 
