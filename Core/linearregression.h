@@ -15,11 +15,38 @@ template<typename T>
 class LinearRegression
 {
 public:
+
+    LinearRegression() = delete;
+
+    LinearRegression(matrix<T> &Y, matrix<T> &X)
+    {
+        train(Y, X);
+    }
+
+    /*
+     * Calculate Y based on the learnt coefficients
+     */
+    matrix<T> calculate(const matrix<T> &X)
+    {
+        // Verify X dimensions, should be a single p+1 row vector
+        assert(X.size1() == 1 && X.size2() == B.size1());
+
+        // y = XB
+        return prod(X, B);
+    }
+
+    // TODO: Get this working, would be a lot easier to just call f(x), where f is an instance of this class
+    matrix<T> operator()(const matrix<T> &X)
+    {
+        return this->calculate(X);
+    }
+
+private:
+
     // [ROWS x COLUMNS] -> [size1 x size2]
     // Takes the output column vector [N x 1] and the input matrix [N x (p+1)] for training
     // The coefficients B will therefore be a [(p+1) x 1]
-    // The constructor is the TRAINING step
-    LinearRegression(matrix<T> &Y, matrix<T> &X)
+    void train(matrix<T> &Y, matrix<T> &X)
     {
         // e.g. for single output Y = [1 X1 X2 ... Xp][B0; B1; ... Bp]
         // Where p is the feature size, the X vector will be of length p+1
@@ -46,25 +73,7 @@ public:
         std::cout << "B = " << B << std::endl;
     }
 
-    /*
-     * Calculate Y based on the learnt coefficients
-     */
-    matrix<T> calculate(const matrix<T> &X)
-    {
-        // Verify X dimensions, should be a single p+1 row vector
-        assert(X.size1() == 1 && X.size2() == B.size1());
 
-        // y = XB
-        return prod(X, B);
-    }
-
-    // TODO: Get this working, would be a lot easier to just call f(x), where f is an instance of this class
-    matrix<T> operator()(const matrix<T> &X)
-    {
-        return this->calculate(X);
-    }
-
-private:
     matrix<T> B; // Regression coefficients
 };
 

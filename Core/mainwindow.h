@@ -7,7 +7,7 @@
 #include <QWidget>
 #include <QSlider>
 
-#include "graphwidget.h"
+#include "Graph/graphwidget.h"
 
 namespace Ui {
 class MainWindow;

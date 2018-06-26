@@ -53,8 +53,7 @@ HEADERS += \
     Core/linearregression.h \
     Core/mainwindow.h \
     Core/plot.h \
-    Core/utilities.h \
-    Dependencies/qcustomplot-source/qcustomplot.h
+    Core/utilities.h
 
 FORMS += \
     Core/UI/addblockdialog.ui \

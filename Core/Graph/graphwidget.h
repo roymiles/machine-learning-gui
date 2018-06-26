@@ -13,7 +13,7 @@
 #include "mycustomblock.h" //TODO: can't include every type of block
 #include "edge.h"
 #include "port.h"
-#include "filemanager.h"
+#include "../IO/filemanager.h"
 
 //#include <opencv2/opencv.hpp>
 

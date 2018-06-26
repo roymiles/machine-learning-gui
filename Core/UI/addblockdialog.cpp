@@ -3,7 +3,7 @@
 
 #include <QDebug>
 #include <QMessageBox>
-#include "filemanager.h"
+#include "../IO/filemanager.h"
 
 AddBlockDialog::AddBlockDialog(QWidget *parent) :
     QDialog(parent),

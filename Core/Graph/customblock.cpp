@@ -1,5 +1,5 @@
 #include "customblock.h"
-#include "utilities.h" // insideRect
+#include "../utilities.h" // insideRect
 
 namespace je {
 

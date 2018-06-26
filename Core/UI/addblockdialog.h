@@ -2,7 +2,7 @@
 #define ADDBLOCKDIALOG_H
 
 #include <QDialog>
-#include "graphwidget.h"
+#include "../Graph/graphwidget.h"
 
 namespace Ui {
 class AddBlockDialog;

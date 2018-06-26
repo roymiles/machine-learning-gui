@@ -1,11 +1,11 @@
 #ifndef PLOT_H
 #define PLOT_H
 
-#include "qcustomplot-source/qcustomplot.h"
 #include <boost/numeric/ublas/matrix.hpp>
 #include <algorithm>
 #include "linearregression.h"
 #include <QVector>
+#include <qcustomplot-source/qcustomplot.h>
 
 namespace je {
 

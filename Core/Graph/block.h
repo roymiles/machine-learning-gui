@@ -7,7 +7,7 @@
 #include <QTextEdit>
 #include <memory>
 #include "port.h"
-#include "filemanager.h"
+#include "../IO/filemanager.h"
 
 namespace je {
 

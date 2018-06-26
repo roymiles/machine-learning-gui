@@ -1,5 +1,5 @@
 #include "block.h"
-#include "debug.h"
+#include "../debug.h"
 
 #include <QPainter>
 #include <QRect>

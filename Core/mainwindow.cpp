@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "debug.h"
-#include "addblockdialog.h"
+#include "UI/addblockdialog.h"
 #include "utilities.h"
 
 MainWindow::MainWindow(QWidget *parent) :

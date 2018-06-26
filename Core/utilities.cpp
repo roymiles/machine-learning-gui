@@ -4,7 +4,12 @@
 #include "linearregression.h"
 #include "plot.h"
 
+#include <boost/random.hpp>
+#include <boost/random/normal_distribution.hpp>
+
 namespace je {
+
+// TODO: Move tests into a seperate file
 
 // Unit test for "invertMatrix" function
 bool testInvertMatrix()
@@ -38,33 +43,22 @@ void testLinearRegression(QTabWidget *tabWidget)
     using namespace boost::numeric::ublas;
 
     // Example with a feature size of 1 (p = 1)
-    // y = 5x -> B = 5
-    const int N = 5; // # Outputs
+    const int N = 100; // # Outputs
     const int P = 1; // Dimensions
 
-    matrix<double> X(N, P+1); // [N x (p+1)]
-    // Row 1
-    X(0, 0) = 1;
-    X(0, 1) = 1;
-    // Row 2
-    X(1, 0) = 1;
-    X(1, 1) = 2;
-    // Row 3
-    X(2, 0) = 1;
-    X(2, 1) = 3;
-    // Row 4 (now for some random stuff)
-    X(3, 0) = 1;
-    X(3, 1) = 10;
-    // Row 5
-    X(4, 0) = 1;
-    X(4, 1) = 23;
+    boost::mt19937 rng; // Not seeded
+    boost::normal_distribution<> nd(0.0, 1.0);
+    boost::variate_generator<boost::mt19937&,
+                             boost::normal_distribution<> > var_nor(rng, nd);
 
+    matrix<double> X(N, P+1); // [N x (p+1)]
     matrix<double> Y(N, 1); // [N x 1]
-    Y(0, 0) = 100;
-    Y(1, 0) = 200;
-    Y(2, 0) = 300;
-    Y(3, 0) = 340;
-    Y(4, 0) = 340;
+    for(int i = 0; i < N; i++)
+    {
+        X(i, 0) = 1; // y-intercept
+        X(i, 1) = i;
+        Y(i, 0) = i + var_nor(); // Y = BX + e, where e ~ N(0, var)
+    }
 
     // Function approximation
     auto f = new LinearRegression<double>(Y, X);
