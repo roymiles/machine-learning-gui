@@ -1,5 +1,7 @@
 Dependencies/opencv-3.4.1/
-Dependencies/
+Dependencies/darkstyle
+Dependencies/opencv-2.4.13.6/
+Dependencies/tensorflor/
 *.DS_Store
 mainwindow.ui.autosave
 JumboEagle.pro.user.e73499f

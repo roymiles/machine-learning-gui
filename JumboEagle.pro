@@ -23,45 +23,42 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-    graphwidget.cpp \
-    filemanager.cpp \
-    addblockdialog.cpp \
-    inputport.cpp \
-    port.cpp \
-    customblock.cpp \
-    block.cpp \
-    mycustomblock.cpp \
-    outputport.cpp \
-    edge.cpp \
-    linearregression.cpp \
-    utilities.cpp \
-    Dependencies/qcustomplot-source/qcustomplot.cpp
+    Core/Graph/block.cpp \
+    Core/Graph/customblock.cpp \
+    Core/Graph/edge.cpp \
+    Core/Graph/graphwidget.cpp \
+    Core/Graph/inputport.cpp \
+    Core/Graph/mycustomblock.cpp \
+    Core/Graph/outputport.cpp \
+    Core/Graph/port.cpp \
+    Core/IO/filemanager.cpp \
+    Core/UI/addblockdialog.cpp \
+    Core/linearregression.cpp \
+    Core/main.cpp \
+    Core/mainwindow.cpp \
+    Core/utilities.cpp
 
 HEADERS += \
-        mainwindow.h \
-    debug.h \
-    mainwindow.h \
-    graphwidget.h \
-    filemanager.h \
-    addblockdialog.h \
-    inputport.h \
-    port.h \
-    customblock.h \
-    block.h \
-    mycustomblock.h \
-    outputport.h \
-    utilities.h \
-    edge.h \
-    matrix.h \
-    linearregression.h \
-    Dependencies/qcustomplot-source/qcustomplot.h \
-    plot.h
+    Core/Graph/block.h \
+    Core/Graph/customblock.h \
+    Core/Graph/edge.h \
+    Core/Graph/graphwidget.h \
+    Core/Graph/inputport.h \
+    Core/Graph/mycustomblock.h \
+    Core/Graph/outputport.h \
+    Core/Graph/port.h \
+    Core/IO/filemanager.h \
+    Core/UI/addblockdialog.h \
+    Core/debug.h \
+    Core/linearregression.h \
+    Core/mainwindow.h \
+    Core/plot.h \
+    Core/utilities.h \
+    Dependencies/qcustomplot-source/qcustomplot.h
 
 FORMS += \
-        mainwindow.ui \
-    addblockdialog.ui
+    Core/UI/addblockdialog.ui \
+    Core/mainwindow.ui
 
 DISTFILES += \
     bg.svg
