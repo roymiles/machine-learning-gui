@@ -17,7 +17,7 @@ namespace je { // Not in graph sub namespace to reduce user boilerplate code
 
 /*
  * Generic block with one input and one output port. All user blocks must inherit from this.
- * This has a FileManager widget that loads the text editor in a new tab with the source code of the block
+ * This has a BlockSourceCodeManager widget that loads the text editor in a new tab with the source code of the block
  */
 
 using namespace je::graph;

@@ -1,6 +1,7 @@
 #ifndef PORT_H
 #define PORT_H
 
+#include "port.h"
 #include <QPainter>
 
 namespace je { namespace graph {
@@ -10,14 +11,11 @@ class Port
 public:
     Port() {}
     virtual void draw(QPainter *painter) = 0;
-    const int getX() const;
-    const int getY() const;
-    const int getW() const;
-    const int getH() const;
-    QPoint getCenter() const;
-
-protected:
-    int x, y, w, h; // TODO: add setters
+    virtual int getX() const = 0;
+    virtual int getY() const = 0;
+    virtual int getW() const = 0;
+    virtual int getH() const = 0;
+    virtual QPoint getCenter() const = 0;
 };
 
 } } // graph, je

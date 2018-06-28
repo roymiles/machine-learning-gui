@@ -73,8 +73,6 @@ private:
         // NOTE: Nested prod is not allowed
         tmp = prod(out, trans(X));
         B = prod(tmp, Y); // This is a unique solution
-
-        std::cout << "B = " << B << std::endl;
     }
 
 

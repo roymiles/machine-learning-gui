@@ -30,7 +30,6 @@ SOURCES += \
     Core/Graph/inputport.cpp \
     Core/Graph/mycustomblock.cpp \
     Core/Graph/outputport.cpp \
-    Core/Graph/port.cpp \
     Core/UI/addblockdialog.cpp \
     Core/linearregression.cpp \
     Core/main.cpp \

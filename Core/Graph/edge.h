@@ -15,6 +15,8 @@ public:
     Edge(const std::pair<BlockPointer, BlockPointer> endPoints) : endPoints(endPoints) {}
 
     void draw(QPainter *painter);
+    BlockPointer getStartVertex();
+    BlockPointer getEndVertex();
 
 private:
     // Can't change the end points once the edge is created

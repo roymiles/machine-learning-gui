@@ -16,7 +16,7 @@ GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(paren
     setMouseTracking(false);
     curState = State::IDLE;
     this->tabWidget = tabWidget;
-    this->drawingEdge = std::make_pair(nullDescriptor(), nullDescriptor());
+    this->drawingEdge = std::make_pair(G::null_vertex(), G::null_vertex());
 }
 
 void GraphWidget::addBlock(QString name)
@@ -24,10 +24,8 @@ void GraphWidget::addBlock(QString name)
     /*
      * Adds a user generated block
      */
-    qDebug() << "Block name = " << name;
-
     std::shared_ptr<Block> myBlock = std::make_shared<MyCustomBlock>();
-    Vertexd vertex = boost::add_vertex(myBlock, graph);
+    vertex_t vertex = boost::add_vertex(myBlock, graph);
     graph[vertex]->setName(name);
 
     this->update(); // Re-paints the canvas
@@ -64,11 +62,11 @@ void GraphWidget::paintEvent(QPaintEvent* e)
     // If in the DRAWING state, want to draw from the previously clicked port to the mouse position
     if(curState == State::DRAWING_EDGE){
         // Only one vertex is connected, either the start or the end point
-        bool firstNull = isNullDescriptor(drawingEdge.first);
-        bool secondNull = isNullDescriptor(drawingEdge.second);
-        if(firstNull && !secondNull){
+        bool no_source = (drawingEdge.first == G::null_vertex());
+        bool no_target = (drawingEdge.second == G::null_vertex());
+        if(no_source && !no_target){
             painter.drawLine(graph[drawingEdge.second]->getOutputPortCenter(), cursorPos);
-        }else if (!firstNull && secondNull) {
+        }else if (!no_source && no_target) {
             painter.drawLine(graph[drawingEdge.first]->getInputPortCenter(), cursorPos);
         }
     }
@@ -109,7 +107,7 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                     drawingEdge.first = vertex;
                 }
 
-                clearDescriptor(clickedVertex);
+                clickedVertex = G::null_vertex();
                 // Clicking on port for first time
                 if(curState == State::IDLE){
                     curState = State::DRAWING_EDGE;
@@ -120,21 +118,26 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                     curState = State::IDLE;
                     setMouseTracking(false);
 
-                    if(isNullDescriptor(drawingEdge.first) && isNullDescriptor(drawingEdge.second)){ // Only create the edge if we have both the input and outport ports
+                    if(drawingEdge.first != G::null_vertex() && drawingEdge.second != G::null_vertex()){ // Only create the edge if we have both the input and outport ports
                         // Edge accepts a pair of pointer to the start and end blocks (vertices)
                         std::pair<BlockPointer, BlockPointer> endPoints = std::make_pair(graph[drawingEdge.first], graph[drawingEdge.second]);
-                        std::unique_ptr<Edge> edge = std::make_unique<Edge>(endPoints);
-                        boost::add_edge(drawingEdge.first, drawingEdge.second, graph);
+                        std::shared_ptr<Edge> edge = std::make_shared<Edge>(endPoints);
+
+                        edge_t _e; bool _b;
+                        boost::tie(_e, _b) = boost::add_edge(drawingEdge.first, drawingEdge.second, edge, graph);
+                        vertex_t source = _e.m_source;
+                        vertex_t target = _e.m_target;
+                        qDebug() << "Added edge connecting " << graph[source]->getName() << " to " << graph[target]->getName();
 
                         // The edge has been created so clear previous start and end
-                        clearDescriptor(drawingEdge.first);
-                        clearDescriptor(drawingEdge.second);
+                        drawingEdge.first = G::null_vertex();
+                        drawingEdge.second = G::null_vertex();
                     }
                 }
                 break;
 
             case clickType::none:
-                clearDescriptor(clickedVertex);
+                clickedVertex = G::null_vertex();
                 hit = false; // No click events triggered, go onto the next block
                 break;
         }
@@ -161,7 +164,7 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
         this->update(); // Re-draw canvas
     }
 
-    if(!isNullDescriptor(clickedVertex)) // Currently holding down mouse button on a block, so move it with the mouse
+    if(clickedVertex != G::null_vertex()) // Currently holding down mouse button on a block, so move it with the mouse
     {
         // Need to offset the position by half the width and height of the box
         QPoint p = e->pos();
@@ -182,11 +185,9 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
  */
 void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
 {
-    // TODO NEED TO CHECK IF clickedVertex exists in graph (no overflow). Checking if invalid is not enough
-    if(!isNullDescriptor(clickedVertex))
+    if(clickedVertex != G::null_vertex())
     {
-        qDebug() << graph[clickedVertex]->getName();
-        clearDescriptor(clickedVertex);
+        clickedVertex = G::null_vertex();
     }
 }
 
@@ -199,33 +200,23 @@ void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
     {
         if(graph[vertex]->mousePressEvent(e->pos()) == clickType::block)
         {
-            this->tabWidget->addTab(graph[vertex]->loadTabWidget(), graph[vertex]->getName());
-
-        }
-        /*
-        if(block->mousePressEvent(e->pos()) == clickType::block)
-        {
             // Check if the source is not already open
-            const int tabIndex = block->tabIndex;
+            const int tabIndex = graph[vertex]->tabIndex;
             if(tabIndex == -1)
             {
-                // Not in a tab
-                if(block->loadSource())
-                {
-                    QPlainTextEdit* textEdit = block->getSource();
-                    this->tabWidget->addTab(textEdit, block->getName());
-                    const int i = this->tabWidget->count(); // Total number of tabs open
-                    block->tabIndex = i-1; // Update the tab index
-                    this->tabWidget->setCurrentIndex(i-1);
-                }
-
+                // Not in tab
+                auto widget = graph[vertex]->loadTabWidget();
+                this->tabWidget->addTab(widget, graph[vertex]->getName());
+                const int i = this->tabWidget->count(); // Total number of tabs open
+                graph[vertex]->tabIndex = i-1; // Update the tab index
+                this->tabWidget->setCurrentIndex(i-1);
             }else{
                 // Already in a tab, so set it as the active tab
                 this->tabWidget->setCurrentIndex(tabIndex);
             }
+
             break;
         }
-        */
     }
 }
 
@@ -245,7 +236,7 @@ void GraphWidget::zoomOut()
     qDebug() << "Zooming disabled";
 }
 
-std::shared_ptr<Block> GraphWidget::getBlock(const Vertexd vertex)
+std::shared_ptr<Block> GraphWidget::getBlock(const vertex_t vertex)
 {
     return graph[vertex];
 }

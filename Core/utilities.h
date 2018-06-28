@@ -59,21 +59,6 @@ inline bool invertMatrix (const matrix<T>& input, matrix<T>& inverse)
    return true;
 }
 
-// Used to clear the vertex/edge descriptors
-template<typename T>
-void clearDescriptor(T &x)
-{
-    x = -1; // For a vector -1 index does not exist, so this effectively clears the descriptor
-}
-
-// Check if a vertex/edge descriptor is empty
-template<typename T>
-bool isNullDescriptor(T &x)
-{
-    return (x == -1) ? true : false;
-}
-
-int nullDescriptor();
 bool isValidFileName(const QString fileName);
 bool testInvertMatrix();
 void testLinearRegression(QTabWidget *tabWidget);

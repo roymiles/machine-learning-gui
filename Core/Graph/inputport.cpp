@@ -4,16 +4,36 @@ namespace je { namespace graph {
 
 void InputPort::draw(QPainter *painter)
 {
-    w = parentBlock->getW() / 4;
-    h = parentBlock->getH() / 4;
-    x = parentBlock->getX() - w;
-    y = parentBlock->getY() + parentBlock->getH()/2 - h/2;
-
-    QRect rectangle(x, y, w, h);
+    QRect rectangle(getX(), getY(), getW(), getH());
 
     // Draw input port
     painter->fillRect(rectangle, Qt::yellow);
     painter->drawRect(rectangle);
+}
+
+int InputPort::getX() const
+{
+    return parentBlock->getX() - this->getW();
+}
+
+int InputPort::getY() const
+{
+    return parentBlock->getY() + parentBlock->getH()/2 - this->getH()/2;
+}
+
+int InputPort::getW() const
+{
+    return parentBlock->getW() / 4;
+}
+
+int InputPort::getH() const
+{
+    return parentBlock->getH() / 4;
+}
+
+QPoint InputPort::getCenter() const
+{
+    return QPoint(getX(), getY());
 }
 
 } } // graph, je

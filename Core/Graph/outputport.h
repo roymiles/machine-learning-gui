@@ -14,6 +14,13 @@ public:
     OutputPort() = delete;
     OutputPort(const Block* parentBlock) : parentBlock(parentBlock) {}
     void draw(QPainter *painter) override;
+
+    int getX() const override;
+    int getY() const override;
+    int getW() const override;
+    int getH() const override;
+    QPoint getCenter() const override;
+
 private:
     const Block* parentBlock;
 };

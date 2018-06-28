@@ -97,7 +97,6 @@ public:
         // Plot the Y column vector against a column in the input matrix (indexed by xcol)
         // Y is an Nx1 column vector
         // X is an Nx(p+1) matrix
-        std::cout << Y << X << std::endl;
         assert(Y.size1() == X.size1() && Y.size2() == 1);
 
         const size_t N = Y.size1();

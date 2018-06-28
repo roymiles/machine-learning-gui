@@ -19,7 +19,6 @@
 #include "mycustomblock.h" //TODO: can't include every type of block, need some loader .h
 #include "edge.h"
 #include "port.h"
-#include "../IO/blocksourcecodemanager.h"
 
 namespace je { namespace graph {
 
@@ -36,8 +35,9 @@ typedef boost::adjacency_list<boost::vecS, boost::vecS,
                               std::shared_ptr<Edge>
                               > GraphType;
 // For a vector container, these will be an unsigned integer index
-typedef boost::graph_traits<GraphType>::vertex_descriptor Vertexd;
-typedef boost::graph_traits<GraphType>::edge_descriptor Edged;
+typedef boost::graph_traits<GraphType> G;
+typedef G::vertex_descriptor vertex_t;
+typedef G::edge_descriptor edge_t;
 
 class GraphWidget : public QWidget
 {
@@ -51,7 +51,7 @@ public:
     void zoomIn();
     void zoomOut();
 
-    std::shared_ptr<Block> getBlock(const Vertexd vertex);
+    std::shared_ptr<Block> getBlock(const vertex_t vertex);
 
 protected:
     void paintEvent(QPaintEvent*);
@@ -66,13 +66,13 @@ private:
     GraphType graph; // Boost graph data type
 
     // The block that has been clicked on (before the mouse button has been released)
-    Vertexd clickedVertex;
+    vertex_t clickedVertex;
 
     State curState;
 
     // This is for drawing a link between two ports
     // Once this pair is filled up with 2 vertices, a corresponding edge will be added and the pair will be cleared
-    std::pair<Vertexd, Vertexd> drawingEdge;
+    std::pair<vertex_t, vertex_t> drawingEdge;
 
     // Mouse position for when in the DRAWING state. Will draw from a port to this point
     QPoint cursorPos;

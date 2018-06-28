@@ -8,4 +8,14 @@ void Edge::draw(QPainter *painter)
     painter->drawLine(endPoints.first->getX(), endPoints.first->getY(), endPoints.second->getX(), endPoints.second->getY());
 }
 
+BlockPointer Edge::getStartVertex()
+{
+    return endPoints.first;
+}
+
+BlockPointer Edge::getEndVertex()
+{
+    return endPoints.second;
+}
+
 } } // graph, je
