@@ -2,11 +2,6 @@
 
 namespace je { namespace graph {
 
-Port::Port()
-{
-    activePort = false;
-}
-
 const int Port::getX() const
 {
     return x;

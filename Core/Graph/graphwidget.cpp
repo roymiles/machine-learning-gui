@@ -7,32 +7,28 @@
 #include <QDebug>
 #include <QMatrix>
 #include <QPlainTextEdit>
+#include "../utilities.h"
 
 namespace je { namespace graph {
 
 GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(parent)
 {
     setMouseTracking(false);
-    curState = state::IDLE;
-    //std::cout << "Width = " << width() << ", Height = " << height() << std::endl;
-    start = nullptr;
-    end   = nullptr;
-    zoomX = 1.0;
-    zoomY = 1.0;
-    translateX = 1;
-    translateY = 1;
+    curState = State::IDLE;
     this->tabWidget = tabWidget;
+    this->drawingEdge = std::make_pair(nullDescriptor(), nullDescriptor());
 }
 
-void GraphWidget::addBlock(QString name, std::unique_ptr<io::FileManager> fileManager)
+void GraphWidget::addBlock(QString name)
 {
+    /*
+     * Adds a user generated block
+     */
     qDebug() << "Block name = " << name;
-    // Probably lots of unnecessary copying, which can be optimised out
-    std::shared_ptr<MyCustomBlock> block = std::make_shared<MyCustomBlock>(100, 100, 100, 100);
-    block->setName(name);
-    block->setFileManager(std::move(fileManager));
 
-    blocks.push_back(block);
+    std::shared_ptr<Block> myBlock = std::make_shared<MyCustomBlock>();
+    Vertexd vertex = boost::add_vertex(myBlock, graph);
+    graph[vertex]->setName(name);
 
     this->update(); // Re-paints the canvas
 }
@@ -45,11 +41,6 @@ void GraphWidget::paintEvent(QPaintEvent* e)
     // Draw the background
     QPainter painter(this);
 
-    //QMatrix matrix;
-    //matrix.translate(translateX, translateY);
-    //matrix.scale(zoomX, zoomY);
-    //painter.setMatrix(matrix);
-
     QPixmap pixmap("Resources/bg.png");
     // Tile the background
     const int width = 50;
@@ -58,24 +49,27 @@ void GraphWidget::paintEvent(QPaintEvent* e)
         for(int y = 0; y < this->height(); y += height)
             painter.drawPixmap(x, y, width, height, pixmap);
 
-    // Draw ports and blocks
-    for(auto const &b : blocks)
+    // Draw all blocks (and internally the ports)
+    for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
-        b->draw(&painter);
+        graph[vertex]->draw(&painter);
     }
+
     // Draw all edges
-    for(auto const &e : edges)
+    for(auto edge : boost::make_iterator_range(boost::edges(graph)))
     {
-        e->draw(&painter);
+        graph[edge]->draw(&painter);
     }
 
     // If in the DRAWING state, want to draw from the previously clicked port to the mouse position
-    if(curState == state::DRAWING){
-        if(start == nullptr && end != nullptr){
-            painter.drawLine(end->getCenter(), cursorPos);
-        }
-        else if (end == nullptr && start != nullptr) {
-            painter.drawLine(start->getCenter(), cursorPos);
+    if(curState == State::DRAWING_EDGE){
+        // Only one vertex is connected, either the start or the end point
+        bool firstNull = isNullDescriptor(drawingEdge.first);
+        bool secondNull = isNullDescriptor(drawingEdge.second);
+        if(firstNull && !secondNull){
+            painter.drawLine(graph[drawingEdge.second]->getOutputPortCenter(), cursorPos);
+        }else if (!firstNull && secondNull) {
+            painter.drawLine(graph[drawingEdge.first]->getInputPortCenter(), cursorPos);
         }
     }
 }
@@ -86,64 +80,71 @@ void GraphWidget::paintEvent(QPaintEvent* e)
  * If clicking on a block, want to be able to drag and move the block around
  * If clicking on a port (for the first time) want to enter the DRAWING state, where a line is drawn from the port to the mouse
  * Then, after clicking another port, create the link between these two ports.
+ *
+ * Another loop is for checking if the mouse press is on an edge
  */
 void GraphWidget::mousePressEvent(QMouseEvent* e)
 {
-    // Check if clicking on a block
-    for(auto const &block : blocks)
+    // Check if clicking on a block (or its ports)
+    for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
+
         bool hit = true; // Once a click event has been triggered (on either a block or a port), exit out of the loop
-        clickType c = block->mousePressEvent(e->pos());
+        clickType c = graph[vertex]->mousePressEvent(e->pos());
         switch(c)
         {
             case clickType::block:
-                activeBlock = block;
+                clickedVertex = vertex;
                 break;
 
             // The following click events have similar functionality, and so are grouped together
+            // Can connect either way round. e.g. in to and out, or an out to an in
             case clickType::inPort:
             case clickType::outPort:
 
                 // Set the start and end port depending on the click event
-                if(c == clickType::inPort)
-                {
-                    // Downcasting could be avoided?
-                    end   = std::static_pointer_cast<InputPort>(block->getActivePort());
+                if(c == clickType::inPort){
+                    drawingEdge.second = vertex;
                 }else{
-                    start = std::static_pointer_cast<OutputPort>(block->getActivePort());
+                    drawingEdge.first = vertex;
                 }
 
-                activeBlock = nullptr;
+                clearDescriptor(clickedVertex);
                 // Clicking on port for first time
-                if(curState == state::IDLE){
-                    curState = state::DRAWING;
+                if(curState == State::IDLE){
+                    curState = State::DRAWING_EDGE;
                     setMouseTracking(true); // Trigger mouse event without mouse click when in drawing state
                 }
                 // Clicking on port for second time, making the edge
-                else if(curState == state::DRAWING){
-                    curState = state::IDLE;
+                else if(curState == State::DRAWING_EDGE){
+                    curState = State::IDLE;
                     setMouseTracking(false);
 
-                    if(start != nullptr && end != nullptr){ // Only create the edge, if we have both the input and outport ports
-                        std::unique_ptr<Edge> edge = std::make_unique<Edge>(start, end);
-                        edges.push_back(std::move(edge));
+                    if(isNullDescriptor(drawingEdge.first) && isNullDescriptor(drawingEdge.second)){ // Only create the edge if we have both the input and outport ports
+                        // Edge accepts a pair of pointer to the start and end blocks (vertices)
+                        std::pair<BlockPointer, BlockPointer> endPoints = std::make_pair(graph[drawingEdge.first], graph[drawingEdge.second]);
+                        std::unique_ptr<Edge> edge = std::make_unique<Edge>(endPoints);
+                        boost::add_edge(drawingEdge.first, drawingEdge.second, graph);
 
                         // The edge has been created so clear previous start and end
-                        start = nullptr;
-                        end   = nullptr;
+                        clearDescriptor(drawingEdge.first);
+                        clearDescriptor(drawingEdge.second);
                     }
                 }
                 break;
 
             case clickType::none:
-                //curState = state::PANNING;
-                //panPos = e->pos(); // Reference pos
-                activeBlock = nullptr;
+                clearDescriptor(clickedVertex);
                 hit = false; // No click events triggered, go onto the next block
                 break;
         }
 
-        if(hit) break;
+        if(hit) break; // Once triggered a click event, exit the loop
+    }
+
+    // Check if clicked on an edge
+    for(auto edge : boost::make_iterator_range(boost::edges(graph)))
+    {
     }
 
 }
@@ -154,40 +155,26 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
  */
 void GraphWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    if(curState == state::DRAWING)
+    if(curState == State::DRAWING_EDGE)
     {
         cursorPos = e->pos();
         this->update(); // Re-draw canvas
     }
 
-    //std::cout << "Mouse move, x = " << e->pos().x() << ", y = " << e->pos().y() << std::endl;
-    if(activeBlock != nullptr)
+    if(!isNullDescriptor(clickedVertex)) // Currently holding down mouse button on a block, so move it with the mouse
     {
         // Need to offset the position by half the width and height of the box
         QPoint p = e->pos();
-        p.setX(p.x() - activeBlock->getW()/2);
-        p.setY(p.y() - activeBlock->getH()/2);
+        p.setX(p.x() - graph[clickedVertex]->getW()/2);
+        p.setY(p.y() - graph[clickedVertex]->getH()/2);
 
         // Move the block
-        activeBlock->setPos(p);
+        graph[clickedVertex]->setPos(p);
 
         // Redraw canvas
         this->update();
 
     }
-
-    /*if(curState == state::PANNING)
-    {
-        // Panning the canvas
-
-        // Update the translation based on how much panned from click
-        translateX -= (panPos.x() - e->pos().x());
-        translateY -= (panPos.y() - e->pos().y());
-
-        panPos = e->pos(); // Update panning reference
-
-        this->update();
-    }*/
 }
 
 /*
@@ -195,18 +182,12 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
  */
 void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
 {
-    //std::cout << "Mouse release" << std::endl;
-    if(activeBlock != nullptr)
+    // TODO NEED TO CHECK IF clickedVertex exists in graph (no overflow). Checking if invalid is not enough
+    if(!isNullDescriptor(clickedVertex))
     {
-        qDebug() << activeBlock->getName();
-        activeBlock = nullptr;
+        qDebug() << graph[clickedVertex]->getName();
+        clearDescriptor(clickedVertex);
     }
-
-    /*if(curState == state::PANNING)
-    {
-        // Exit out of the panning state
-        curState = state::IDLE;
-    }*/
 }
 
 /*
@@ -214,9 +195,14 @@ void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
  */
 void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
 {
-    //std::cout << "Doubling clicking" << std::endl;
-    for(auto const &block : blocks)
+    for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
+        if(graph[vertex]->mousePressEvent(e->pos()) == clickType::block)
+        {
+            this->tabWidget->addTab(graph[vertex]->loadTabWidget(), graph[vertex]->getName());
+
+        }
+        /*
         if(block->mousePressEvent(e->pos()) == clickType::block)
         {
             // Check if the source is not already open
@@ -239,6 +225,7 @@ void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
             }
             break;
         }
+        */
     }
 }
 
@@ -258,13 +245,9 @@ void GraphWidget::zoomOut()
     qDebug() << "Zooming disabled";
 }
 
-// Is a loop necessary? any alternatives?
-std::shared_ptr<Block> GraphWidget::getBlock(const int index)
+std::shared_ptr<Block> GraphWidget::getBlock(const Vertexd vertex)
 {
-    for(auto &block : blocks)
-        if(block->tabIndex == index) return block;
-
-    return nullptr;
+    return graph[vertex];
 }
 
 } } // graph, je

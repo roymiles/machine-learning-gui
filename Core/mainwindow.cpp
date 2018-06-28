@@ -38,6 +38,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_addBlock_clicked()
 {
+    // Show add block dialog. This handles all the types of blocks that can be added to the graph
     AddBlockDialog addBlockDialog;
     addBlockDialog.setGraphWidget(this->graphWidget); // Inject graph widget so that dialog can call addBlock
     addBlockDialog.setModal(true);
@@ -62,7 +63,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
     // Check for memory leaks...
     // Set the associated block tabIndex to -1
-    graphWidget->getBlock(index)->tabIndex = -1;
+    /*graphWidget->getBlock(index)->tabIndex = -1;
 
-    ui->tabWidget->removeTab(index);
+    ui->tabWidget->removeTab(index);*/
 }

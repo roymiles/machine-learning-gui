@@ -2,20 +2,10 @@
 
 namespace je { namespace graph {
 
-Edge::Edge()
-{
-
-}
-
-Edge::Edge(std::shared_ptr<OutputPort> start, std::shared_ptr<InputPort> end)
-{
-    this->start = start;
-    this->end   = end;
-}
-
 void Edge::draw(QPainter *painter)
 {
-    painter->drawLine(start->getX(), start->getY(), end->getX(), end->getY());
+    // At the moment, just draw a straight line from the start and to the end vertex
+    painter->drawLine(endPoints.first->getX(), endPoints.first->getY(), endPoints.second->getX(), endPoints.second->getY());
 }
 
 } } // graph, je

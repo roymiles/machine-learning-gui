@@ -3,22 +3,22 @@
 
 #include <QPainter>
 #include <memory>
-#include "inputport.h"
-#include "outputport.h"
+#include <utility> // std::pair, std::make_pair
+#include "block.h"
 
 namespace je { namespace graph {
 
 class Edge
 {
 public:
-    Edge();
-    Edge(std::shared_ptr<OutputPort> start, std::shared_ptr<InputPort> end);
+    Edge() = delete;
+    Edge(const std::pair<BlockPointer, BlockPointer> endPoints) : endPoints(endPoints) {}
 
     void draw(QPainter *painter);
 
 private:
-    std::shared_ptr<OutputPort> start;
-    std::shared_ptr<InputPort> end;
+    // Can't change the end points once the edge is created
+    const std::pair<BlockPointer, BlockPointer> endPoints;
 };
 
 } } // graph, je

@@ -44,7 +44,7 @@ void testLinearRegression(QTabWidget *tabWidget)
 
     // Example with a feature size of 2 (= p)
     const int N = 100; // # Outputs
-    const int P = 2; // Dimensions
+    const int P = 1; // Dimensions
 
     boost::mt19937 rng; // Not seeded
     boost::normal_distribution<> nd(0.0, 5.0);
@@ -76,6 +76,20 @@ void testLinearRegression(QTabWidget *tabWidget)
     p.drawFunction(0, 100, 1, fptr);
 
     tabWidget->addTab(customPlot, "Linear regression test");
+}
+
+bool isValidFileName(const QString fileName)
+{
+    // TODO: Add extra validation, such as filename length
+    // True if fileName only contains alphanumeric characters
+    QRegularExpression re("^[A-Za-z]+$"); // Contains alphanumeric characters only
+    QRegularExpressionMatch match = re.match(fileName);
+    return match.hasMatch();
+}
+
+int nullDescriptor()
+{
+    return -1;
 }
 
 } // je

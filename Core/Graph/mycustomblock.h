@@ -1,11 +1,11 @@
 #ifndef MYCUSTOMBLOCK_H
 #define MYCUSTOMBLOCK_H
 
-#include "customblock.h"
+#include "userblock.h"
 
 using namespace je;
 
-class MyCustomBlock : public CustomBlock
+class MyCustomBlock : public UserBlock
 {
 public:
     MyCustomBlock();

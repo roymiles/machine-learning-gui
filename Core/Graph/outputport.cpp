@@ -2,12 +2,6 @@
 
 namespace je { namespace graph {
 
-OutputPort::OutputPort(Block *parentBlock)
-{
-    this->parentBlock = parentBlock;
-}
-
-
 void OutputPort::draw(QPainter *painter)
 {
     w = parentBlock->getW()/4;

@@ -3,7 +3,8 @@
 
 #include <QDebug>
 #include <QMessageBox>
-#include "../IO/filemanager.h"
+#include "../IO/blocksourcecodemanager.h"
+#include "../utilities.h"
 
 AddBlockDialog::AddBlockDialog(QWidget *parent) :
     QDialog(parent),
@@ -29,13 +30,9 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
     {
         // Validate file name
         const QString fileName = ui->BlockNameLineEdit->text();
-        std::unique_ptr<io::FileManager> fileManager = std::make_unique<io::FileManager>(fileName);
-        if(fileManager->isValidFileName())
+        if(isValidFileName(fileName))
         {
-            // Create the source file
-            fileManager->createSourceFile(); // Build boiler plate code
-
-            this->graphWidget->addBlock(fileName, std::move(fileManager));
+            this->graphWidget->addBlock(fileName);
             this->close();
         }else{
             // TODO: FIX THIS BUG (CRASHES APPLICATION)

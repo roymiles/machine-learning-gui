@@ -4,16 +4,18 @@
 #include "port.h"
 #include "block.h"
 #include <QPainter>
+#include <memory>
 
 namespace je { namespace graph {
 
 class OutputPort : public Port
 {
 public:
-    OutputPort(Block *parentBlock);
+    OutputPort() = delete;
+    OutputPort(const Block* parentBlock) : parentBlock(parentBlock) {}
     void draw(QPainter *painter) override;
 private:
-    Block *parentBlock;
+    const Block* parentBlock;
 };
 
 } } // graph, je

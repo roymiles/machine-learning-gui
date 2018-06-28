@@ -7,6 +7,7 @@
 #include <QVector>
 #include <qcustomplot-source/qcustomplot.h>
 #include <tuple>
+#include "qcplinearcolormap.h"
 
 namespace je {
 
@@ -28,7 +29,7 @@ public:
     Plot(QCustomPlot *customPlot)
     {
         this->customPlot = customPlot;
-        this->count      = count;
+        this->count      = 0;
     }
 
     /*
@@ -46,7 +47,44 @@ public:
         // X is an Nx(p+1) matrix
 
         // X must have at least 2 inputs and xcols must exist in X
-        assert(X.size2() > 1 && X.size2() > std::get<0>(xcols) && X.size2() > std::get<1>(result));
+        assert(X.size2() > 1 && X.size2() > std::get<0>(xcols) && X.size2() > std::get<1>(xcols));
+
+        const size_t N = X.size1();
+        QVector<double> x1(N), x2(N);
+        for(size_t i = 0; i < N; i++)
+        {
+          x1[i] = X(i, std::get<0>(xcols));
+          x2[i] = X(i, std::get<1>(xcols));
+        }
+
+        colourMap = QCPLinearColorMap; // My colour stops are defined as values 0.0 through 1.0.
+        colourMap.addColorStop(0.0, Qt::red);
+        colourMap.addColorStop(0.1, Qt::blue);
+        colourMap.addColorStop(0.3, Qt::green);
+
+        QPen pen;
+        pen.setColor(colourMap.color(0.0, 100.0, xValue)); // Set colour range 0 to 100.0.
+
+        customPlot->addGraph();
+        customPlot->graph(count)->setData(x1, x2);
+        // Give the axes some labels:
+        customPlot->xAxis->setLabel("x1");
+        customPlot->yAxis->setLabel("x2");
+        customPlot->graph(count)->setPen(pen);
+        customPlot->graph(count)->setLineStyle(QCPGraph::lsNone);
+        customPlot->graph(count)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 4));
+        customPlot->graph(count)->setName("Training data");
+
+        // Set axes ranges, so we see all data:
+        T min = *std::min_element(x1.constBegin(), x1.constEnd());
+        T max = *std::max_element(x1.constBegin(), x1.constEnd());
+        customPlot->xAxis->setRange(min, max);
+
+        min = *std::min_element(x2.constBegin(), x2.constEnd());
+        max = *std::max_element(x2.constBegin(), x2.constEnd());
+        customPlot->yAxis->setRange(min, max);
+        customPlot->replot();
+        count++;
     }
 
     /*
@@ -64,10 +102,10 @@ public:
 
         const size_t N = Y.size1();
         QVector<double> x(N), y(N);
-        for(size_t i = 0; i < N; i++)
+        for(int i = 0; i < N; i++)
         {
-          x[i] = X(i, xcol);
-          y[i] = Y(i, 0);
+            x[i] = X(i, xcol);
+            y[i] = Y(i, 0);
         }
 
         customPlot->addGraph();
@@ -103,10 +141,10 @@ public:
     {
         assert(xStep > 0); // Ensures the loop ends and no division by zero
 
-        const size_t N = std::abs(xEnd - xStart) / xStep;
+        const int N = std::abs(xEnd - xStart) / xStep;
         QVector<double> x(N), y(N);
         matrix<T> in(1, 2);
-        for(size_t i = xStart; i < xEnd; i += xStep)
+        for(int i = xStart; i < xEnd; i += xStep)
         {
           x[i] = i;
           in(0, 0) = 1; // See theory, this is for the y-intercept

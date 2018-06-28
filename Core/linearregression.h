@@ -3,6 +3,7 @@
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
+#include "Graph/userblock.h"
 
 using namespace boost::numeric::ublas;
 
@@ -13,7 +14,7 @@ namespace je{
 // This fixes the relationship to a linear model
 // TODO: Allow multi-output data
 template<typename T>
-class LinearRegression
+class LinearRegression : public UserBlock
 {
 public:
 
@@ -21,7 +22,7 @@ public:
      * Must specify the X, Y data
      */
     LinearRegression() = delete;
-    LinearRegression(matrix<T> &Y, matrix<T> &X)
+    LinearRegression(matrix<T> &Y, matrix<T> &X) : UserBlock()
     {
         train(Y, X);
     }

@@ -1,5 +1,5 @@
-#ifndef FILEMANAGER_H
-#define FILEMANAGER_H
+#ifndef BLOCKSOURCECODEMANAGER_H
+#define BLOCKSOURCECODEMANAGER_H
 
 #include <QString>
 #include <QPlainTextEdit>
@@ -11,15 +11,14 @@ namespace je { namespace io {
  * Responsible for creating the block source files (adding boilerplate code)
  * and validating file names
  */
-class FileManager
+class BlockSourceCodeManager
 {
 public:
-    FileManager();
-    FileManager(QString fileName);
-    ~FileManager();
+    BlockSourceCodeManager();
+    BlockSourceCodeManager(QString fileName);
+    ~BlockSourceCodeManager();
 
     const QString getCompleteFilePath() const;
-    bool isValidFileName() const;
     bool createSourceFile();
 
     bool loadSourceFile(); // Attempt to load the source file (and place in textEdit)
@@ -32,4 +31,4 @@ private:
 
 } } // io, je
 
-#endif // FILEMANAGER_H
+#endif // BLOCKSOURCECODEMANAGER_H

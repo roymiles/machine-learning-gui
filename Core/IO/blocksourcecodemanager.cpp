@@ -1,4 +1,4 @@
-#include "filemanager.h"
+#include "blocksourcecodemanager.h"
 #include <QRegularExpression>
 #include <QFile>
 #include <QTextStream>
@@ -6,37 +6,28 @@
 
 namespace je { namespace io {
 
-FileManager::FileManager()
+BlockSourceCodeManager::BlockSourceCodeManager()
 {
 }
 
-FileManager::FileManager(QString fileName)
+BlockSourceCodeManager::BlockSourceCodeManager(QString fileName)
 {
     this->fileName = fileName;
 }
 
-FileManager::~FileManager()
+BlockSourceCodeManager::~BlockSourceCodeManager()
 {
     // Free up memory
     delete plainTextEdit;
 }
 
-inline const QString FileManager::getCompleteFilePath() const
+inline const QString BlockSourceCodeManager::getCompleteFilePath() const
 {
     // TODO: This needs to be changed
     return "C:\\Users\\Roy\\Documents\\JumboEagle\\" + this->fileName + ".txt";
 }
 
-bool FileManager::isValidFileName() const
-{
-    // TODO: Add extra validation, such as filename length
-    // True if fileName only contains alphanumeric characters
-    QRegularExpression re("^[A-Za-z]+$"); // Contains alphanumeric characters only
-    QRegularExpressionMatch match = re.match(fileName);
-    return match.hasMatch();
-}
-
-bool FileManager::createSourceFile()
+bool BlockSourceCodeManager::createSourceFile()
 {
 
     QFile file(getCompleteFilePath());
@@ -48,12 +39,12 @@ bool FileManager::createSourceFile()
     return true;
 }
 
-QPlainTextEdit* FileManager::getContent() const
+QPlainTextEdit* BlockSourceCodeManager::getContent() const
 {
     return plainTextEdit;
 }
 
-bool FileManager::loadSourceFile()
+bool BlockSourceCodeManager::loadSourceFile()
 {
     QString completeFilePath = getCompleteFilePath();
     if (!QFile::exists(completeFilePath))

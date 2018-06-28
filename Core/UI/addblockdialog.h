@@ -20,14 +20,11 @@ public:
 
 private slots:
     void on_AddBlockDialog_finished(int result);
-
     void on_AddBlockConfirmButton_accepted();
-
     void on_AddBlockConfirmButton_rejected();
 
 private:
     Ui::AddBlockDialog *ui;
-
     GraphWidget *graphWidget;
 };
 

@@ -8,15 +8,13 @@ namespace je { namespace graph {
 class Port
 {
 public:
-    Port();
+    Port() {}
     virtual void draw(QPainter *painter) = 0;
     const int getX() const;
     const int getY() const;
     const int getW() const;
     const int getH() const;
     QPoint getCenter() const;
-
-    bool activePort;
 
 protected:
     int x, y, w, h; // TODO: add setters

@@ -7,20 +7,37 @@
 #include <QString>
 #include <vector>
 #include <memory>
+#include <string>
+#include <utility> // std::pair, std::make_pair
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graphviz.hpp>
+#include <boost/graph/properties.hpp>
+#include <boost/property_map/property_map.hpp>
+#include <boost/graph/named_function_params.hpp>
 
 #include "block.h"
 #include "mycustomblock.h" //TODO: can't include every type of block, need some loader .h
 #include "edge.h"
 #include "port.h"
-#include "../IO/filemanager.h"
+#include "../IO/blocksourcecodemanager.h"
 
 namespace je { namespace graph {
 
-enum state {
+enum State {
     IDLE,
-    DRAWING
-    //PANNING
+    DRAWING_EDGE
 };
+
+// See: http://blog.hostilefork.com/boost-graph-templates-not-crazy/
+// Graph type, defines the properties of the adjacency list
+typedef boost::adjacency_list<boost::vecS, boost::vecS,
+                              boost::directedS,
+                              std::shared_ptr<Block>, // Vertex
+                              std::shared_ptr<Edge>
+                              > GraphType;
+// For a vector container, these will be an unsigned integer index
+typedef boost::graph_traits<GraphType>::vertex_descriptor Vertexd;
+typedef boost::graph_traits<GraphType>::edge_descriptor Edged;
 
 class GraphWidget : public QWidget
 {
@@ -29,12 +46,12 @@ class GraphWidget : public QWidget
 public:
     GraphWidget(QWidget *parent=0, QTabWidget *tabWidget=0); // Takes in tabWidget, because need graphWidget to add new tabs and stuff
 
-    void addBlock(QString name, std::unique_ptr<io::FileManager> fileManager);
+    void addBlock(QString name);
 
     void zoomIn();
     void zoomOut();
 
-    std::shared_ptr<Block> getBlock(const int index);
+    std::shared_ptr<Block> getBlock(const Vertexd vertex);
 
 protected:
     void paintEvent(QPaintEvent*);
@@ -46,30 +63,21 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent*);
 
 private:
-    std::vector<std::shared_ptr<Block>> blocks;
-    std::vector<std::unique_ptr<Edge>> edges; // TODO: Move this over to using boost::graph
+    GraphType graph; // Boost graph data type
 
-    // The current block that is being moved around, see mousePressEvent
-    std::shared_ptr<Block> activeBlock;
+    // The block that has been clicked on (before the mouse button has been released)
+    Vertexd clickedVertex;
 
-    state curState;
+    State curState;
 
     // This is for drawing a link between two ports
-    std::shared_ptr<OutputPort> start;
-    std::shared_ptr<InputPort> end;
-
-    // The last position for panning reference
-    //QPoint panPos;
+    // Once this pair is filled up with 2 vertices, a corresponding edge will be added and the pair will be cleared
+    std::pair<Vertexd, Vertexd> drawingEdge;
 
     // Mouse position for when in the DRAWING state. Will draw from a port to this point
     QPoint cursorPos;
 
-    float zoomX, zoomY;
-    int translateX, translateY;
-
     QTabWidget *tabWidget;
-
-    std::unique_ptr<io::FileManager> fileManager;
 
 };
 
