@@ -3,18 +3,17 @@
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
-#include "Graph/userblock.h"
 
 using namespace boost::numeric::ublas;
 
-namespace je{
+namespace je { namespace maths {
 
 // Find the linear relationship between an input vector and an output
 // The feature size is p+1, and the # outputs = N
 // This fixes the relationship to a linear model
 // TODO: Allow multi-output data
-template<typename T>
-class LinearRegression : public UserBlock
+template<typename T> // Output will be the same type as input because Y = XB
+class LinearRegression
 {
 public:
 
@@ -22,7 +21,7 @@ public:
      * Must specify the X, Y data
      */
     LinearRegression() = delete;
-    LinearRegression(matrix<T> &Y, matrix<T> &X) : UserBlock()
+    LinearRegression(matrix<T> &Y, matrix<T> &X)
     {
         train(Y, X);
     }
@@ -82,6 +81,6 @@ private:
 template<typename T>
 using calc_t = std::function<matrix<T>(matrix<T> const&)>;
 
-} // je
+} } // maths, je
 
 #endif // LINEARREGRESSION_H

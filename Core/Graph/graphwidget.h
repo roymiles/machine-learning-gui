@@ -16,7 +16,7 @@
 #include <boost/graph/named_function_params.hpp>
 
 #include "block.h"
-#include "mycustomblock.h" //TODO: can't include every type of block, need some loader .h
+#include "Blocks/mycustomblock.h" //TODO: can't include every type of block, need some loader .h
 #include "edge.h"
 #include "port.h"
 
@@ -46,11 +46,10 @@ class GraphWidget : public QWidget
 public:
     GraphWidget(QWidget *parent=0, QTabWidget *tabWidget=0); // Takes in tabWidget, because need graphWidget to add new tabs and stuff
 
-    void addBlock(QString name);
-
     void zoomIn();
     void zoomOut();
 
+    void addBlock(QString name);
     std::shared_ptr<Block> getBlock(const vertex_t vertex);
 
 protected:

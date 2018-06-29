@@ -61,9 +61,7 @@ void MainWindow::on_zoomIn_clicked()
  */
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
-    // Check for memory leaks...
     // Set the associated block tabIndex to -1
-    /*graphWidget->getBlock(index)->tabIndex = -1;
-
-    ui->tabWidget->removeTab(index);*/
+    graphWidget->getBlock(index)->tabIndex = -1;
+    ui->tabWidget->removeTab(index);
 }

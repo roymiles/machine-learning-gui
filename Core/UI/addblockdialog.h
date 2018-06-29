@@ -8,6 +8,11 @@ namespace Ui {
 class AddBlockDialog;
 }
 
+enum BlockTypes : int {
+    USER_BLOCK = 0,
+    LINEAR_REGRESSION = 1
+};
+
 class AddBlockDialog : public QDialog
 {
     Q_OBJECT

@@ -3,6 +3,7 @@
 
 #include "port.h"
 #include <QPainter>
+#include <memory>
 
 namespace je { namespace graph {
 
@@ -17,6 +18,8 @@ public:
     virtual int getH() const = 0;
     virtual QPoint getCenter() const = 0;
 };
+
+typedef std::shared_ptr<Port> PortPointer;
 
 } } // graph, je
 

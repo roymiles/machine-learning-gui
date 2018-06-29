@@ -1,6 +1,6 @@
 #include "utilities.h"
 
-#include "linearregression.h"
+#include "../Maths/linearregression.h"
 #include "plot.h"
 
 #include <boost/random.hpp>

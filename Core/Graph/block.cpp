@@ -1,14 +1,10 @@
 #include "block.h"
-#include "../debug.h"
+#include "../Utility/debug.h"
 
 #include <QPainter>
 #include <QRect>
 
 namespace je { namespace graph {
-
-Block::Block() : x(0), y(0), w(50), h(50), tabIndex(-1)
-{
-}
 
 Block::Block(int x, int y, int width, int height) : x(x), y(y), w(width), h(height), tabIndex(-1)
 {

@@ -6,8 +6,10 @@
 #include <QString>
 #include <QTextEdit>
 #include <memory>
+#include <utility>
 #include "port.h"
 #include "../IO/blocksourcecodemanager.h"
+#include <boost/optional.hpp>
 
 namespace je { namespace graph {
 
@@ -21,11 +23,12 @@ enum clickType{
 
 /*
  * Characteristic of all block types, including user generated and our own blocks
+ * Must be a non-templated class as its the container for boost::graph
  */
 class Block
 {
 public:
-    Block();
+    Block() = delete;
     Block(int x, int y, int width, int height);
     ~Block();
 
@@ -40,25 +43,24 @@ public:
     int getW() const;
     int getH() const;
 
-    virtual QPoint getInputPortCenter() = 0;
-    virtual QPoint getOutputPortCenter() = 0;
+    virtual std::pair<PortPointer, PortPointer> getPorts() = 0;
 
     void setName(QString name);
     const QString& getName() const; // Same as file name for user blocks
-
-    // Attempt to load source content
-    //bool loadSource();
-    // After successfully loading the source, put it into a QTextEdit
-    //QPlainTextEdit* getSource();
 
     int tabIndex; // Current tab index, -1 if not in tab
 
     /*
      *  Loads the widget that is shown in a new tab after double clicking the block
      *  This can either be a text editor with the source code (user block)
-     *  or a graph showing the linear regression function etc
+     *  or a graph showing the linear regression function (as an example)
      */
     virtual QWidget* loadTabWidget() = 0;
+
+    /*
+     *
+     */
+    virtual void* execute(void* in) = 0;
 
 private:
     int x, y, w, h;

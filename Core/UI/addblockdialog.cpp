@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include "../IO/blocksourcecodemanager.h"
-#include "../utilities.h"
+#include "../Utility/utilities.h"
 
 AddBlockDialog::AddBlockDialog(QWidget *parent) :
     QDialog(parent),
@@ -27,21 +27,28 @@ void AddBlockDialog::on_AddBlockDialog_finished(int result)
 void AddBlockDialog::on_AddBlockConfirmButton_accepted()
 {
     if(this->graphWidget != nullptr)
-    {
-        // Validate file name
-        const QString fileName = ui->BlockNameLineEdit->text();
-        if(isValidFileName(fileName))
-        {
-            this->graphWidget->addBlock(fileName);
-            this->close();
-        }else{
-            // TODO: FIX THIS BUG (CRASHES APPLICATION)
-            //QMessageBox msgBox;
-            //msgBox.setText("Invalid block name."); // Give more detail...
-            //msgBox.exec();
+    {      
+        auto selectedBlockType = ui->comboBox->currentIndex();
 
-            // Don't close the add block dialog
-            this->close();
+        switch(selectedBlockType)
+        {
+        case USER_BLOCK:
+            // Validate file name
+            const QString fileName = ui->BlockNameLineEdit->text();
+            if(isValidFileName(fileName))
+            {
+                this->graphWidget->addBlock<CustomBlock>(fileName);
+                this->close();
+            }else{
+                // TODO: FIX THIS BUG (CRASHES APPLICATION)
+                //QMessageBox msgBox;
+                //msgBox.setText("Invalid block name."); // Give more detail...
+                //msgBox.exec();
+
+                // Don't close the add block dialog
+                this->close();
+            }
+            break;
         }
     }else{
         // Give error message

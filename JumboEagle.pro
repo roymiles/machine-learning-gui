@@ -8,7 +8,8 @@ QT       += core gui
 QT       += opengl # Maybe dont need?
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
-CONFIG += c++14
+CONFIG += c++17
+
 TARGET = JumboEagle
 TEMPLATE = app
 
@@ -28,46 +29,33 @@ SOURCES += \
     Core/Graph/edge.cpp \
     Core/Graph/graphwidget.cpp \
     Core/Graph/inputport.cpp \
-    Core/Graph/mycustomblock.cpp \
     Core/Graph/outputport.cpp \
+    Core/Graph/Blocks/mycustomblock.cpp \
+    Core/IO/blocksourcecodemanager.cpp \
+    Core/Maths/histogram.cpp \
+    Core/Maths/linearregression.cpp \
     Core/UI/addblockdialog.cpp \
-    Core/linearregression.cpp \
-    Core/main.cpp \
-    Core/mainwindow.cpp \
-    Core/utilities.cpp \
-    Dependencies/qcustomplot-source/qcustomplot.cpp \
-    Core/testsuite.cpp \
-    Dependencies/darkstyle/DarkStyle.cpp \
-    Dependencies/darkstyle/framelesswindow/framelesswindow.cpp \
-    Dependencies/darkstyle/framelesswindow/windowdragger.cpp \
-    Core/histogram.cpp \
-    Core/qcplinearcolormap.cpp \
-    Core/Graph/userblock.cpp \
-    Core/IO/blocksourcecodemanager.cpp
+    Core/Utility/utilities.cpp \
+    Core/Graph/BlockTypes/customblock.cpp
+
 
 HEADERS += \
     Core/Graph/block.h \
     Core/Graph/edge.h \
     Core/Graph/graphwidget.h \
     Core/Graph/inputport.h \
-    Core/Graph/mycustomblock.h \
     Core/Graph/outputport.h \
     Core/Graph/port.h \
+    Core/Graph/Blocks/mycustomblock.h \
+    Core/Graph/BlockTypes/customblock.h \
+    Core/IO/blocksourcecodemanager.h \
+    Core/Maths/histogram.h \
+    Core/Maths/linearregression.h \
     Core/UI/addblockdialog.h \
-    Core/debug.h \
-    Core/linearregression.h \
-    Core/mainwindow.h \
-    Core/plot.h \
-    Core/utilities.h \
-    Dependencies/qcustomplot-source/qcustomplot.h \
-    Core/testsuite.h \
-    Dependencies/darkstyle/DarkStyle.h \
-    Dependencies/darkstyle/framelesswindow/framelesswindow.h \
-    Dependencies/darkstyle/framelesswindow/windowdragger.h \
-    Core/histogram.h \
-    Core/qcplinearcolormap.h \
-    Core/Graph/userblock.h \
-    Core/IO/blocksourcecodemanager.h
+    Core/Utility/debug.h \
+    Core/Utility/plot.h \
+    Core/Utility/utilities.h
+
 
 FORMS += \
     Core/UI/addblockdialog.ui \

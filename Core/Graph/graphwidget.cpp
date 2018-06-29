@@ -7,7 +7,8 @@
 #include <QDebug>
 #include <QMatrix>
 #include <QPlainTextEdit>
-#include "../utilities.h"
+#include "BlockTypes/customblock.h"
+#include "../Utility/utilities.h"
 
 namespace je { namespace graph {
 
@@ -19,14 +20,18 @@ GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(paren
     this->drawingEdge = std::make_pair(G::null_vertex(), G::null_vertex());
 }
 
-void GraphWidget::addBlock(QString name)
+void GraphWidget<CustomBlock>::addBlock(QString name)
 {
     /*
      * Adds a user generated block
      */
-    std::shared_ptr<Block> myBlock = std::make_shared<MyCustomBlock>();
+
+    std::shared_ptr<Block> myBlock = std::make_shared<MyCustomBlock>(); // As an example
     vertex_t vertex = boost::add_vertex(myBlock, graph);
     graph[vertex]->setName(name);
+    qDebug() << "Added vertex " << name;
+    qDebug() << "Num vertices = " << boost::num_vertices(graph);
+    qDebug() << "Num edges = " << boost::num_edges(graph);
 
     this->update(); // Re-paints the canvas
 }
@@ -39,7 +44,8 @@ void GraphWidget::paintEvent(QPaintEvent* e)
     // Draw the background
     QPainter painter(this);
 
-    QPixmap pixmap("Resources/bg.png");
+    // Does not work
+    QPixmap pixmap("C:\\Users\\Roy\\Documents\\JumboEagle\\Resources\\bg.png");
     // Tile the background
     const int width = 50;
     const int height = 50;
@@ -128,7 +134,8 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                         vertex_t source = _e.m_source;
                         vertex_t target = _e.m_target;
                         qDebug() << "Added edge connecting " << graph[source]->getName() << " to " << graph[target]->getName();
-
+                        qDebug() << "Num vertices = " << boost::num_vertices(graph);
+                        qDebug() << "Num edges = " << boost::num_edges(graph);
                         // The edge has been created so clear previous start and end
                         drawingEdge.first = G::null_vertex();
                         drawingEdge.second = G::null_vertex();

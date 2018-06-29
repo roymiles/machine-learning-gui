@@ -1,15 +1,16 @@
 #ifndef MYCUSTOMBLOCK_H
 #define MYCUSTOMBLOCK_H
 
-#include "userblock.h"
+#include "../BlockTypes/customblock.h"
 
 using namespace je;
 
-class MyCustomBlock : public UserBlock
+class MyCustomBlock : public iblock_t
 {
 public:
     MyCustomBlock();
-    MyCustomBlock(int x, int y, int width, int height);
+
+    //int execute(int in) override;
 };
 
 #endif // MYCUSTOMBLOCK_H

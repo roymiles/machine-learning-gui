@@ -19,6 +19,21 @@ namespace je {
 
 using namespace boost::numeric::ublas;
 
+template<typename T>
+struct optional{
+    optional() : valid(false) {}
+    optional(T t) : t(t), valid(true) {}
+
+    void set(T t)
+    {
+        this->t = t;
+        valid = true;
+    }
+
+    T t;
+    bool valid;
+};
+
 /*
  * --- PARAMS ---
  * rect     : Arbitrary type that must specify getX, getY, getW, and getH
