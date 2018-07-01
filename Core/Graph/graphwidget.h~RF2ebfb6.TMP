@@ -49,11 +49,8 @@ public:
     void zoomIn();
     void zoomOut();
 
-    // These need to be generalised, maybe a template version
     void addBlock(QString name);
     std::shared_ptr<IBlock> getBlock(const vertex_t vertex);
-
-    void run();
 
 protected:
     void paintEvent(QPaintEvent*);

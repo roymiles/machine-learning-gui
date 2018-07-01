@@ -10,7 +10,11 @@ class MyCustomBlock : public test_t
 public:
     MyCustomBlock();
 
-    //int execute(int in) override;
+    void init() override;
+    double run(int in) override
+    {
+        return 5.0;
+    }
 };
 
 #endif // MYCUSTOMBLOCK_H

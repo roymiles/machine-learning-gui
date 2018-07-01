@@ -64,6 +64,14 @@ int IBlock::getH() const
     return h;
 }
 
+void IBlock::getRect(QRect &rect) const
+{
+    rect.setX(x);
+    rect.setY(y);
+    rect.setWidth(w);
+    rect.setHeight(h);
+}
+
 std::pair<PortPointer, PortPointer> IBlock::getPorts() const
 {
     return ports;

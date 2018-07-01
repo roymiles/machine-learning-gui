@@ -39,7 +39,10 @@ SOURCES += \
     Dependencies/qcustomplot-source/qcustomplot.cpp \
     Core/main.cpp \
     Core/mainwindow.cpp \
-    Core/Graph/iblock.cpp
+    Core/Graph/iblock.cpp \
+    Dependencies/darkstyle/framelesswindow/framelesswindow.cpp \
+    Dependencies/darkstyle/framelesswindow/windowdragger.cpp \
+    Dependencies/darkstyle/DarkStyle.cpp
 
 
 HEADERS += \
@@ -60,7 +63,10 @@ HEADERS += \
     Dependencies/qcustomplot-source/qcustomplot.h \
     Core/mainwindow.h \
     Core/Graph/iblock.h \
-    Core/Graph/blockutils.h
+    Core/Graph/blockutils.h \
+    Dependencies/darkstyle/framelesswindow/framelesswindow.h \
+    Dependencies/darkstyle/framelesswindow/windowdragger.h \
+    Dependencies/darkstyle/DarkStyle.h
 
 
 FORMS += \

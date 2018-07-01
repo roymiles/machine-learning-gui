@@ -48,7 +48,8 @@ public:
     static void draw(QPainter *painter, IBlock* block)
     {
         qDebug() << "Drawing a block";
-        QRect rectangle(block->getX(), block->getX(), block->getX(), block->getX());
+        QRect rectangle;
+        block->getRect(rectangle);
         painter->fillRect(rectangle, Qt::white);
         painter->drawRect(rectangle);
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());
@@ -79,7 +80,8 @@ public:
              typename out_type>
     static void draw(QPainter *painter, IBlock* block)
     {
-        QRect rectangle(block->getX(), block->getX(), block->getX(), block->getX());
+        QRect rectangle;
+        block->getRect(rectangle);
         painter->fillRect(rectangle, Qt::white);
         painter->drawRect(rectangle);
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());
@@ -107,7 +109,8 @@ public:
              typename out_type>
     static void draw(QPainter *painter, IBlock* block)
     {
-        QRect rectangle(block->getX(), block->getX(), block->getX(), block->getX());
+        QRect rectangle;
+        block->getRect(rectangle);
         painter->fillRect(rectangle, Qt::white);
         painter->drawRect(rectangle);
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());

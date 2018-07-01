@@ -31,6 +31,7 @@ public:
     int getY() const;
     int getW() const;
     int getH() const;
+    void getRect(QRect &rect) const;
     std::pair<PortPointer, PortPointer> getPorts() const;
     void setName(QString name);
     const QString& getName() const;
@@ -41,6 +42,19 @@ public:
     virtual void draw(QPainter *painter) = 0;
     virtual clickType mousePressEvent(QPoint &point) = 0;
     virtual QWidget* tabWidget() = 0;
+
+    /*
+     * This is called before the flow graph is run
+     * This involve (for example) loading state information from a file
+     * *Training* from a dataset
+     */
+    virtual void init() = 0;
+
+    /*
+     * The templated Block class will cast the void* to the appropriate types
+     * and then call the user made run functions
+     */
+    virtual void* run(void* in) = 0;
 
 private:
     int x, y, w, h;

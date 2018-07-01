@@ -5,8 +5,7 @@ MyCustomBlock::MyCustomBlock() : test_t()
 
 }
 
-
-/*int MyCustomBlock::execute(int in)
+void MyCustomBlock::init()
 {
-     return 5 * in;
-}*/
+    qDebug() << "Initializing MyCustomBlock";
+}

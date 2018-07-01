@@ -248,4 +248,20 @@ std::shared_ptr<IBlock> GraphWidget::getBlock(const vertex_t vertex)
     return graph[vertex];
 }
 
+void GraphWidget::run()
+{
+    // Run init on all blocks (initialise all blocks)
+    for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
+        graph[vertex]->init();
+
+    // Go through each vertex and execute its function.
+    // The output of a preceeding vertex is fed into the next vertex
+    for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
+    {
+        // NOTE: the return void* is allocated using malloc and so must be freed
+        //       when no longer being used
+        //graph[vertex]->init();
+    }
+}
+
 } } // graph, je
