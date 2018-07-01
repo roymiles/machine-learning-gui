@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <string>
-#include "linearregression.h"
+#include "Maths/linearregression.h"
 #include <boost/numeric/ublas/matrix.hpp>
 #include <qcustomplot-source/qcustomplot.h>
 #include <opencv2/core.hpp>

@@ -1,74 +1,69 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
+#include <vector>
 #include <QPainter>
 #include <QPoint>
-#include <QString>
-#include <QTextEdit>
+#include <QWidget>
+#include <QDebug>
 #include <memory>
-#include <utility>
+#include <utility> // std::pair
+
+#include "../Utility/utilities.h"
 #include "port.h"
 #include "../IO/blocksourcecodemanager.h"
-#include <boost/optional.hpp>
+#include "../Utility/utilities.h"
+#include "iblock.h"
+#include "blockutils.h"
 
 namespace je { namespace graph {
 
-// Checks where a click takes place
-enum clickType{
-    inPort,
-    outPort,
-    block,
-    none
-};
-
 /*
- * Characteristic of all block types, including user generated and our own blocks
- * Must be a non-templated class as its the container for boost::graph
+ *  All blocks inherit a specialised version of this class
+ *  --- T PARAMS ---
+ *  blockType   : Defines the connected ports. Either a source, sink, or generic block
+ *  inType      : The type the block accepts
+ *  outType     : The type the block returns
+ *  tabType     : What happens when the user double clicks on the block.
+ *                An editable block will open a text editor with the source code that defines
+ *                the execution of the block
  */
-class Block
+template<typename block_type,
+         typename in_type,
+         typename out_type,
+         typename tab_type>
+class Block : public IBlock
 {
 public:
-    Block() = delete;
-    Block(int x, int y, int width, int height);
-    ~Block();
+    Block() : IBlock(block_type::has_input, block_type::has_output) {}
+    ~Block() {}
 
-    virtual void draw(QPainter *painter) = 0;
-    virtual clickType mousePressEvent(QPoint &point) = 0;
+    // Overridden members call upon the templated utility functions declared above
+    void draw(QPainter *painter) override
+    {
+        // Drawing a block is only dependant on the block type
+        block_type_impl<block_type>::draw(painter, this);
+    }
 
-    void setX(int x);
-    void setY(int y);
-    void setPos(QPoint point);
-    int getX() const;
-    int getY() const;
-    int getW() const;
-    int getH() const;
+    clickType mousePressEvent(QPoint &point) override
+    {
+        // The mouse press event check searches through all its ports and
+        // therefore is block type dependant
+        return block_type_impl<block_type>::mousePressEvent(point, this);
+    }
 
-    virtual std::pair<PortPointer, PortPointer> getPorts() = 0;
-
-    void setName(QString name);
-    const QString& getName() const; // Same as file name for user blocks
-
-    int tabIndex; // Current tab index, -1 if not in tab
-
-    /*
-     *  Loads the widget that is shown in a new tab after double clicking the block
-     *  This can either be a text editor with the source code (user block)
-     *  or a graph showing the linear regression function (as an example)
-     */
-    virtual QWidget* loadTabWidget() = 0;
-
-    /*
-     *
-     */
-    virtual void* execute(void* in) = 0;
-
-private:
-    int x, y, w, h;
-    QString name;
+    QWidget* tabWidget() override
+    {
+        // The widget that is returned is dependant on the tab type only
+        return tab_type_impl<tab_type>::tabWidget(this);
+    }
 };
 
-typedef std::shared_ptr<Block> BlockPointer;
+// Some common block types
+typedef Block<sink_t, int, int, editable_t> isink_t;
+typedef Block<source_t, int, int, editable_t> isource_t;
+typedef Block<block_t, int, int, editable_t> iblock_t;
 
-} } // graph, je
+} } // je
 
 #endif // BLOCK_H

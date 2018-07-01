@@ -4,9 +4,9 @@
 #include <QKeyEvent>
 #include <iostream>
 
-#include "debug.h"
+#include "Utility/debug.h"
 #include "UI/addblockdialog.h"
-#include "utilities.h"
+#include "Utility/utilities.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -62,6 +62,6 @@ void MainWindow::on_zoomIn_clicked()
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
     // Set the associated block tabIndex to -1
-    graphWidget->getBlock(index)->tabIndex = -1;
+    graphWidget->getBlock(index)->setTabIndex(-1);
     ui->tabWidget->removeTab(index);
 }

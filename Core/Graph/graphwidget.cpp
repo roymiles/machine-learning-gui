@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QMatrix>
 #include <QPlainTextEdit>
-#include "BlockTypes/customblock.h"
+#include "block.h"
 #include "../Utility/utilities.h"
 
 namespace je { namespace graph {
@@ -20,13 +20,13 @@ GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(paren
     this->drawingEdge = std::make_pair(G::null_vertex(), G::null_vertex());
 }
 
-void GraphWidget<CustomBlock>::addBlock(QString name)
+void GraphWidget::addBlock(QString name)
 {
     /*
      * Adds a user generated block
      */
 
-    std::shared_ptr<Block> myBlock = std::make_shared<MyCustomBlock>(); // As an example
+    std::shared_ptr<IBlock> myBlock = std::make_shared<MyCustomBlock>(); // As an example
     vertex_t vertex = boost::add_vertex(myBlock, graph);
     graph[vertex]->setName(name);
     qDebug() << "Added vertex " << name;
@@ -71,9 +71,11 @@ void GraphWidget::paintEvent(QPaintEvent* e)
         bool no_source = (drawingEdge.first == G::null_vertex());
         bool no_target = (drawingEdge.second == G::null_vertex());
         if(no_source && !no_target){
-            painter.drawLine(graph[drawingEdge.second]->getOutputPortCenter(), cursorPos);
-        }else if (!no_source && no_target) {
-            painter.drawLine(graph[drawingEdge.first]->getInputPortCenter(), cursorPos);
+            //auto p = graph[drawingEdge.second]->getPorts();
+            //painter.drawLine(p.second->getCenter(), cursorPos);
+        }else if(!no_source && no_target){
+            //auto p = graph[drawingEdge.first]->getPorts();
+            //painter.drawLine(p.first->getCenter(), cursorPos);
         }
     }
 }
@@ -208,14 +210,14 @@ void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
         if(graph[vertex]->mousePressEvent(e->pos()) == clickType::block)
         {
             // Check if the source is not already open
-            const int tabIndex = graph[vertex]->tabIndex;
+            const int tabIndex = graph[vertex]->getTabIndex();
             if(tabIndex == -1)
             {
                 // Not in tab
-                auto widget = graph[vertex]->loadTabWidget();
+                auto widget = graph[vertex]->tabWidget();
                 this->tabWidget->addTab(widget, graph[vertex]->getName());
                 const int i = this->tabWidget->count(); // Total number of tabs open
-                graph[vertex]->tabIndex = i-1; // Update the tab index
+                graph[vertex]->setTabIndex(i-1); // Update the tab index
                 this->tabWidget->setCurrentIndex(i-1);
             }else{
                 // Already in a tab, so set it as the active tab
@@ -243,7 +245,7 @@ void GraphWidget::zoomOut()
     qDebug() << "Zooming disabled";
 }
 
-std::shared_ptr<Block> GraphWidget::getBlock(const vertex_t vertex)
+std::shared_ptr<IBlock> GraphWidget::getBlock(const vertex_t vertex)
 {
     return graph[vertex];
 }

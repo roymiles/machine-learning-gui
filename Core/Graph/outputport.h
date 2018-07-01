@@ -8,11 +8,13 @@
 
 namespace je { namespace graph {
 
+class IBlock;
+
 class OutputPort : public Port
 {
 public:
     OutputPort() = delete;
-    OutputPort(const Block* parentBlock) : parentBlock(parentBlock) {}
+    OutputPort(const IBlock* parentBlock) : parentBlock(parentBlock) {}
     void draw(QPainter *painter) override;
 
     int getX() const override;
@@ -22,7 +24,7 @@ public:
     QPoint getCenter() const override;
 
 private:
-    const Block* parentBlock;
+    const IBlock* parentBlock;
 };
 
 } } // graph, je

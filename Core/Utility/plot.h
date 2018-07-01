@@ -18,7 +18,7 @@ using namespace je::maths;
  * This class offers an interface between the boost numeric structures and QCustomPlot
  * It can take Boost::Matrix data and plot them on a QCustomPlot instance
  */
-template<typename xType, typename yType>
+template<typename T>
 class Plot
 {
 public:
@@ -42,7 +42,7 @@ public:
      *         In the discrete case, each distinct value will have a unique point colour
      *         In the continuous case, the values will not be colour coded
      */
-    void scatterPlotXX(matrix<xType> &X, matrix<yType> &Y, std::tuple<int, int> xcols)
+    void scatterPlotXX(matrix<T> &X, matrix<T> &Y, std::tuple<int, int> xcols)
     {
         // Y is an Nx1 column vector
         // X is an Nx(p+1) matrix
@@ -93,7 +93,7 @@ public:
      * The output value (y-axis) will be plotted against a single input value (x-axis)
      * The choice of input value, as the function may be multivariate, is specified by xcol
      */
-    void scatterPlotYX(matrix<yType> &Y, matrix<xType> &X, int xcol = 1)
+    void scatterPlotYX(matrix<T> &Y, matrix<T> &X, int xcol = 1)
     {
         // Plot the Y column vector against a column in the input matrix (indexed by xcol)
         // Y is an Nx1 column vector
@@ -101,8 +101,7 @@ public:
         assert(Y.size1() == X.size1() && Y.size2() == 1);
 
         const size_t N = Y.size1();
-        QVector<xType> x(N);
-        QVector<yType> y(N);
+        QVector<T> x(N), y(N);
         for(int i = 0; i < N; i++)
         {
             x[i] = X(i, xcol);
@@ -143,9 +142,8 @@ public:
         assert(xStep > 0); // Ensures the loop ends and no division by zero
 
         const int N = std::abs(xEnd - xStart) / xStep;
-        QVector<xType> x(N);
-        QVector<yType> y(N);
-        matrix<xType> in(1, 2);
+        QVector<T> x(N), y(N);
+        matrix<T> in(1, 2);
         for(int i = xStart; i < xEnd; i += xStep)
         {
           x[i] = i;

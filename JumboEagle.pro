@@ -25,7 +25,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Core/Graph/block.cpp \
     Core/Graph/edge.cpp \
     Core/Graph/graphwidget.cpp \
     Core/Graph/inputport.cpp \
@@ -36,25 +35,32 @@ SOURCES += \
     Core/Maths/linearregression.cpp \
     Core/UI/addblockdialog.cpp \
     Core/Utility/utilities.cpp \
-    Core/Graph/BlockTypes/customblock.cpp
+    Core/qcplinearcolormap.cpp \
+    Dependencies/qcustomplot-source/qcustomplot.cpp \
+    Core/main.cpp \
+    Core/mainwindow.cpp \
+    Core/Graph/iblock.cpp
 
 
 HEADERS += \
-    Core/Graph/block.h \
     Core/Graph/edge.h \
     Core/Graph/graphwidget.h \
     Core/Graph/inputport.h \
     Core/Graph/outputport.h \
     Core/Graph/port.h \
     Core/Graph/Blocks/mycustomblock.h \
-    Core/Graph/BlockTypes/customblock.h \
     Core/IO/blocksourcecodemanager.h \
     Core/Maths/histogram.h \
     Core/Maths/linearregression.h \
     Core/UI/addblockdialog.h \
     Core/Utility/debug.h \
     Core/Utility/plot.h \
-    Core/Utility/utilities.h
+    Core/Utility/utilities.h \
+    Core/Graph/block.h \
+    Dependencies/qcustomplot-source/qcustomplot.h \
+    Core/mainwindow.h \
+    Core/Graph/iblock.h \
+    Core/Graph/blockutils.h
 
 
 FORMS += \

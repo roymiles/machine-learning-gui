@@ -31,7 +31,7 @@ enum State {
 // Graph type, defines the properties of the adjacency list
 typedef boost::adjacency_list<boost::vecS, boost::vecS,
                               boost::directedS,
-                              std::shared_ptr<Block>, // Vertex
+                              std::shared_ptr<IBlock>, // Vertex
                               std::shared_ptr<Edge>
                               > GraphType;
 // For a vector container, these will be an unsigned integer index
@@ -50,7 +50,7 @@ public:
     void zoomOut();
 
     void addBlock(QString name);
-    std::shared_ptr<Block> getBlock(const vertex_t vertex);
+    std::shared_ptr<IBlock> getBlock(const vertex_t vertex);
 
 protected:
     void paintEvent(QPaintEvent*);

@@ -35,9 +35,9 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
         case USER_BLOCK:
             // Validate file name
             const QString fileName = ui->BlockNameLineEdit->text();
-            if(isValidFileName(fileName))
+            if(je::isValidFileName(fileName))
             {
-                this->graphWidget->addBlock<CustomBlock>(fileName);
+                this->graphWidget->addBlock(fileName);
                 this->close();
             }else{
                 // TODO: FIX THIS BUG (CRASHES APPLICATION)

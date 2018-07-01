@@ -1,4 +1,5 @@
 #include "inputport.h"
+#include "block.h"
 
 namespace je { namespace graph {
 

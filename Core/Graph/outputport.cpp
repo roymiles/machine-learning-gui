@@ -1,4 +1,5 @@
 #include "outputport.h"
+#include "block.h"
 
 namespace je { namespace graph {
 

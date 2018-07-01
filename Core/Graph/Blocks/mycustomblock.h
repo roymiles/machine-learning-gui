@@ -1,9 +1,9 @@
 #ifndef MYCUSTOMBLOCK_H
 #define MYCUSTOMBLOCK_H
 
-#include "../BlockTypes/customblock.h"
+#include "../block.h"
 
-using namespace je;
+using namespace je::graph;
 
 class MyCustomBlock : public iblock_t
 {

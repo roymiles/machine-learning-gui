@@ -1,7 +1,6 @@
 #ifndef PORT_H
 #define PORT_H
 
-#include "port.h"
 #include <QPainter>
 #include <memory>
 
