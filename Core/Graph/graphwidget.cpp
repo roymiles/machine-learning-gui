@@ -71,11 +71,9 @@ void GraphWidget::paintEvent(QPaintEvent* e)
         bool no_source = (drawingEdge.first == G::null_vertex());
         bool no_target = (drawingEdge.second == G::null_vertex());
         if(no_source && !no_target){
-            //auto p = graph[drawingEdge.second]->getPorts();
-            //painter.drawLine(p.second->getCenter(), cursorPos);
+            painter.drawLine(graph[drawingEdge.second]->getPorts().second->getCenter(), cursorPos);
         }else if(!no_source && no_target){
-            //auto p = graph[drawingEdge.first]->getPorts();
-            //painter.drawLine(p.first->getCenter(), cursorPos);
+            painter.drawLine(graph[drawingEdge.first]->getPorts().first->getCenter(), cursorPos);
         }
     }
 }

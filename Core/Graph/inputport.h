@@ -15,7 +15,7 @@ class InputPort : public Port
 public:
     InputPort() = delete;
     InputPort(const IBlock* parentBlock) : parentBlock(parentBlock) {}
-    void draw(QPainter *painter) override;
+    void draw(QPainter *painter, QColor color) override;
 
     int getX() const override;
     int getY() const override;

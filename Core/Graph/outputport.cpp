@@ -3,12 +3,12 @@
 
 namespace je { namespace graph {
 
-void OutputPort::draw(QPainter *painter)
+void OutputPort::draw(QPainter *painter, QColor color)
 {
     QRect rectangle(getX(), getY(), getW(), getH());
 
     // Draw input port
-    painter->fillRect(rectangle, Qt::red);
+    painter->fillRect(rectangle, color);
     painter->drawRect(rectangle);
 }
 

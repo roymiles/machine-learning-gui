@@ -4,6 +4,7 @@
 #include <QRect>
 #include <QPoint>
 #include <QTabWidget>
+#include <QColor>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/vector_proxy.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
@@ -19,19 +20,25 @@ namespace je {
 
 using namespace boost::numeric::ublas;
 
+// Different input/output data types will have different coloured ports
+
+// Default type colour
 template<typename T>
-struct optional{
-    optional() : valid(false) {}
-    optional(T t) : t(t), valid(true) {}
+struct type_info
+{
+    static QColor colour() { return Qt::gray; }
+};
 
-    void set(T t)
-    {
-        this->t = t;
-        valid = true;
-    }
+template<>
+struct type_info<int>
+{
+    static QColor colour() { return Qt::red; }
+};
 
-    T t;
-    bool valid;
+template<>
+struct type_info<double>
+{
+    static QColor colour() { return Qt::green; }
 };
 
 /*

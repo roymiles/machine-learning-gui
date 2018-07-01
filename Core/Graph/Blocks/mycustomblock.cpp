@@ -1,6 +1,6 @@
 #include "mycustomblock.h"
 
-MyCustomBlock::MyCustomBlock() : iblock_t()
+MyCustomBlock::MyCustomBlock() : test_t()
 {
 
 }

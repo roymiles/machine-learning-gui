@@ -42,7 +42,7 @@ public:
     void draw(QPainter *painter) override
     {
         // Drawing a block is only dependant on the block type
-        block_type_impl<block_type>::draw(painter, this);
+        block_type_impl<block_type>::draw<in_type, out_type>(painter, this);
     }
 
     clickType mousePressEvent(QPoint &point) override
@@ -63,6 +63,9 @@ public:
 typedef Block<sink_t, int, int, editable_t> isink_t;
 typedef Block<source_t, int, int, editable_t> isource_t;
 typedef Block<block_t, int, int, editable_t> iblock_t;
+
+// For testing...
+typedef Block<block_t, int, double, editable_t> test_t;
 
 } } // je
 

@@ -87,5 +87,4 @@ bool isValidFileName(const QString fileName)
     return match.hasMatch();
 }
 
-
 } // je

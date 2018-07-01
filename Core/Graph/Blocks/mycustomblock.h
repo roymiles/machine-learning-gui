@@ -5,7 +5,7 @@
 
 using namespace je::graph;
 
-class MyCustomBlock : public iblock_t
+class MyCustomBlock : public test_t
 {
 public:
     MyCustomBlock();

@@ -15,7 +15,7 @@ class OutputPort : public Port
 public:
     OutputPort() = delete;
     OutputPort(const IBlock* parentBlock) : parentBlock(parentBlock) {}
-    void draw(QPainter *painter) override;
+    void draw(QPainter *painter, QColor color) override;
 
     int getX() const override;
     int getY() const override;

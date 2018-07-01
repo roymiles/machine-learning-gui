@@ -16,6 +16,12 @@ IBlock::IBlock(bool has_input, bool has_output)
         ports.second = std::make_shared<OutputPort>(this);
 
     tabIndex = -1;
+
+    // Default dimensions
+    x = 50;
+    y = 50;
+    w = 100;
+    h = 100;
 }
 
 IBlock::~IBlock()

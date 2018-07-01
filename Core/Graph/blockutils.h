@@ -3,6 +3,7 @@
 
 #include <QPainter>
 #include "iblock.h"
+#include"../Utility/utilities.h"
 
 namespace je { namespace graph {
 
@@ -22,6 +23,9 @@ template<typename block_type>
 class block_type_impl
 {
 public:
+
+    template<typename in_type,
+             typename out_type>
     static void draw(QPainter *painter, IBlock* block)
     {
         qDebug() << "NOT GOOD";
@@ -38,6 +42,9 @@ template<>
 class block_type_impl<block_t>
 {
 public:
+
+    template<typename in_type,
+             typename out_type>
     static void draw(QPainter *painter, IBlock* block)
     {
         qDebug() << "Drawing a block";
@@ -46,8 +53,8 @@ public:
         painter->drawRect(rectangle);
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());
 
-        block->getPorts().first->draw(painter);
-        block->getPorts().second->draw(painter);
+        block->getPorts().first->draw(painter, type_info<in_type>::colour());
+        block->getPorts().second->draw(painter, type_info<out_type>::colour());
     }
 
     static clickType mousePressEvent(QPoint &point, IBlock* block)
@@ -68,6 +75,8 @@ template<>
 class block_type_impl<source_t>
 {
 public:
+    template<typename in_type,
+             typename out_type>
     static void draw(QPainter *painter, IBlock* block)
     {
         QRect rectangle(block->getX(), block->getX(), block->getX(), block->getX());
@@ -75,7 +84,7 @@ public:
         painter->drawRect(rectangle);
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());
 
-        block->getPorts().second->draw(painter);
+        block->getPorts().second->draw(painter, type_info<out_type>::colour());
     }
 
     static clickType mousePressEvent(QPoint &point, IBlock* block)
@@ -94,6 +103,8 @@ template<>
 class block_type_impl<sink_t>
 {
 public:
+    template<typename in_type,
+             typename out_type>
     static void draw(QPainter *painter, IBlock* block)
     {
         QRect rectangle(block->getX(), block->getX(), block->getX(), block->getX());
@@ -101,7 +112,7 @@ public:
         painter->drawRect(rectangle);
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());
 
-        block->getPorts().first->draw(painter);
+        block->getPorts().first->draw(painter, type_info<in_type>::colour());
     }
 
     static clickType mousePressEvent(QPoint &point, IBlock* block)

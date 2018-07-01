@@ -3,6 +3,7 @@
 
 #include <QPainter>
 #include <memory>
+#include <QColor>
 
 namespace je { namespace graph {
 
@@ -10,7 +11,8 @@ class Port
 {
 public:
     Port() {}
-    virtual void draw(QPainter *painter) = 0;
+    // The draw function takes in a color which is dependant on the input/output type
+    virtual void draw(QPainter *painter, QColor color) = 0;
     virtual int getX() const = 0;
     virtual int getY() const = 0;
     virtual int getW() const = 0;
