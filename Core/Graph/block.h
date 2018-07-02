@@ -20,6 +20,8 @@ namespace je { namespace graph {
 
 /*
  *  All blocks inherit a specialised version of this class
+ *  NOTE: The class is named _Block to avoid collision with Block typedef (see bottom)
+ *        This makes the user code more intuitive
  *  --- T PARAMS ---
  *  blockType   : Defines the connected ports. Either a source, sink, or generic block
  *  inType      : The type the block accepts
@@ -32,11 +34,11 @@ template<typename block_type,
          typename in_type,
          typename out_type,
          typename tab_type>
-class Block : public IBlock
+class _Block : public IBlock
 {
 public:
-    Block() : IBlock(block_type::has_input, block_type::has_output) {}
-    ~Block() {}
+    _Block() : IBlock(block_type::has_input, block_type::has_output) {}
+    ~_Block() {}
 
     // Overridden members call upon the templated utility functions declared above
     void draw(QPainter *painter) override
@@ -69,17 +71,40 @@ public:
         *retval = out;
         return retval;
     }
+
+    static bool is_sink()
+    {
+        // A sink is defined as a block with an input and no output
+        return (block_type::has_input && !block_type::has_output);
+    }
+
+    static bool is_source()
+    {
+        // A source is defined as a block with an output but no input
+        return (!block_type::has_input && block_type::has_output);
+    }
 };
 
+// This is needed because func(void in) is an illegal expression
+// An alternative is class template specialisation, but this adds too much bulk code
+struct void_t {};
 
-// block_type, in_type, out_type, tab_type
+// template parameters : block_type, in_type, out_type, tab_type
 // Some common block types
-typedef Block<sink_t, int, int, editable_t> isink_t;
-typedef Block<source_t, int, int, editable_t> isource_t;
-typedef Block<block_t, int, int, editable_t> iblock_t;
+
+template <typename T>
+using Sink = _Block<sink_t, T, void_t, editable_t>; // An input but no output (void_t)
+
+template <typename T>
+using Source = _Block<source_t, void_t, T, editable_t>; // An output but no input
+
+template<typename T>
+using Block = _Block<block_t, T, T, editable_t>;
+
+using Blank = _Block<blank_t, void_t, void_t, editable_t>; // init will still be called for this type but run() won't be
 
 // For testing...
-typedef Block<block_t, int, double, editable_t> test_t;
+typedef _Block<block_t, int, double, editable_t> test_t;
 
 } } // je
 

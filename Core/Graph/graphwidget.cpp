@@ -18,22 +18,9 @@ GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(paren
     curState = State::IDLE;
     this->tabWidget = tabWidget;
     this->drawingEdge = std::make_pair(G::null_vertex(), G::null_vertex());
-}
 
-void GraphWidget::addBlock(QString name)
-{
-    /*
-     * Adds a user generated block
-     */
-
-    std::shared_ptr<IBlock> myBlock = std::make_shared<MyCustomBlock>(); // As an example
-    vertex_t vertex = boost::add_vertex(myBlock, graph);
-    graph[vertex]->setName(name);
-    qDebug() << "Added vertex " << name;
-    qDebug() << "Num vertices = " << boost::num_vertices(graph);
-    qDebug() << "Num edges = " << boost::num_edges(graph);
-
-    this->update(); // Re-paints the canvas
+    source = G::null_vertex();
+    sink = G::null_vertex();
 }
 
 /*
@@ -53,16 +40,17 @@ void GraphWidget::paintEvent(QPaintEvent* e)
         for(int y = 0; y < this->height(); y += height)
             painter.drawPixmap(x, y, width, height, pixmap);
 
-    // Draw all blocks (and internally the ports)
-    for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
-    {
-        graph[vertex]->draw(&painter);
-    }
-
+    // NOTE: The order of drawing is important
     // Draw all edges
     for(auto edge : boost::make_iterator_range(boost::edges(graph)))
     {
         graph[edge]->draw(&painter);
+    }
+
+    // Draw all blocks (and internally the ports)
+    for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
+    {
+        graph[vertex]->draw(&painter);
     }
 
     // If in the DRAWING state, want to draw from the previously clicked port to the mouse position
@@ -71,6 +59,7 @@ void GraphWidget::paintEvent(QPaintEvent* e)
         bool no_source = (drawingEdge.first == G::null_vertex());
         bool no_target = (drawingEdge.second == G::null_vertex());
         if(no_source && !no_target){
+            // Draw from
             painter.drawLine(graph[drawingEdge.second]->getPorts().second->getCenter(), cursorPos);
         }else if(!no_source && no_target){
             painter.drawLine(graph[drawingEdge.first]->getPorts().first->getCenter(), cursorPos);
@@ -250,6 +239,11 @@ std::shared_ptr<IBlock> GraphWidget::getBlock(const vertex_t vertex)
 
 void GraphWidget::run()
 {
+    if(sink != G::null_vertex() && source != G::null_vertex()){
+        je::inputDialog("Must have one source and one sink");
+        return;
+    }
+
     // Run init on all blocks (initialise all blocks)
     for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
         graph[vertex]->init();

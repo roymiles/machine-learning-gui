@@ -34,7 +34,7 @@ int OutputPort::getH() const
 
 QPoint OutputPort::getCenter() const
 {
-    return QPoint(getX(), getY());
+    return QPoint(getX() + getW(), getY() + getH()/2);
 }
 
 } } // graph, je

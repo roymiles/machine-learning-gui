@@ -1,6 +1,6 @@
 #include "mycustomblock.h"
 
-MyCustomBlock::MyCustomBlock() : test_t()
+MyCustomBlock::MyCustomBlock() : Block<int>()
 {
 
 }
@@ -8,4 +8,9 @@ MyCustomBlock::MyCustomBlock() : test_t()
 void MyCustomBlock::init()
 {
     qDebug() << "Initializing MyCustomBlock";
+}
+
+int MyCustomBlock::run(int in)
+{
+    return 5.0;
 }

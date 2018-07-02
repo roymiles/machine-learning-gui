@@ -42,7 +42,9 @@ SOURCES += \
     Core/Graph/iblock.cpp \
     Dependencies/darkstyle/framelesswindow/framelesswindow.cpp \
     Dependencies/darkstyle/framelesswindow/windowdragger.cpp \
-    Dependencies/darkstyle/DarkStyle.cpp
+    Dependencies/darkstyle/DarkStyle.cpp \
+    Core/Graph/Blocks/mycustomsink.cpp \
+    Core/Graph/Blocks/mycustomsource.cpp
 
 
 HEADERS += \
@@ -66,7 +68,9 @@ HEADERS += \
     Core/Graph/blockutils.h \
     Dependencies/darkstyle/framelesswindow/framelesswindow.h \
     Dependencies/darkstyle/framelesswindow/windowdragger.h \
-    Dependencies/darkstyle/DarkStyle.h
+    Dependencies/darkstyle/DarkStyle.h \
+    Core/Graph/Blocks/mycustomsink.h \
+    Core/Graph/Blocks/mycustomsource.h
 
 
 FORMS += \

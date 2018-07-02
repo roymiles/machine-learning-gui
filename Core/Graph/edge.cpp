@@ -10,7 +10,7 @@ void Edge::draw(QPainter *painter)
     QPoint outPoint = endPoints.first->getPorts().second->getCenter();
 
     // And similarly for the input port of the second vertex
-    QPoint inPoint = endPoints.first->getPorts().second->getCenter();
+    QPoint inPoint = endPoints.second->getPorts().first->getCenter();
 
     painter->drawLine(outPoint.x(), outPoint.y(), inPoint.x(), inPoint.y());
 }

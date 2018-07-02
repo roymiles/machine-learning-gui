@@ -33,10 +33,12 @@ private slots:
 
     void on_tabWidget_tabCloseRequested(int index);
 
+    void on_runButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
-    GraphWidget *graphWidget;
+    je::graph::GraphWidget *graphWidget;
 };
 
 #endif // MAINWINDOW_H

@@ -30,24 +30,27 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
     {      
         auto selectedBlockType = ui->comboBox->currentIndex();
 
+        const QString blockName = ui->BlockNameLineEdit->text();
+        if(!je::isValidFileName(blockName))
+        {
+            je::inputDialog("Invalid file name.");
+            this->close();
+            return;
+        }
+
         switch(selectedBlockType)
         {
-        case USER_BLOCK:
-            // Validate file name
-            const QString fileName = ui->BlockNameLineEdit->text();
-            if(je::isValidFileName(fileName))
-            {
-                this->graphWidget->addBlock(fileName);
-                this->close();
-            }else{
-                // TODO: FIX THIS BUG (CRASHES APPLICATION)
-                //QMessageBox msgBox;
-                //msgBox.setText("Invalid block name."); // Give more detail...
-                //msgBox.exec();
-
-                // Don't close the add block dialog
-                this->close();
-            }
+        case BlockTypes::BLOCK:
+            this->graphWidget->addBlock<MyCustomBlock>(blockName);
+            this->close();
+            break;
+        case BlockTypes::SOURCE:
+            this->graphWidget->addBlock<MyCustomSource>(blockName);
+            this->close();
+            break;
+        case BlockTypes::SINK:
+            this->graphWidget->addBlock<MyCustomSink>(blockName);
+            this->close();
             break;
         }
     }else{

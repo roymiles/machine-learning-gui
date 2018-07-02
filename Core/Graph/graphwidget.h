@@ -8,7 +8,7 @@
 #include <vector>
 #include <memory>
 #include <string>
-#include <utility> // std::pair, std::make_pair
+#include <utility> // std::pair
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphviz.hpp>
 #include <boost/graph/properties.hpp>
@@ -16,9 +16,13 @@
 #include <boost/graph/named_function_params.hpp>
 
 #include "block.h"
-#include "Blocks/mycustomblock.h" //TODO: can't include every type of block, need some loader .h
 #include "edge.h"
 #include "port.h"
+
+// TODO: The following includes should be seperated into a loader
+#include "../Graph/Blocks/mycustomblock.h"
+#include "../Graph/Blocks/mycustomsink.h"
+#include "../Graph/Blocks/mycustomsource.h"
 
 namespace je { namespace graph {
 
@@ -49,8 +53,52 @@ public:
     void zoomIn();
     void zoomOut();
 
-    // These need to be generalised, maybe a template version
-    void addBlock(QString name);
+    // Add a block of type T (T inherits from Block and in turn IBlock)
+    template<typename T>
+    void GraphWidget::addBlock(QString name)
+    {
+        std::shared_ptr<IBlock> myBlock = std::make_shared<T>();
+        vertex_t vertex = boost::add_vertex(myBlock, graph);
+
+        qDebug() << "Attempting to add new block";
+        qDebug() << "is_sink : " << T::is_sink();
+        qDebug() << "is_source : " << T::is_source();
+        qDebug() << source << sink;
+
+        // Only allow at most one source and one sink
+        if(T::is_sink())
+        {
+            if(!isNullDescriptor(sink))
+            {
+                boost::remove_vertex(vertex, graph);
+                inputDialog("Too many sinks");
+                return;
+            }else{
+                qDebug() << "Adding sink";
+                sink = vertex;
+            }
+        }
+
+        if(T::is_source())
+        {
+            if(!isNullDescriptor(source)){
+                boost::remove_vertex(vertex, graph);
+                inputDialog("Too many sources");
+                return;
+            }else{
+                qDebug() << "Adding source";
+                source = vertex;
+            }
+        }
+
+        graph[vertex]->setName(name);
+        qDebug() << "Added vertex " << name;
+        qDebug() << "Num vertices = " << boost::num_vertices(graph);
+        qDebug() << "Num edges = " << boost::num_edges(graph);
+
+        this->update(); // Re-paints the canvas
+    }
+
     std::shared_ptr<IBlock> getBlock(const vertex_t vertex);
 
     void run();
@@ -65,6 +113,12 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent*);
 
 private:
+    // Only allowed one sink and one source in the flow graph
+    // The vertex of the source and sinks are remembered to
+    // aid in the breadth first search
+    vertex_t sink;
+    vertex_t source;
+
     GraphType graph; // Boost graph data type
 
     // The block that has been clicked on (before the mouse button has been released)

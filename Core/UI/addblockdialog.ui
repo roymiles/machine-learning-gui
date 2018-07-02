@@ -51,7 +51,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -72,12 +72,17 @@
      <widget class="QComboBox" name="comboBox">
       <item>
        <property name="text">
-        <string>Custom Block</string>
+        <string>My Custom Block</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Linear Regression Block</string>
+        <string>My Custom Source</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>My Custom Sink</string>
        </property>
       </item>
      </widget>

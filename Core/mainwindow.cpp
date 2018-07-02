@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     ui->tabWidget->setTabsClosable(true);
-    graphWidget = new GraphWidget(this, ui->tabWidget);
+    graphWidget = new je::graph::GraphWidget(this, ui->tabWidget);
     ui->tabWidget->addTab(graphWidget, "Flow graph");
 
     je::testLinearRegression(ui->tabWidget);
@@ -64,4 +64,9 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     // Set the associated block tabIndex to -1
     graphWidget->getBlock(index)->setTabIndex(-1);
     ui->tabWidget->removeTab(index);
+}
+
+void MainWindow::on_runButton_clicked()
+{
+    graphWidget->run();
 }

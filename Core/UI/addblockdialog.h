@@ -9,8 +9,9 @@ class AddBlockDialog;
 }
 
 enum BlockTypes : int {
-    USER_BLOCK = 0,
-    LINEAR_REGRESSION = 1
+    BLOCK = 0,
+    SOURCE = 1,
+    SINK = 2
 };
 
 class AddBlockDialog : public QDialog
@@ -21,7 +22,7 @@ public:
     explicit AddBlockDialog(QWidget *parent = 0);
     ~AddBlockDialog();
 
-    void setGraphWidget(GraphWidget *graphWidget);
+    void setGraphWidget(je::graph::GraphWidget *graphWidget);
 
 private slots:
     void on_AddBlockDialog_finished(int result);
@@ -30,7 +31,7 @@ private slots:
 
 private:
     Ui::AddBlockDialog *ui;
-    GraphWidget *graphWidget;
+    je::graph::GraphWidget *graphWidget;
 };
 
 #endif // ADDBLOCKDIALOG_H

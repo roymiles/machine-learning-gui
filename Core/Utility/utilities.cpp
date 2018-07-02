@@ -9,6 +9,13 @@
 
 namespace je {
 
+void inputDialog(QString message)
+{
+    QMessageBox msgBox;
+    msgBox.setText(message);
+    msgBox.exec();
+}
+
 // TODO: Move tests into a seperate file
 
 // Unit test for "invertMatrix" function

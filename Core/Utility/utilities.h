@@ -5,6 +5,7 @@
 #include <QPoint>
 #include <QTabWidget>
 #include <QColor>
+#include <QMessageBox>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/vector_proxy.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
@@ -20,13 +21,38 @@ namespace je {
 
 using namespace boost::numeric::ublas;
 
-// Different input/output data types will have different coloured ports
+// NOTE: Use null_vertex() not these!
+template<typename T>
+bool isNullDescriptor(T t)
+{
+    qFatal("Use null_vertex instead.");
+    return (t == -1);
+}
 
-// Default type colour
+template<typename T>
+T getNullDescriptor()
+{
+    qFatal("Use null_vertex instead.");
+    return -1;
+}
+
+template<typename T, typename U>
+struct is_same
+{
+    static const bool value = false;
+};
+
+template<typename T>
+struct is_same<T, T>
+{
+    static const bool value = true;
+};
+
+// Different input/output data types will have different coloured ports
 template<typename T>
 struct type_info
 {
-    static QColor colour() { return Qt::gray; }
+    static QColor colour() { return Qt::gray; } // Default type colour
 };
 
 template<>
@@ -40,6 +66,8 @@ struct type_info<double>
 {
     static QColor colour() { return Qt::green; }
 };
+
+void inputDialog(QString message);
 
 /*
  * --- PARAMS ---

@@ -10,6 +10,8 @@ namespace je { namespace graph {
 struct sink_t { enum { has_input = true, has_output = false }; };
 struct source_t { enum { has_input = false, has_output = true }; };
 struct block_t { enum { has_input = true, has_output = true }; };
+// init() will still be called on this type but run() won't be
+struct blank_t { enum { has_input = false, has_output = false }; };
 
 struct editable_t { };
 struct graph_t { };
@@ -28,11 +30,12 @@ public:
              typename out_type>
     static void draw(QPainter *painter, IBlock* block)
     {
-        qDebug() << "NOT GOOD";
+        qFatal("The non-specialised block_type_impl functions should not be used.");
     }
 
     static clickType mousePressEvent(QPoint &point, IBlock* block)
     {
+        qFatal("The non-specialised block_type_impl functions should not be used.");
         return clickType::none;
     }
 };
@@ -47,7 +50,6 @@ public:
              typename out_type>
     static void draw(QPainter *painter, IBlock* block)
     {
-        qDebug() << "Drawing a block";
         QRect rectangle;
         block->getRect(rectangle);
         painter->fillRect(rectangle, Qt::white);
@@ -129,6 +131,31 @@ public:
     }
 };
 
+// ------- BLANK -------
+template<>
+class block_type_impl<blank_t>
+{
+public:
+    template<typename in_type,
+             typename out_type>
+    static void draw(QPainter *painter, IBlock* block)
+    {
+        QRect rectangle;
+        block->getRect(rectangle);
+        painter->fillRect(rectangle, Qt::white);
+        painter->drawRect(rectangle);
+        painter->drawText(rectangle, Qt::AlignCenter, block->getName());
+    }
+
+    static clickType mousePressEvent(QPoint &point, IBlock* block)
+    {
+        if(insideRect(block, point))
+            return clickType::block;
+        else
+            return clickType::none;
+    }
+};
+
 // Following are for tab type specialisations
 template<typename tab_type>
 class tab_type_impl
@@ -136,6 +163,7 @@ class tab_type_impl
 public:
     static QWidget* tabWidget(IBlock* block)
     {
+        qFatal("The non-specialised tab_type_impl functions should not be used.");
         return nullptr;
     }
 };

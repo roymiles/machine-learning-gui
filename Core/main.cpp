@@ -15,7 +15,7 @@
 
 using namespace je;
 
-#define DARK_STYLE
+//#define DARK_STYLE
 
 int main(int argc, char *argv[])
 {

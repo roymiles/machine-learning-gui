@@ -5,16 +5,13 @@
 
 using namespace je::graph;
 
-class MyCustomBlock : public test_t
+class MyCustomBlock : public Block<int>
 {
 public:
     MyCustomBlock();
 
     void init() override;
-    double run(int in) override
-    {
-        return 5.0;
-    }
+    int run(int in) override;
 };
 
 #endif // MYCUSTOMBLOCK_H

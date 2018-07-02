@@ -17,6 +17,11 @@ public:
     virtual int getY() const = 0;
     virtual int getW() const = 0;
     virtual int getH() const = 0;
+
+    /*
+     * This is the point at which the edges are drawn from
+     * This is not the geometric center of the shape
+     */
     virtual QPoint getCenter() const = 0;
 };
 
