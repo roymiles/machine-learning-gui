@@ -271,6 +271,8 @@ void GraphWidget::run()
     vertex_t current_node = source;
     void* out;
     void* prev_out;
+    // Run through all the vertices untill a sink is found
+    bool at_sink = false;
     while(true)
     {
         // NOTE: the return void* is allocated using malloc and so must be freed
@@ -280,14 +282,20 @@ void GraphWidget::run()
         // Run the current block
         if(current_node == source) {
             out = graph[current_node]->_run(prev_out);
-            //qDebug() << "Source out = " << out;
         } else if(current_node == sink) {
             graph[current_node]->_run(prev_out);
-            break; // Reached the end
+            at_sink = true; // Reached the end
         } else {
             out = graph[current_node]->_run(prev_out);
         }
         auto t2 = std::chrono::system_clock::now();
+
+        std::chrono::duration<double> elapsed_seconds = t2-t1;
+        qDebug() << "t = " << elapsed_seconds.count();
+
+        // This is so can do timing calculations before breaking out of loop
+        if(at_sink)
+            break;
 
         // Pass timing details to block
         //graph[current_node]->elapsed_times.push_back(t2 - t1);

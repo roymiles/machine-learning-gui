@@ -107,7 +107,6 @@ public:
         if(!is_same<in_type, void>::value && !is_same<out_type, void>::value) {
             // Cast the input argument and call the users function
             out_type out = run(*((in_type *)in));
-            qDebug() << "Block out = " << out;
             // Dynamically allocate memory for output (because returning a pointer)
             out_type* retval = (out_type*)malloc(sizeof(out_type));
             *retval = out;
@@ -156,7 +155,6 @@ public:
         if(is_same<in_type, void>::value) {
             // No input, therefore a source
             out_type out = run();
-            qDebug() << "Source out = " << out;
             out_type* retval = (out_type*)malloc(sizeof(out_type));
             *retval = out;
             return retval;
