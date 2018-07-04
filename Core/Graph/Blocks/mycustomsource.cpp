@@ -12,6 +12,7 @@ void MyCustomSource::init()
 
 int MyCustomSource::run()
 {
-    qDebug() << "Running MyCustomSource";
+    //qDebug() << "Running MyCustomSource";
+    qDebug() << "Input = " << 5.0;
     return 5.0;
 }

@@ -12,5 +12,6 @@ void MyCustomSink::init()
 
 void MyCustomSink::run(int in)
 {
-    qDebug() << "Running MyCustomSink";
+    //qDebug() << "Running MyCustomSink";
+    qDebug() << "Output = " << in;
 }

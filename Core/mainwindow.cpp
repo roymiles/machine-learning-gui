@@ -70,3 +70,12 @@ void MainWindow::on_runButton_clicked()
 {
     graphWidget->run();
 }
+
+void MainWindow::on_exampleLayoutButton_clicked()
+{
+    this->graphWidget->addBlock<MyCustomBlock>("Block");
+    this->graphWidget->addBlock<MyCustomSource>("Source");
+    this->graphWidget->addBlock<MyCustomSink>("Sink");
+
+
+}

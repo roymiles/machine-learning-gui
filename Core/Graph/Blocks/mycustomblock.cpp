@@ -12,6 +12,7 @@ void MyCustomBlock::init()
 
 int MyCustomBlock::run(int in)
 {
-    qDebug() << "Running MyCustomBlock";
-    return 5.0;
+    //qDebug() << "Running MyCustomBlock";
+    qDebug() << "Block received: " << in;
+    return 5 * 5;
 }

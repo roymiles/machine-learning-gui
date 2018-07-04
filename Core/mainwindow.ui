@@ -70,6 +70,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="exampleLayoutButton">
+       <property name="text">
+        <string>Example Layout</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">

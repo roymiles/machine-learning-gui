@@ -35,6 +35,8 @@ private slots:
 
     void on_runButton_clicked();
 
+    void on_exampleLayoutButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 

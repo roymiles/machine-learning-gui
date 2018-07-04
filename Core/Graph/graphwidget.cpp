@@ -98,7 +98,7 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
             case clickType::outPort:
 
                 // Set the start and end port depending on the click event
-                if(c == clickType::inPort){
+                if(c == clickType::inPort) {
                     drawingEdge.second = vertex;
                 }else{
                     drawingEdge.first = vertex;
@@ -115,7 +115,17 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                     curState = State::IDLE;
                     setMouseTracking(false);
 
-                    if(drawingEdge.first != G::null_vertex() && drawingEdge.second != G::null_vertex()){ // Only create the edge if we have both the input and outport ports
+                    if(drawingEdge.first != G::null_vertex() && drawingEdge.second != G::null_vertex())
+                    { // Only create the edge if we have both the input and outport ports
+
+                        // Verify the data types of the input and output ports
+                        // NEED TO HAVE A THINK ABOUT HOW TO DO THIS (PREFERABLY COMPILE TIME COMP)
+                        //if(!validEdge(graph[drawingEdge.first], graph[drawingEdge.second]))
+                        //{
+                            // Clear the edge and give a dialog
+                            // ...
+                        //}
+
                         // Edge accepts a pair of pointer to the start and end blocks (vertices)
                         std::pair<BlockPointer, BlockPointer> endPoints = std::make_pair(graph[drawingEdge.first], graph[drawingEdge.second]);
                         std::shared_ptr<Edge> edge = std::make_shared<Edge>(endPoints);
@@ -130,6 +140,7 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                         // The edge has been created so clear previous start and end
                         drawingEdge.first = G::null_vertex();
                         drawingEdge.second = G::null_vertex();
+
                     }
                 }
                 break;
@@ -265,15 +276,21 @@ void GraphWidget::run()
         // NOTE: the return void* is allocated using malloc and so must be freed
         //       when no longer being used
 
+        auto t1 = std::chrono::system_clock::now();
         // Run the current block
         if(current_node == source) {
             out = graph[current_node]->_run(prev_out);
+            //qDebug() << "Source out = " << out;
         } else if(current_node == sink) {
             graph[current_node]->_run(prev_out);
             break; // Reached the end
         } else {
             out = graph[current_node]->_run(prev_out);
         }
+        auto t2 = std::chrono::system_clock::now();
+
+        // Pass timing details to block
+        //graph[current_node]->elapsed_times.push_back(t2 - t1);
 
         // Move onto next block
         boost::tie(ei, ei_end) = boost::out_edges(current_node, graph);
@@ -282,7 +299,6 @@ void GraphWidget::run()
         current_node = target;
 
         prev_out = out;
-        delete out;
     }
 
         // All edges coming out of current node

@@ -5,6 +5,7 @@
 #include <QPoint>
 #include <QString>
 #include "port.h"
+#include <chrono>
 
 namespace je { namespace graph {
 
@@ -56,6 +57,8 @@ public:
      */
     virtual void* _run(void* in) = 0;
 
+    void addExecutionTime(std::chrono::duration<double> time);
+
 private:
     int x, y, w, h;
     QString name;
@@ -63,6 +66,9 @@ private:
 
     // First -> Input, Second -> Output
     std::pair<PortPointer, PortPointer> ports;
+
+    // Stores a list of all the execution times of this block
+    std::vector<std::chrono::duration<double>> executionTimes;
 };
 
 typedef std::shared_ptr<IBlock> BlockPointer;
