@@ -54,15 +54,17 @@ void GraphWidget::paintEvent(QPaintEvent* e)
     }
 
     // If in the DRAWING state, want to draw from the previously clicked port to the mouse position
-    if(curState == State::DRAWING_EDGE){
+    if(curState == State::DRAWING_EDGE)
+    {
         // Only one vertex is connected, either the start or the end point
         bool no_source = (drawingEdge.first == G::null_vertex());
         bool no_target = (drawingEdge.second == G::null_vertex());
         if(no_source && !no_target){
-            // Draw from
-            painter.drawLine(graph[drawingEdge.second]->getPorts().second->getCenter(), cursorPos);
+            // Draw from target (input port) to cursor
+            painter.drawLine(graph[drawingEdge.second]->getPorts().first->getCenter(), cursorPos);
         }else if(!no_source && no_target){
-            painter.drawLine(graph[drawingEdge.first]->getPorts().first->getCenter(), cursorPos);
+            // Draw from source (output port) to cursor
+            painter.drawLine(graph[drawingEdge.first]->getPorts().second->getCenter(), cursorPos);
         }
     }
 }
@@ -239,10 +241,13 @@ std::shared_ptr<IBlock> GraphWidget::getBlock(const vertex_t vertex)
 
 void GraphWidget::run()
 {
-    if(sink != G::null_vertex() && source != G::null_vertex()){
+    if(sink == G::null_vertex() || source == G::null_vertex()){
         je::inputDialog("Must have one source and one sink");
         return;
     }
+
+    // Validate the edges
+    // ...
 
     // Run init on all blocks (initialise all blocks)
     for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
@@ -250,12 +255,43 @@ void GraphWidget::run()
 
     // Go through each vertex and execute its function.
     // The output of a preceeding vertex is fed into the next vertex
-    for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
+    //void* source_out = graph[source].run();
+    typename G::out_edge_iterator ei, ei_end;
+    vertex_t current_node = source;
+    void* out;
+    void* prev_out;
+    while(true)
     {
         // NOTE: the return void* is allocated using malloc and so must be freed
         //       when no longer being used
-        //graph[vertex]->init();
+
+        // Run the current block
+        if(current_node == source) {
+            out = graph[current_node]->_run(prev_out);
+        } else if(current_node == sink) {
+            graph[current_node]->_run(prev_out);
+            break; // Reached the end
+        } else {
+            out = graph[current_node]->_run(prev_out);
+        }
+
+        // Move onto next block
+        boost::tie(ei, ei_end) = boost::out_edges(current_node, graph);
+        auto source = boost::source(*ei, graph);
+        auto target = boost::target(*ei, graph);
+        current_node = target;
+
+        prev_out = out;
+        delete out;
     }
+
+        // All edges coming out of current node
+        //std::pair<out_edge_iterator, out_edge_iterator> out_edge = boost::out_edges(current_node, graph);
+       // vertex_t current_node = boost::target(*ei, graph); // Vertex connected to out-going edge of previous vertex
+
+        //qDebug() << graph[current_node]->getName();
+    //}
+
 }
 
 } } // graph, je

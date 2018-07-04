@@ -109,7 +109,9 @@ inline bool invertMatrix (const matrix<T>& input, matrix<T>& inverse)
    return true;
 }
 
-bool isValidFileName(const QString fileName);
+bool isValidBlockName(const QString fileName);
+
+// These should not be in utilities
 bool testInvertMatrix();
 void testLinearRegression(QTabWidget *tabWidget);
 

@@ -70,7 +70,8 @@ HEADERS += \
     Dependencies/darkstyle/framelesswindow/windowdragger.h \
     Dependencies/darkstyle/DarkStyle.h \
     Core/Graph/Blocks/mycustomsink.h \
-    Core/Graph/Blocks/mycustomsource.h
+    Core/Graph/Blocks/mycustomsource.h \
+    Core/Graph/blockbase.h
 
 
 FORMS += \

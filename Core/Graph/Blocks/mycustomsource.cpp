@@ -10,7 +10,8 @@ void MyCustomSource::init()
     qDebug() << "Initializing MyCustomSource";
 }
 
-int MyCustomSource::run(void_t in)
+int MyCustomSource::run()
 {
+    qDebug() << "Running MyCustomSource";
     return 5.0;
 }

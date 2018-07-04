@@ -11,7 +11,7 @@ public:
     MyCustomSink();
 
     void init() override;
-    void_t run(int in) override;
+    void run(int in) override;
 };
 
 #endif // MYCUSTOMSINK_H

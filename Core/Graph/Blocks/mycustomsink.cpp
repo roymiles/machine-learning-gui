@@ -10,7 +10,7 @@ void MyCustomSink::init()
     qDebug() << "Initializing MyCustomSink";
 }
 
-void_t MyCustomSink::run(int in)
+void MyCustomSink::run(int in)
 {
-    return void_t{};
+    qDebug() << "Running MyCustomSink";
 }

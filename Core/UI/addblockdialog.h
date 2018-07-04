@@ -8,6 +8,8 @@ namespace Ui {
 class AddBlockDialog;
 }
 
+namespace je {
+
 enum BlockTypes : int {
     BLOCK = 0,
     SOURCE = 1,
@@ -22,7 +24,7 @@ public:
     explicit AddBlockDialog(QWidget *parent = 0);
     ~AddBlockDialog();
 
-    void setGraphWidget(je::graph::GraphWidget *graphWidget);
+    void setGraphWidget(graph::GraphWidget *graphWidget);
 
 private slots:
     void on_AddBlockDialog_finished(int result);
@@ -31,7 +33,9 @@ private slots:
 
 private:
     Ui::AddBlockDialog *ui;
-    je::graph::GraphWidget *graphWidget;
+    graph::GraphWidget *graphWidget;
 };
+
+} // je
 
 #endif // ADDBLOCKDIALOG_H

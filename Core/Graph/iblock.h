@@ -54,7 +54,7 @@ public:
      * The templated Block class will cast the void* to the appropriate types
      * and then call the user made run functions
      */
-    virtual void* run(void* in) = 0;
+    virtual void* _run(void* in) = 0;
 
 private:
     int x, y, w, h;

@@ -85,12 +85,15 @@ void testLinearRegression(QTabWidget *tabWidget)
     tabWidget->addTab(customPlot, "Linear regression test");
 }
 
-bool isValidFileName(const QString fileName)
+/*
+ * The block name must be a valid file name too
+ */
+bool isValidBlockName(const QString blockName)
 {
     // TODO: Add extra validation, such as filename length
     // True if fileName only contains alphanumeric characters
     QRegularExpression re("^[A-Za-z]+$"); // Contains alphanumeric characters only
-    QRegularExpressionMatch match = re.match(fileName);
+    QRegularExpressionMatch match = re.match(blockName);
     return match.hasMatch();
 }
 

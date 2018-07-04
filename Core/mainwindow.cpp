@@ -39,7 +39,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_addBlock_clicked()
 {
     // Show add block dialog. This handles all the types of blocks that can be added to the graph
-    AddBlockDialog addBlockDialog;
+    je::AddBlockDialog addBlockDialog;
     addBlockDialog.setGraphWidget(this->graphWidget); // Inject graph widget so that dialog can call addBlock
     addBlockDialog.setModal(true);
     addBlockDialog.exec();
@@ -57,7 +57,7 @@ void MainWindow::on_zoomIn_clicked()
 
 /*
  * Breaks if close any other type of tab
- * Not all tabs will be text editors! (blocks)
+ * Not all tabs will be text editors! (editable_t blocks)
  */
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {

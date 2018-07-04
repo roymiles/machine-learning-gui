@@ -68,7 +68,8 @@ public:
         // Only allow at most one source and one sink
         if(T::is_sink())
         {
-            if(!isNullDescriptor(sink))
+            // Only add a sink/source if we haven't already got one in the graph
+            if(sink != G::null_vertex())
             {
                 boost::remove_vertex(vertex, graph);
                 inputDialog("Too many sinks");
@@ -81,7 +82,7 @@ public:
 
         if(T::is_source())
         {
-            if(!isNullDescriptor(source)){
+            if(source != G::null_vertex()){
                 boost::remove_vertex(vertex, graph);
                 inputDialog("Too many sources");
                 return;

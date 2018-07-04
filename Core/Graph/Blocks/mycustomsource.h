@@ -11,7 +11,7 @@ public:
     MyCustomSource();
 
     void init() override;
-    int run(void_t in) override;
+    int run() override;
 };
 
 #endif // MYCUSTOMSOURCE_H
