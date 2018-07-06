@@ -5,13 +5,22 @@
 
 using namespace je::graph;
 
-class MyCustomSource : public Source<int>
+template<typename T>
+class MyCustomSource : public Source<T>
 {
 public:
-    MyCustomSource();
+    MyCustomSource() : Source<T>() {}
+    ~MyCustomSource() {}
 
-    void init() override;
-    int run() override;
+    void init() override
+    {
+        qDebug() << "Initializing MyCustomSource";
+    }
+
+    T run() override
+    {
+        return 5;
+    }
 };
 
 #endif // MYCUSTOMSOURCE_H

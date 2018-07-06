@@ -3,7 +3,8 @@
 
 #include <QPainter>
 #include "iblock.h"
-#include"../Utility/utilities.h"
+#include "../Utility/utilities.h"
+#include "../Utility/plot.h"
 
 namespace je { namespace graph {
 
@@ -197,7 +198,18 @@ class tab_type_impl<graph_t>
 public:
     static QWidget* tabWidget(IBlock* block)
     {
-        return nullptr; // TODO
+        auto customPlot = new QCustomPlot();
+        /*utility::Plot<double> p(customPlot);
+
+        // Draw the input training data as a scatter pot
+        p.scatterPlotYX(Y, X);
+
+        // And overlay the linear model prediction
+        using namespace std::placeholders;  // For e.g. _1
+        calc_t<double> fptr = std::bind(&maths::linear::Regression<double>::calculate, f, _1);
+        p.drawFunction(0, 100, 1, fptr);*/
+
+        return customPlot;
     }
 };
 

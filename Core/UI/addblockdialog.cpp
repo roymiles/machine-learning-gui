@@ -43,15 +43,19 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
         switch(selectedBlockType)
         {
         case BlockTypes::BLOCK:
-            this->graphWidget->addBlock<MyCustomBlock>(blockName);
+            this->graphWidget->addBlock<MyCustomBlock<double>>(blockName);
             this->close();
             break;
         case BlockTypes::SOURCE:
-            this->graphWidget->addBlock<MyCustomSource>(blockName);
+            this->graphWidget->addBlock<MyCustomSource<double>>(blockName);
             this->close();
             break;
         case BlockTypes::SINK:
-            this->graphWidget->addBlock<MyCustomSink>(blockName);
+            this->graphWidget->addBlock<MyCustomSink<double>>(blockName);
+            this->close();
+            break;
+        case BlockTypes::LINEAR_REGRESSION:
+            this->graphWidget->addBlock<LinearRegressionBlock<double>>(blockName);
             this->close();
             break;
         }

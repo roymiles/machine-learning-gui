@@ -5,13 +5,24 @@
 
 using namespace je::graph;
 
-class MyCustomBlock : public Block<int>
+template<typename T>
+class MyCustomBlock : public Block<T>
 {
 public:
-    MyCustomBlock();
+    MyCustomBlock() : Block<T>()
+    {
 
-    void init() override;
-    int run(int in) override;
+    }
+
+    void init() override
+    {
+        qDebug() << "Initializing MyCustomBlock";
+    }
+
+    T run(T in) override
+    {
+        return in * 5;
+    }
 };
 
 #endif // MYCUSTOMBLOCK_H

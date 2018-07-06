@@ -17,12 +17,15 @@ class Regression
 {
 public:
 
-    /*
-     * Must specify the X, Y data
-     */
-    Regression() = delete;
+    // If using default constructor, must remember to call train()
+    Regression()
+    {
+        hasTrained = false;
+    }
+
     Regression(matrix<T> &Y, matrix<T> &X)
     {
+        hasTrained = false;
         train(Y, X);
     }
 
@@ -31,6 +34,9 @@ public:
      */
     matrix<T> calculate(const matrix<T> &X)
     {
+        // Must run train() first
+        assert(hasTrained == true);
+
         // Verify X dimensions, should be a single p+1 row vector
         assert(X.size1() == 1 && X.size2() == B.size1());
 
@@ -43,8 +49,6 @@ public:
     {
         return this->calculate(X);
     }
-
-private:
 
     // [ROWS x COLUMNS] -> [size1 x size2]
     // Takes the output column vector [N x 1] and the input matrix [N x (p+1)] for training
@@ -72,9 +76,12 @@ private:
         // NOTE: Nested prod is not allowed
         tmp = prod(out, trans(X));
         B = prod(tmp, Y); // This is a unique solution
+
+        hasTrained = true;
     }
 
-
+private:
+    bool hasTrained; // Cannot run calculate() until train() has been run
     matrix<T> B; // Regression coefficients
 };
 

@@ -29,7 +29,6 @@ SOURCES += \
     Core/Graph/graphwidget.cpp \
     Core/Graph/inputport.cpp \
     Core/Graph/outputport.cpp \
-    Core/Graph/Blocks/mycustomblock.cpp \
     Core/IO/blocksourcecodemanager.cpp \
     Core/Maths/histogram.cpp \
     Core/UI/addblockdialog.cpp \
@@ -42,10 +41,7 @@ SOURCES += \
     Dependencies/darkstyle/framelesswindow/framelesswindow.cpp \
     Dependencies/darkstyle/framelesswindow/windowdragger.cpp \
     Dependencies/darkstyle/DarkStyle.cpp \
-    Core/Graph/Blocks/mycustomsink.cpp \
-    Core/Graph/Blocks/mycustomsource.cpp \
     Core/Maths/Linear/regression.cpp \
-    Core/Graph/Blocks/linearregressionblock.cpp \
     Core/IO/datamanager.cpp
 
 

@@ -23,6 +23,7 @@
 #include "../Graph/Blocks/mycustomblock.h"
 #include "../Graph/Blocks/mycustomsink.h"
 #include "../Graph/Blocks/mycustomsource.h"
+#include "../Graph/Blocks/linearregressionblock.h"
 
 namespace je { namespace graph {
 

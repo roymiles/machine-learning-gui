@@ -85,6 +85,11 @@
         <string>My Custom Sink</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Linear Regression Block</string>
+       </property>
+      </item>
      </widget>
     </item>
    </layout>

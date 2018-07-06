@@ -5,13 +5,22 @@
 
 using namespace je::graph;
 
-class MyCustomSink : public Sink<int>
+template<typename T>
+class MyCustomSink : public Sink<T>
 {
 public:
-    MyCustomSink();
+    MyCustomSink() : Sink<T>() {}
+    ~MyCustomSink() {}
 
-    void init() override;
-    void run(int in) override;
+    void init() override
+    {
+        qDebug() << "Initializing MyCustomSink";
+    }
+
+    void run(T in) override
+    {
+        qDebug() << "Output = " << in;
+    }
 };
 
 #endif // MYCUSTOMSINK_H

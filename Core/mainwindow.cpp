@@ -63,6 +63,7 @@ void MainWindow::on_zoomIn_clicked()
  */
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
+    // TODO MAKE THIS WORK FOR GENERIC QWidget*
     // Set the associated block tabIndex to -1
     graphWidget->getBlock(index)->setTabIndex(-1);
     ui->tabWidget->removeTab(index);
@@ -75,9 +76,13 @@ void MainWindow::on_runButton_clicked()
 
 void MainWindow::on_exampleLayoutButton_clicked()
 {
-    this->graphWidget->addBlock<MyCustomBlock>("Block");
-    this->graphWidget->addBlock<MyCustomSource>("Source");
-    this->graphWidget->addBlock<MyCustomSink>("Sink");
+    /*this->graphWidget->addBlock<MyCustomBlock<int>>("Block");
+    this->graphWidget->addBlock<MyCustomSource<int>>("Source");
+    this->graphWidget->addBlock<MyCustomSink<int>>("Sink");*/
+
+    this->graphWidget->addBlock<LinearRegressionBlock<double>>("Linear regression");
+    this->graphWidget->addBlock<MyCustomSource<double>>("Source");
+    this->graphWidget->addBlock<MyCustomSink<double>>("Sink");
 }
 
 } // je

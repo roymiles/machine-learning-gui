@@ -13,7 +13,8 @@ namespace je { namespace ui {
 enum BlockTypes : int {
     BLOCK = 0,
     SOURCE = 1,
-    SINK = 2
+    SINK = 2,
+    LINEAR_REGRESSION = 3
 };
 
 class AddBlockDialog : public QDialog
