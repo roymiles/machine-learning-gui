@@ -19,13 +19,13 @@ public:
     _BlockBase()
     {
         // Some type assertions
-        if(is_sink() && is_same<out_type, void>::value && !is_same<in_type, void>::value) // Must have void output and non-void input
+        if(is_sink() && utility::is_same<out_type, void>::value && !utility::is_same<in_type, void>::value) // Must have void output and non-void input
             assert("Invalid sink template parameters");
 
-        if(is_source() && !is_same<out_type, void>::value && is_same<in_type, void>::value) // Must have void input and non-void output
+        if(is_source() && !utility::is_same<out_type, void>::value && utility::is_same<in_type, void>::value) // Must have void input and non-void output
             assert("Invalid source template parameters");
 
-        if(is_block() && !is_same<out_type, void>::value && !is_same<in_type, void>::value) // Must have non-void input and output
+        if(is_block() && !utility::is_same<out_type, void>::value && !utility::is_same<in_type, void>::value) // Must have non-void input and output
             assert("Invalid block template parameters");
     }
 

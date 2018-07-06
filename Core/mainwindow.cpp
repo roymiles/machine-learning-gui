@@ -8,6 +8,8 @@
 #include "UI/addblockdialog.h"
 #include "Utility/utilities.h"
 
+namespace je {
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -19,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     graphWidget = new je::graph::GraphWidget(this, ui->tabWidget);
     ui->tabWidget->addTab(graphWidget, "Flow graph");
 
-    je::testLinearRegression(ui->tabWidget);
+    utility::testLinearRegression(ui->tabWidget);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
@@ -39,7 +41,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_addBlock_clicked()
 {
     // Show add block dialog. This handles all the types of blocks that can be added to the graph
-    je::AddBlockDialog addBlockDialog;
+    ui::AddBlockDialog addBlockDialog;
     addBlockDialog.setGraphWidget(this->graphWidget); // Inject graph widget so that dialog can call addBlock
     addBlockDialog.setModal(true);
     addBlockDialog.exec();
@@ -76,6 +78,6 @@ void MainWindow::on_exampleLayoutButton_clicked()
     this->graphWidget->addBlock<MyCustomBlock>("Block");
     this->graphWidget->addBlock<MyCustomSource>("Source");
     this->graphWidget->addBlock<MyCustomSink>("Sink");
-
-
 }
+
+} // je

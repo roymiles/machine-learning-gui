@@ -8,7 +8,7 @@ namespace Ui {
 class AddBlockDialog;
 }
 
-namespace je {
+namespace je { namespace ui {
 
 enum BlockTypes : int {
     BLOCK = 0,
@@ -36,6 +36,6 @@ private:
     graph::GraphWidget *graphWidget;
 };
 
-} // je
+} } // ui, je
 
 #endif // ADDBLOCKDIALOG_H

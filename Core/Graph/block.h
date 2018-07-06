@@ -51,6 +51,10 @@ public:
     {
         // Drawing a block is only dependant on the block type
         block_type_impl<block_type>::draw<in_type, out_type>(painter, this);
+
+        // Also show the execution times
+
+        //drawText(const QPointF & position, getExecutionTime())
     }
 
     clickType mousePressEvent(QPoint &point) override
@@ -104,7 +108,7 @@ public:
 
     void* _run(void* in) override
     {
-        if(!is_same<in_type, void>::value && !is_same<out_type, void>::value) {
+        if(!utility::is_same<in_type, void>::value && !utility::is_same<out_type, void>::value) {
             // Cast the input argument and call the users function
             out_type out = run(*((in_type *)in));
             // Dynamically allocate memory for output (because returning a pointer)
@@ -112,7 +116,7 @@ public:
             *retval = out;
             return retval;
         } else {
-            assert("Invalid template parameters in _run()");
+            qFatal("Invalid template parameters in _run()");
             return nullptr;
         }
     }
@@ -152,14 +156,14 @@ public:
 
     void* _run(void* in) override
     {
-        if(is_same<in_type, void>::value) {
+        if(utility::is_same<in_type, void>::value) {
             // No input, therefore a source
             out_type out = run();
             out_type* retval = (out_type*)malloc(sizeof(out_type));
             *retval = out;
             return retval;
         } else {
-            assert("Invalid template parameters in _run()");
+            qFatal("Invalid template parameters in _run()");
             return nullptr;
         }
     }
@@ -199,11 +203,11 @@ public:
 
     void* _run(void* in) override
     {
-        if(is_same<out_type, void>::value) {
+        if(utility::is_same<out_type, void>::value) {
             // No output, therefore a sink
             run(*((in_type *)in));
         } else {
-            assert("Invalid template parameters in _run()");
+            qFatal("Invalid template parameters in _run()");
         }
 
         return nullptr;

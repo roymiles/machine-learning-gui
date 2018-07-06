@@ -57,7 +57,8 @@ public:
      */
     virtual void* _run(void* in) = 0;
 
-    void addExecutionTime(std::chrono::duration<double> time);
+    void setExecutionTime(std::chrono::duration<double> time);
+    std::chrono::duration<double> getExecutionTime();
 
 private:
     int x, y, w, h;
@@ -67,8 +68,8 @@ private:
     // First -> Input, Second -> Output
     std::pair<PortPointer, PortPointer> ports;
 
-    // Stores a list of all the execution times of this block
-    std::vector<std::chrono::duration<double>> executionTimes;
+    // The elapsed time of the previous execution
+    std::chrono::duration<double> previousExecutionTimes;
 };
 
 typedef std::shared_ptr<IBlock> BlockPointer;

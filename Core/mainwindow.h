@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 #include <QGraphicsScene>
@@ -12,6 +11,8 @@
 namespace Ui {
 class MainWindow;
 }
+
+namespace je {
 
 class MainWindow : public QMainWindow
 {
@@ -40,7 +41,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    je::graph::GraphWidget *graphWidget;
+    graph::GraphWidget *graphWidget;
 };
 
-#endif // MAINWINDOW_H
+} // je

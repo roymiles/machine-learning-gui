@@ -97,9 +97,14 @@ int IBlock::getTabIndex() const
     return tabIndex;
 }
 
-void IBlock::addExecutionTime(std::chrono::duration<double> time)
+void IBlock::setExecutionTime(std::chrono::duration<double> time)
 {
-    executionTimes.push_back(time);
+    previousExecutionTimes = time;
+}
+
+std::chrono::duration<double> IBlock::getExecutionTime()
+{
+    return previousExecutionTimes;
 }
 
 } } // graph, je

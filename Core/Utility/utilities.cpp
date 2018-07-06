@@ -1,13 +1,13 @@
 #include "utilities.h"
 
-#include "../Maths/linearregression.h"
+#include "../Maths/Linear/regression.h"
 #include "plot.h"
 
 #include <boost/random.hpp>
 #include <boost/random/normal_distribution.hpp>
 #include <qcustomplot-source/qcustomplot.h>
 
-namespace je {
+namespace je { namespace utility {
 
 void inputDialog(QString message)
 {
@@ -69,7 +69,7 @@ void testLinearRegression(QTabWidget *tabWidget)
     }
 
     // Function approximation
-    auto f = new LinearRegression<double>(Y, X);
+    auto f = new maths::linear::Regression<double>(Y, X);
 
     auto customPlot = new QCustomPlot();
     Plot<double> p(customPlot);
@@ -79,7 +79,7 @@ void testLinearRegression(QTabWidget *tabWidget)
 
     // And overlay the linear model prediction
     using namespace std::placeholders;  // For e.g. _1
-    calc_t<double> fptr = std::bind(&LinearRegression<double>::calculate, f, _1);
+    calc_t<double> fptr = std::bind(&maths::linear::Regression<double>::calculate, f, _1);
     p.drawFunction(0, 100, 1, fptr);
 
     tabWidget->addTab(customPlot, "Linear regression test");
@@ -97,4 +97,4 @@ bool isValidBlockName(const QString blockName)
     return match.hasMatch();
 }
 
-} // je
+} } // utility, je

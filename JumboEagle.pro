@@ -32,7 +32,6 @@ SOURCES += \
     Core/Graph/Blocks/mycustomblock.cpp \
     Core/IO/blocksourcecodemanager.cpp \
     Core/Maths/histogram.cpp \
-    Core/Maths/linearregression.cpp \
     Core/UI/addblockdialog.cpp \
     Core/Utility/utilities.cpp \
     Core/qcplinearcolormap.cpp \
@@ -44,7 +43,10 @@ SOURCES += \
     Dependencies/darkstyle/framelesswindow/windowdragger.cpp \
     Dependencies/darkstyle/DarkStyle.cpp \
     Core/Graph/Blocks/mycustomsink.cpp \
-    Core/Graph/Blocks/mycustomsource.cpp
+    Core/Graph/Blocks/mycustomsource.cpp \
+    Core/Maths/Linear/regression.cpp \
+    Core/Graph/Blocks/linearregressionblock.cpp \
+    Core/IO/datamanager.cpp
 
 
 HEADERS += \
@@ -56,7 +58,6 @@ HEADERS += \
     Core/Graph/Blocks/mycustomblock.h \
     Core/IO/blocksourcecodemanager.h \
     Core/Maths/histogram.h \
-    Core/Maths/linearregression.h \
     Core/UI/addblockdialog.h \
     Core/Utility/debug.h \
     Core/Utility/plot.h \
@@ -71,7 +72,11 @@ HEADERS += \
     Dependencies/darkstyle/DarkStyle.h \
     Core/Graph/Blocks/mycustomsink.h \
     Core/Graph/Blocks/mycustomsource.h \
-    Core/Graph/blockbase.h
+    Core/Graph/blockbase.h \
+    Dependencies/matplotlibcpp/matplotlibcpp.h \
+    Core/Maths/Linear/regression.h \
+    Core/Graph/Blocks/linearregressionblock.h \
+    Core/IO/datamanager.h
 
 
 FORMS += \
@@ -95,5 +100,6 @@ win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Dependencies/opencv-3.4.1/
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Dependencies/opencv-3.4.1/opencv/build/x64/vc14/lib/ -lopencv_world341d
 else:unix: LIBS += -L$$PWD/Dependencies/opencv-3.4.1/opencv/build/x64/vc14/lib/ -lopencv_world341
 
+INCLUDEPATH += C:/Users/Roy/AppData/Local/Programs/Python/Python35/include
 INCLUDEPATH += Dependencies/opencv-3.4.1/opencv/build/include
 DEPENDPATH += Dependencies/opencv-3.4.1/opencv/build/include

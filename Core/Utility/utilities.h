@@ -17,7 +17,7 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 
-namespace je {
+namespace je { namespace utility {
 
 using namespace boost::numeric::ublas;
 
@@ -129,6 +129,6 @@ void loadDataSet(std::string filePath, matrix<T> &X, matrix<T> &Y)
     }
 }
 
-} // je
+} } // utility, je
 
 #endif

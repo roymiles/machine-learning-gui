@@ -3,19 +3,19 @@
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <algorithm>
-#include "../Maths/linearregression.h"
+#include "../Maths/Linear/regression.h"
 #include <QVector>
 #include <qcustomplot-source/qcustomplot.h>
 #include <tuple>
 #include "../qcplinearcolormap.h"
 
-namespace je {
+namespace je { namespace utility {
 
 using namespace boost::numeric::ublas;
-using namespace je::maths;
+using namespace je::maths::linear;
 
 /*
- * This class offers an interface between the boost numeric structures and QCustomPlot
+ * This class offers an interface between the boost numeric structures (matrices) and QCustomPlot
  * It can take Boost::Matrix data and plot them on a QCustomPlot instance
  */
 template<typename T>
@@ -174,6 +174,6 @@ private:
     int count; // Keeps track of the number of graphs to enable multiple plot calls ->graph(count)
 };
 
-} // je
+} } // utility, je
 
 #endif // PLOT_H

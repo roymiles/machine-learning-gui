@@ -72,7 +72,7 @@ public:
             if(sink != G::null_vertex())
             {
                 boost::remove_vertex(vertex, graph);
-                inputDialog("Too many sinks");
+                utility::inputDialog("Too many sinks");
                 return;
             }else{
                 qDebug() << "Adding sink";
@@ -84,7 +84,7 @@ public:
         {
             if(source != G::null_vertex()){
                 boost::remove_vertex(vertex, graph);
-                inputDialog("Too many sources");
+                utility::inputDialog("Too many sources");
                 return;
             }else{
                 qDebug() << "Adding source";

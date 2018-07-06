@@ -6,7 +6,7 @@
 #include "../IO/blocksourcecodemanager.h"
 #include "../Utility/utilities.h"
 
-namespace je {
+namespace je { namespace ui {
 
 AddBlockDialog::AddBlockDialog(QWidget *parent) :
     QDialog(parent),
@@ -33,9 +33,9 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
         auto selectedBlockType = ui->comboBox->currentIndex();
 
         const QString blockName = ui->BlockNameLineEdit->text();
-        if(!je::isValidBlockName(blockName))
+        if(!utility::isValidBlockName(blockName))
         {
-            je::inputDialog("Invalid block name.");
+            utility::inputDialog("Invalid block name.");
             this->close();
             return;
         }
@@ -73,4 +73,4 @@ void AddBlockDialog::on_AddBlockConfirmButton_rejected()
     this->close();
 }
 
-} // je
+} } // ui, je

@@ -253,7 +253,7 @@ std::shared_ptr<IBlock> GraphWidget::getBlock(const vertex_t vertex)
 void GraphWidget::run()
 {
     if(sink == G::null_vertex() || source == G::null_vertex()){
-        je::inputDialog("Must have one source and one sink");
+        utility::inputDialog("Must have one source and one sink");
         return;
     }
 
@@ -292,6 +292,7 @@ void GraphWidget::run()
 
         std::chrono::duration<double> elapsed_seconds = t2-t1;
         qDebug() << "t = " << elapsed_seconds.count();
+        graph[current_node]->setExecutionTime(elapsed_seconds);
 
         // This is so can do timing calculations before breaking out of loop
         if(at_sink)

@@ -1,27 +1,27 @@
-#ifndef LINEARREGRESSION_H
-#define LINEARREGRESSION_H
+#pragma once
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
+#include "../../Utility/utilities.h"
 
 using namespace boost::numeric::ublas;
 
-namespace je { namespace maths {
+namespace je { namespace maths { namespace linear {
 
 // Find the linear relationship between an input vector and an output
 // The feature size is p+1, and the # outputs = N
 // This fixes the relationship to a linear model
 // TODO: Allow multi-output data
 template<typename T> // Output will be the same type as input because Y = XB
-class LinearRegression
+class Regression
 {
 public:
 
     /*
      * Must specify the X, Y data
      */
-    LinearRegression() = delete;
-    LinearRegression(matrix<T> &Y, matrix<T> &X)
+    Regression() = delete;
+    Regression(matrix<T> &Y, matrix<T> &X)
     {
         train(Y, X);
     }
@@ -67,7 +67,7 @@ private:
         // B = (X^T * X)^-1 * X^T * y
         matrix<T> out;
         matrix<T> tmp = prod(trans(X), X);
-        invertMatrix(tmp, out); // (X^T * X) will always be singular
+        utility::invertMatrix(tmp, out); // (X^T * X) will always be singular
 
         // NOTE: Nested prod is not allowed
         tmp = prod(out, trans(X));
@@ -81,6 +81,4 @@ private:
 template<typename T>
 using calc_t = std::function<matrix<T>(matrix<T> const&)>;
 
-} } // maths, je
-
-#endif // LINEARREGRESSION_H
+} } } // linear, maths, je
