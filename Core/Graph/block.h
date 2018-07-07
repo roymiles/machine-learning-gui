@@ -19,11 +19,6 @@
 
 namespace je { namespace graph {
 
-// This is needed because func(void in) is an illegal expression
-// An alternative is class template specialisation, but this adds too much bulk code (had to be done though)
-// NOTE: No longer used, makes user code ugly
-//struct void_t {};
-
 /*
  *  All blocks inherit a specialised version of this class
  *  NOTE: The class is named _Block to avoid collision with Block typedef (see bottom)
@@ -40,35 +35,11 @@ template<typename block_type,
          typename in_type,
          typename out_type,
          typename tab_type>
-class _Block : public IBlock, public _BlockBase<block_type, in_type, out_type, tab_type>
+class _Block : public _BlockBase<block_type, in_type, out_type, tab_type>
 {
 public:
-    _Block() : IBlock(block_type::has_input, block_type::has_output), _BlockBase() {}
+    _Block() : _BlockBase() {}
     ~_Block() {}
-
-    // Overridden members call upon the templated utility functions declared above
-    void draw(QPainter *painter) override
-    {
-        // Drawing a block is only dependant on the block type
-        block_type_impl<block_type>::draw<in_type, out_type>(painter, this);
-
-        // Also show the execution times
-
-        //drawText(const QPointF & position, getExecutionTime())
-    }
-
-    clickType mousePressEvent(QPoint &point) override
-    {
-        // The mouse press event check searches through all its ports and
-        // therefore is block type dependant
-        return block_type_impl<block_type>::mousePressEvent(point, this);
-    }
-
-    QWidget* tabWidget() override
-    {
-        // The widget that is returned is dependant on the tab type only
-        return tab_type_impl<tab_type>::tabWidget(this);
-    }
 
     virtual void init() override {}    
     void* _run(void* in) override {}
@@ -80,26 +51,11 @@ public:
 template<typename in_type,
          typename out_type,
          typename tab_type>
-class _Block<block_t, in_type, out_type, tab_type> : public IBlock, public _BlockBase<block_t, in_type, out_type, tab_type>
+class _Block<block_t, in_type, out_type, tab_type> : public _BlockBase<block_t, in_type, out_type, tab_type>
 {
 public:
-    _Block() : IBlock(block_t::has_input, block_t::has_output), _BlockBase() {}
+    _Block() : _BlockBase() {}
     ~_Block() {}
-
-    void draw(QPainter *painter) override
-    {
-        block_type_impl<block_t>::draw<in_type, out_type>(painter, this);
-    }
-
-    clickType mousePressEvent(QPoint &point) override
-    {
-        return block_type_impl<block_t>::mousePressEvent(point, this);
-    }
-
-    QWidget* tabWidget() override
-    {
-        return tab_type_impl<tab_type>::tabWidget(this);
-    }
 
     // User may optionally ovveride this function
     virtual void init() override {}
@@ -128,26 +84,11 @@ public:
 template<typename in_type,
          typename out_type,
          typename tab_type>
-class _Block<source_t, in_type, out_type, tab_type> : public IBlock, public _BlockBase<source_t, in_type, out_type, tab_type>
+class _Block<source_t, in_type, out_type, tab_type> : public _BlockBase<source_t, in_type, out_type, tab_type>
 {
 public:
-    _Block() : IBlock(source_t::has_input, source_t::has_output), _BlockBase() {}
+    _Block() : _BlockBase() {}
     ~_Block() {}
-
-    void draw(QPainter *painter) override
-    {
-        block_type_impl<source_t>::draw<in_type, out_type>(painter, this);
-    }
-
-    clickType mousePressEvent(QPoint &point) override
-    {
-        return block_type_impl<source_t>::mousePressEvent(point, this);
-    }
-
-    QWidget* tabWidget() override
-    {
-        return tab_type_impl<tab_type>::tabWidget(this);
-    }
 
     // User may optionally override this function
     virtual void init() override {}
@@ -175,26 +116,11 @@ public:
 template<typename in_type,
          typename out_type,
          typename tab_type>
-class _Block<sink_t, in_type, out_type, tab_type> : public IBlock, public _BlockBase<sink_t, in_type, out_type, tab_type>
+class _Block<sink_t, in_type, out_type, tab_type> : public _BlockBase<sink_t, in_type, out_type, tab_type>
 {
 public:
-    _Block() : IBlock(sink_t::has_input, sink_t::has_output), _BlockBase() {}
+    _Block() : _BlockBase() {}
     ~_Block() {}
-
-    void draw(QPainter *painter) override
-    {
-        block_type_impl<sink_t>::draw<in_type, out_type>(painter, this);
-    }
-
-    clickType mousePressEvent(QPoint &point) override
-    {
-        return block_type_impl<sink_t>::mousePressEvent(point, this);
-    }
-
-    QWidget* tabWidget() override
-    {
-        return tab_type_impl<tab_type>::tabWidget(this);
-    }
 
     // User may optionally override this function
     virtual void init() override {}

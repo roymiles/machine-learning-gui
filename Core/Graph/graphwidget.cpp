@@ -85,20 +85,20 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
     {
 
         bool hit = true; // Once a click event has been triggered (on either a block or a port), exit out of the loop
-        clickType c = graph[vertex]->mousePressEvent(e->pos());
+        click_types c = graph[vertex]->mousePressEvent(e->pos());
         switch(c)
         {
-            case clickType::block:
+            case click_types::block:
                 clickedVertex = vertex;
                 break;
 
             // The following click events have similar functionality, and so are grouped together
             // Can connect either way round. e.g. in to and out, or an out to an in
-            case clickType::inPort:
-            case clickType::outPort:
+            case click_types::inPort:
+            case click_types::outPort:
 
                 // Set the start and end port depending on the click event
-                if(c == clickType::inPort) {
+                if(c == click_types::inPort) {
                     drawingEdge.second = vertex;
                 }else{
                     drawingEdge.first = vertex;
@@ -119,12 +119,12 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                     { // Only create the edge if we have both the input and outport ports
 
                         // Verify the data types of the input and output ports
-                        // NEED TO HAVE A THINK ABOUT HOW TO DO THIS (PREFERABLY COMPILE TIME COMP)
-                        //if(!validEdge(graph[drawingEdge.first], graph[drawingEdge.second]))
-                        //{
-                            // Clear the edge and give a dialog
-                            // ...
-                        //}
+                        if(graph[drawingEdge.first]->getOutType() != graph[drawingEdge.second]->getInType())
+                        {
+                            // Data types do not match, so do not add the edge
+                            utility::inputDialog("Block port data types do not match");
+                            return;
+                        }
 
                         // Edge accepts a pair of pointer to the start and end blocks (vertices)
                         std::pair<BlockPointer, BlockPointer> endPoints = std::make_pair(graph[drawingEdge.first], graph[drawingEdge.second]);
@@ -145,7 +145,7 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 }
                 break;
 
-            case clickType::none:
+            case click_types::none:
                 clickedVertex = G::null_vertex();
                 hit = false; // No click events triggered, go onto the next block
                 break;
@@ -207,7 +207,7 @@ void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
 {
     for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
-        if(graph[vertex]->mousePressEvent(e->pos()) == clickType::block)
+        if(graph[vertex]->mousePressEvent(e->pos()) == click_types::block)
         {
             // Check if the source is not already open
             const int tabIndex = graph[vertex]->getTabIndex();

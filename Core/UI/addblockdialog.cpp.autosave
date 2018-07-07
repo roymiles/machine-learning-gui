@@ -33,6 +33,7 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
         // These are mapped to the block_type and data_type enums respectively
         auto selectedBlockType = ui->comboBox->currentIndex();
         auto selectedDataType  = 0; // TODO
+       
 
         const QString blockName = ui->BlockNameLineEdit->text();
         if(!utility::isValidBlockName(blockName))

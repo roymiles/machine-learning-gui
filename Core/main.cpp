@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     // Create frameless window (and set windowState or title)
     FramelessWindow framelessWindow;
-    framelessWindow.setWindowTitle("test title");
+    framelessWindow.setWindowTitle("Jumbo Eagle");
     framelessWindow.setWindowIcon(app.style()->standardIcon(QStyle::SP_DesktopIcon));
 
     // Add the mainwindow to our custom frameless window

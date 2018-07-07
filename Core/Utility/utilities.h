@@ -17,25 +17,31 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 
+/*
+ * Forward declare all the blocks.
+ * Don't need to unnecessarily include them as we are not calling
+ * any member function of the classes
+ * Note: these classes are outside the je namespace
+ */
+template<typename T>
+class LinearRegressionBlock;
+
+template<typename T>
+class MyCustomBlock;
+
+template<typename T>
+class MyCustomSink;
+
+template<typename T>
+class MyCustomSource;
+
 namespace je { namespace utility {
 
 using namespace boost::numeric::ublas;
 
-// NOTE: Use null_vertex() not these!
-template<typename T>
-bool isNullDescriptor(T t)
-{
-    qFatal("Use null_vertex instead.");
-    return (t == -1);
-}
-
-template<typename T>
-T getNullDescriptor()
-{
-    qFatal("Use null_vertex instead.");
-    return -1;
-}
-
+/*
+ * is_same<T,U>::value is true iff T == U
+ */
 template<typename T, typename U>
 struct is_same
 {
@@ -48,25 +54,130 @@ struct is_same<T, T>
     static const bool value = true;
 };
 
-// Different input/output data types will have different coloured ports
+/*
+ * All the supported template parameter types
+ * This is used to populate the dropdown list in addblockdialog
+ */
+enum data_types
+{
+    INT     = 0,
+    DOUBLE  = 1,
+    _VOID   = 2 // For source/sinks (underscore to avoid naming collision with void)
+};
+
+/*
+ * Convert data_types enum to the appropriate intrinsic type using a typedef
+ */
+template<data_types D>
+struct enum2datatype
+{
+    // Default
+    typedef int inner_type;
+};
+
+// Class specializations
+template<>
+struct enum2datatype<data_types::INT>
+{
+    typedef int inner_type;
+};
+
+template<>
+struct enum2datatype<data_types::DOUBLE>
+{
+    typedef double inner_type;
+};
+
+template<>
+struct enum2datatype<data_types::_VOID>
+{
+    typedef void inner_type;
+};
+
+/*
+ * Give generic type information for all the data_types (specified above)
+ * Different input/output data types will have different coloured ports
+ * Can also be used to convert back to enum data_type
+ */
 template<typename T>
 struct type_info
 {
     static QColor colour() { return Qt::gray; } // Default type colour
+    static const data_types enumtype = data_types::INT;
 };
 
+// Class specializations
 template<>
 struct type_info<int>
 {
     static QColor colour() { return Qt::red; }
+    static const data_types enumtype = data_types::INT;
 };
 
 template<>
 struct type_info<double>
 {
     static QColor colour() { return Qt::green; }
+    static const data_types enumtype = data_types::DOUBLE;
 };
 
+/*
+ * This enum is used to populate the addblockdialog dropdown list of block types
+ * and is then used in enum2blocktype to map the dropdown values to typedefs of the block classes
+ */
+enum block_types
+{
+    BLOCK               = 0,
+    SOURCE              = 1,
+    SINK                = 2,
+    LINEAR_REGRESSION   = 3,
+    _MAX                = 4 // Helps for iterating over the enum
+};
+
+/*
+ * The following template structs convert the block_type enum to a typedef required
+ * for instatiating the block type
+ */
+template<block_types B, data_types D>
+struct enum2blocktype
+{
+    // Default
+    typedef typename enum2datatype<D>::inner_type T;
+    typedef MyCustomBlock<T> inner_type;
+};
+
+// Class specializations
+template<data_types D>
+struct enum2blocktype<block_types::BLOCK, D>
+{
+    typedef typename enum2datatype<D>::inner_type T;
+    typedef MyCustomBlock<T> inner_type;
+};
+
+template<data_types D>
+struct enum2blocktype<block_types::SOURCE, D>
+{
+    typedef typename enum2datatype<D>::inner_type T;
+    typedef MyCustomSource<T> inner_type;
+};
+
+template<data_types D>
+struct enum2blocktype<block_types::SINK, D>
+{
+    typedef typename enum2datatype<D>::inner_type T;
+    typedef MyCustomSink<T> inner_type;
+};
+
+template<data_types D>
+struct enum2blocktype<block_types::LINEAR_REGRESSION, D>
+{
+    typedef typename enum2datatype<D>::inner_type T;
+    typedef LinearRegressionBlock<T> inner_type;
+};
+
+/*
+ * Give a generic GUI message pop-up box for the user
+ */
 void inputDialog(QString message);
 
 /*
@@ -114,20 +225,6 @@ bool isValidBlockName(const QString fileName);
 // The following should not be in utilities!!
 bool testInvertMatrix();
 void testLinearRegression(QTabWidget *tabWidget);
-
-template<typename T>
-void loadDataSet(std::string filePath, matrix<T> &X, matrix<T> &Y)
-{
-    ifstream is(filePath);
-    string str;
-    while(getline(is, str))
-    {
-        if(str.at(0) == "#")
-            continue; // Comment line
-
-
-    }
-}
 
 } } // utility, je
 

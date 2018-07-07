@@ -6,6 +6,27 @@
 using namespace je::graph;
 
 template<typename T>
+class sink_run_impl
+{
+public:
+    static T run(T in)
+    {
+        qFatal("The non-specialised sink_run_impl functions should not be used.");
+        return static_cast<T>(0);
+    }
+};
+
+template<>
+class sink_run_impl<int>
+{
+public:
+    static void run(int in)
+    {
+        qDebug() << "Output = " << in;
+    }
+};
+
+template<typename T>
 class MyCustomSink : public Sink<T>
 {
 public:
@@ -19,7 +40,7 @@ public:
 
     void run(T in) override
     {
-        qDebug() << "Output = " << in;
+        sink_run_impl<T>::run(in);
     }
 };
 

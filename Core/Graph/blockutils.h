@@ -34,10 +34,10 @@ public:
         qFatal("The non-specialised block_type_impl functions should not be used.");
     }
 
-    static clickType mousePressEvent(QPoint &point, IBlock* block)
+    static click_types mousePressEvent(QPoint &point, IBlock* block)
     {
         qFatal("The non-specialised block_type_impl functions should not be used.");
-        return clickType::none;
+        return click_types::none;
     }
 };
 
@@ -61,16 +61,16 @@ public:
         block->getPorts().second->draw(painter, utility::type_info<out_type>::colour());
     }
 
-    static clickType mousePressEvent(QPoint &point, IBlock* block)
+    static click_types mousePressEvent(QPoint &point, IBlock* block)
     {
         if(utility::insideRect(block, point))
-            return clickType::block;
+            return click_types::block;
         else if(utility::insideRect(block->getPorts().first, point))
-            return clickType::inPort;
+            return click_types::inPort;
         else if(utility::insideRect(block->getPorts().second, point))
-            return clickType::outPort;
+            return click_types::outPort;
         else
-            return clickType::none;
+            return click_types::none;
     }
 };
 
@@ -92,14 +92,14 @@ public:
         block->getPorts().second->draw(painter, utility::type_info<out_type>::colour());
     }
 
-    static clickType mousePressEvent(QPoint &point, IBlock* block)
+    static click_types mousePressEvent(QPoint &point, IBlock* block)
     {
         if(utility::insideRect(block, point))
-            return clickType::block;
+            return click_types::block;
         else if(utility::insideRect(block->getPorts().second, point))
-            return clickType::outPort;
+            return click_types::outPort;
         else
-            return clickType::none;
+            return click_types::none;
     }
 };
 
@@ -121,14 +121,14 @@ public:
         block->getPorts().first->draw(painter, utility::type_info<in_type>::colour());
     }
 
-    static clickType mousePressEvent(QPoint &point, IBlock* block)
+    static click_types mousePressEvent(QPoint &point, IBlock* block)
     {
         if(utility::insideRect(block, point))
-            return clickType::block;
+            return click_types::block;
         else if(utility::insideRect(block->getPorts().first, point))
-            return clickType::inPort;
+            return click_types::inPort;
         else
-            return clickType::none;
+            return click_types::none;
     }
 };
 
@@ -148,12 +148,12 @@ public:
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());
     }
 
-    static clickType mousePressEvent(QPoint &point, IBlock* block)
+    static click_types mousePressEvent(QPoint &point, IBlock* block)
     {
         if(utility::insideRect(block, point))
-            return clickType::block;
+            return click_types::block;
         else
-            return clickType::none;
+            return click_types::none;
     }
 };
 
