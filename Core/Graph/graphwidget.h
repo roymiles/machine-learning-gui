@@ -125,6 +125,7 @@ private:
 
     // The block that has been clicked on (before the mouse button has been released)
     vertex_t clickedVertex;
+    boost::optional<edge_t> clickedEdge; // Similarly for an edge
 
     State curState;
 

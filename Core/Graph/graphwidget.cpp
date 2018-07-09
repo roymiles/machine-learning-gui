@@ -20,7 +20,7 @@ GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(paren
     this->drawingEdge = std::make_pair(G::null_vertex(), G::null_vertex());
 
     source = G::null_vertex();
-    sink = G::null_vertex();
+    sink   = G::null_vertex();
 }
 
 /*
@@ -44,13 +44,33 @@ void GraphWidget::paintEvent(QPaintEvent* e)
     // Draw all edges
     for(auto edge : boost::make_iterator_range(boost::edges(graph)))
     {
+        if(clickedEdge != boost::none)
+        {
+            // Highlight active edge
+            if(edge == *clickedEdge)
+                painter.setPen(Qt::red);
+        }
+
         graph[edge]->draw(&painter);
+
+        if(clickedEdge != boost::none)
+        {
+            // Back to default pen
+            if(edge == *clickedEdge)
+                painter.setPen(Qt::black);
+        }
     }
 
     // Draw all blocks (and internally the ports)
     for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
+        if(vertex == clickedVertex)
+            painter.setPen(Qt::red);
+
         graph[vertex]->draw(&painter);
+
+        if(vertex == clickedVertex)
+            painter.setPen(Qt::black);
     }
 
     // If in the DRAWING state, want to draw from the previously clicked port to the mouse position
@@ -80,6 +100,27 @@ void GraphWidget::paintEvent(QPaintEvent* e)
  */
 void GraphWidget::mousePressEvent(QMouseEvent* e)
 {
+    // Do not want to trigger clicking on an edge right after making the edge
+    if(curState != State::DRAWING_EDGE)
+    {
+        // Check if clicked on an edge
+        bool hit = false;
+        for(auto edge : boost::make_iterator_range(boost::edges(graph)))
+        {
+            if(graph[edge]->mousePressEvent(e->pos()))
+            {
+                clickedEdge = edge;
+                hit = true;
+                qDebug() << "Clicked on an edge";
+                break; // Do not check any other edges
+            }
+        }
+
+        // Did not click on an edge, so clear the active edge
+        if(!hit)
+            clickedEdge = boost::none;
+    }
+
     // Check if clicking on a block (or its ports)
     for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
@@ -154,11 +195,6 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
         if(hit) break; // Once triggered a click event, exit the loop
     }
 
-    // Check if clicked on an edge
-    for(auto edge : boost::make_iterator_range(boost::edges(graph)))
-    {
-    }
-
 }
 
 /*
@@ -190,14 +226,28 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
 }
 
 /*
- * When releasing the mouse button, remove any active blocks.
+ * If user is releasing the mouse button on an empty space, remove the clickedVertex and clickedEdge
  */
 void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
 {
-    if(clickedVertex != G::null_vertex())
+    // TODO: cannot just keep clickedVertex else it moves around after releasing mouse and stuff, bad
+
+    /*for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
-        clickedVertex = G::null_vertex();
-    }
+        // If release mouse on the block or any of its ports, keep as active/clicked vertex
+        if(graph[vertex]->mousePressEvent(e->pos()) != click_types::none)
+        {
+           clickedVertex = vertex;
+           return; // Do not need to check any others
+        }
+    }*/
+
+    // Similarly for an edge
+    // ...
+
+    // If reached here, then mouse is not released on anything so clear the active/clicked vertex/edge
+    clickedVertex = G::null_vertex();
+    clickedEdge   = boost::none;
 }
 
 /*
@@ -313,13 +363,6 @@ void GraphWidget::run()
 
     // e.g. To update the displayed execution times on the blocks
     this->update();
-
-        // All edges coming out of current node
-        //std::pair<out_edge_iterator, out_edge_iterator> out_edge = boost::out_edges(current_node, graph);
-       // vertex_t current_node = boost::target(*ei, graph); // Vertex connected to out-going edge of previous vertex
-
-        //qDebug() << graph[current_node]->getName();
-    //}
 
 }
 

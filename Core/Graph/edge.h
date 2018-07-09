@@ -18,6 +18,11 @@ public:
     BlockPointer getStartVertex();
     BlockPointer getEndVertex();
 
+    /*
+     * Returns true/false if point is on the edge (aka user has clicked on the edge)
+     */
+    bool mousePressEvent(QPoint &point);
+
 private:
     // Can't change the end points once the edge is created
     const std::pair<BlockPointer, BlockPointer> endPoints;
