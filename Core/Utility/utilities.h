@@ -62,14 +62,15 @@ enum data_types
 {
     INT     = 0,
     DOUBLE  = 1,
-    _VOID   = 2 // For source/sinks (underscore to avoid naming collision with void)
+    _VOID   = 2, // For source/sinks (underscore to avoid naming collision with void)
+    _MAXD   = 3
 };
 
 /*
  * Convert data_types enum to the appropriate intrinsic type using a typedef
  */
 template<data_types D>
-struct enum2datatype
+struct _enum2datatype
 {
     // Default
     typedef int inner_type;
@@ -77,19 +78,19 @@ struct enum2datatype
 
 // Class specializations
 template<>
-struct enum2datatype<data_types::INT>
+struct _enum2datatype<data_types::INT>
 {
     typedef int inner_type;
 };
 
 template<>
-struct enum2datatype<data_types::DOUBLE>
+struct _enum2datatype<data_types::DOUBLE>
 {
     typedef double inner_type;
 };
 
 template<>
-struct enum2datatype<data_types::_VOID>
+struct _enum2datatype<data_types::_VOID>
 {
     typedef void inner_type;
 };
@@ -103,7 +104,7 @@ template<typename T>
 struct type_info
 {
     static QColor colour() { return Qt::gray; } // Default type colour
-    static const data_types enumtype = data_types::INT;
+    static const data_types enumvalue = data_types::INT;
 };
 
 // Class specializations
@@ -111,14 +112,14 @@ template<>
 struct type_info<int>
 {
     static QColor colour() { return Qt::red; }
-    static const data_types enumtype = data_types::INT;
+    static const data_types enumvalue = data_types::INT;
 };
 
 template<>
 struct type_info<double>
 {
     static QColor colour() { return Qt::green; }
-    static const data_types enumtype = data_types::DOUBLE;
+    static const data_types enumvalue = data_types::DOUBLE;
 };
 
 /*
@@ -131,7 +132,7 @@ enum block_types
     SOURCE              = 1,
     SINK                = 2,
     LINEAR_REGRESSION   = 3,
-    _MAX                = 4 // Helps for iterating over the enum
+    _MAXB               = 4 // Helps for iterating over the enum
 };
 
 /*
@@ -142,7 +143,7 @@ template<block_types B, data_types D>
 struct enum2blocktype
 {
     // Default
-    typedef typename enum2datatype<D>::inner_type T;
+    typedef typename _enum2datatype<D>::inner_type T;
     typedef MyCustomBlock<T> inner_type;
 };
 
@@ -150,28 +151,28 @@ struct enum2blocktype
 template<data_types D>
 struct enum2blocktype<block_types::BLOCK, D>
 {
-    typedef typename enum2datatype<D>::inner_type T;
+    typedef typename _enum2datatype<D>::inner_type T;
     typedef MyCustomBlock<T> inner_type;
 };
 
 template<data_types D>
 struct enum2blocktype<block_types::SOURCE, D>
 {
-    typedef typename enum2datatype<D>::inner_type T;
+    typedef typename _enum2datatype<D>::inner_type T;
     typedef MyCustomSource<T> inner_type;
 };
 
 template<data_types D>
 struct enum2blocktype<block_types::SINK, D>
 {
-    typedef typename enum2datatype<D>::inner_type T;
+    typedef typename _enum2datatype<D>::inner_type T;
     typedef MyCustomSink<T> inner_type;
 };
 
 template<data_types D>
 struct enum2blocktype<block_types::LINEAR_REGRESSION, D>
 {
-    typedef typename enum2datatype<D>::inner_type T;
+    typedef typename _enum2datatype<D>::inner_type T;
     typedef LinearRegressionBlock<T> inner_type;
 };
 

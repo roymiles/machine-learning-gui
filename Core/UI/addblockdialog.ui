@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>404</width>
-    <height>190</height>
+    <height>246</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>140</y>
+     <y>200</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -33,7 +33,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>60</y>
+     <y>110</y>
      <width>381</width>
      <height>80</height>
     </rect>
@@ -69,7 +69,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="blockTypeComboBox">
       <item>
        <property name="text">
         <string>My Custom Block</string>
@@ -88,6 +88,39 @@
       <item>
        <property name="text">
         <string>Linear Regression Block</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>381</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Data Type</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="dataTypeComboBox">
+      <item>
+       <property name="text">
+        <string>Int</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Double</string>
        </property>
       </item>
      </widget>

@@ -37,7 +37,7 @@ public:
 
     void init() override
     {
-        qDebug() << "Initializing MyCustomBlock";
+        //qDebug() << "Initializing MyCustomBlock";
     }
 
     T run(T in) override

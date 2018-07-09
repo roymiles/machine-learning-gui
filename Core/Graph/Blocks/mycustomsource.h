@@ -22,7 +22,19 @@ class source_run_impl<int>
 public:
     static int run()
     {
+        qDebug() << "Input = " << 5;
         return 5;
+    }
+};
+
+template<>
+class source_run_impl<double>
+{
+public:
+    static int run()
+    {
+        qDebug() << "Input = " << 5.0;
+        return 5.0;
     }
 };
 
@@ -35,12 +47,12 @@ public:
 
     void init() override
     {
-        qDebug() << "Initializing MyCustomSource";
+        //qDebug() << "Initializing MyCustomSource";
     }
 
     T run() override
     {
-        return source_run_impl<int>::run();
+        return source_run_impl<T>::run();
     }
 };
 

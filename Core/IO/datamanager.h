@@ -27,12 +27,7 @@ template<typename T>
 class DataManagerBase
 {
 public:
-    DataManagerBase()
-    {
-        //columnNames.reserve(p);
-        //data.resize(p, N); // [p x N]
-        //labels.resize(1, N);
-    }
+    DataManagerBase() {}
 
     int N; // Number of data points
     int p; // Data dimensionality (number of columns)
@@ -55,7 +50,7 @@ public:
         assert("Invalid type parameters"); // This class will be instatiated if all other class specializations fail
     }
 
-    bool load(std::string path);
+    bool load(std::string path) { return false; }
 };
 
 // Class specializations (currently just testing)
@@ -85,7 +80,8 @@ public:
             data(i, 0) = 1; // y-intercept
             data(i, 1) = i;
 
-            labels(i, 0) = -data(i, 1) + var_nor(); // Y = BX + e, where e ~ N(0, var)
+            // Here Y ~= -7*X
+            labels(i, 0) = -7*data(i, 1) + var_nor(); // Y = BX + e, where e ~ N(0, var)
         }
 
         return true; // Would return false is failed to load source

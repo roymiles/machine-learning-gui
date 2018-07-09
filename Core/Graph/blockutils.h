@@ -3,6 +3,7 @@
 
 #include <QPainter>
 #include "iblock.h"
+#include "blockbase.h"
 #include "../Utility/utilities.h"
 #include "../Utility/plot.h"
 
@@ -55,7 +56,8 @@ public:
         block->getRect(rectangle);
         painter->fillRect(rectangle, Qt::white);
         painter->drawRect(rectangle);
-        painter->drawText(rectangle, Qt::AlignCenter, block->getName());
+        painter->drawText(rectangle, Qt::AlignCenter, "BLOCK"); // Block type
+        painter->drawText(rectangle, Qt::AlignCenter, block->getName()); // Block name
 
         block->getPorts().first->draw(painter, utility::type_info<in_type>::colour());
         block->getPorts().second->draw(painter, utility::type_info<out_type>::colour());
@@ -87,6 +89,7 @@ public:
         block->getRect(rectangle);
         painter->fillRect(rectangle, Qt::white);
         painter->drawRect(rectangle);
+        painter->drawText(rectangle, Qt::AlignCenter, "SOURCE");
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());
 
         block->getPorts().second->draw(painter, utility::type_info<out_type>::colour());
@@ -116,6 +119,7 @@ public:
         block->getRect(rectangle);
         painter->fillRect(rectangle, Qt::white);
         painter->drawRect(rectangle);
+        painter->drawText(rectangle, Qt::AlignCenter, "SINK");
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());
 
         block->getPorts().first->draw(painter, utility::type_info<in_type>::colour());
@@ -145,6 +149,7 @@ public:
         block->getRect(rectangle);
         painter->fillRect(rectangle, Qt::white);
         painter->drawRect(rectangle);
+        painter->drawText(rectangle, Qt::AlignCenter, "BLANK");
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());
     }
 
@@ -158,7 +163,7 @@ public:
 };
 
 // Following are for tab type specialisations
-template<typename tab_type>
+template<typename tab_type, typename in_type, typename out_type>
 class tab_type_impl
 {
 public:
@@ -170,8 +175,8 @@ public:
 };
 
 // ------- EDITABLE -------
-template<>
-class tab_type_impl<editable_t>
+template<typename in_type, typename out_type>
+class tab_type_impl<editable_t, in_type, out_type>
 {
 public:
     static QWidget* tabWidget(IBlock* block)
@@ -192,22 +197,27 @@ public:
 };
 
 // ------- GRAPH -------
-template<>
-class tab_type_impl<graph_t>
+template<typename in_type, typename out_type>
+class tab_type_impl<graph_t, in_type, out_type>
 {
 public:
-    static QWidget* tabWidget(IBlock* block)
+    static QWidget* tabWidget(IBlock * block)
     {
         auto customPlot = new QCustomPlot();
-        /*utility::Plot<double> p(customPlot);
+
+        // Input and output types must be the same for a plot
+        assert(utility::is_same<in_type, out_type>::value);
+
+        typedef in_type data_type; // Same as out_type
+        utility::Plot<data_type> p(customPlot);
 
         // Draw the input training data as a scatter pot
         p.scatterPlotYX(Y, X);
 
         // And overlay the linear model prediction
         using namespace std::placeholders;  // For e.g. _1
-        calc_t<double> fptr = std::bind(&maths::linear::Regression<double>::calculate, f, _1);
-        p.drawFunction(0, 100, 1, fptr);*/
+        calc_t<data_type> fptr = std::bind(&maths::linear::Regression<data_type>::calculate, f, _1);
+        p.drawFunction(0, 100, 1, fptr);
 
         return customPlot;
     }

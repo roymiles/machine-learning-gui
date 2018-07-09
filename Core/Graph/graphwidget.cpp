@@ -261,6 +261,7 @@ void GraphWidget::run()
     // ...
 
     // Run init on all blocks (initialise all blocks)
+    qDebug() << "init...";
     for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
         graph[vertex]->init();
 
@@ -291,7 +292,7 @@ void GraphWidget::run()
         auto t2 = std::chrono::system_clock::now();
 
         std::chrono::duration<double> elapsed_seconds = t2-t1;
-        qDebug() << "t = " << elapsed_seconds.count();
+        //qDebug() << "t = " << elapsed_seconds.count();
         graph[current_node]->setExecutionTime(elapsed_seconds);
 
         // This is so can do timing calculations before breaking out of loop
@@ -303,7 +304,7 @@ void GraphWidget::run()
 
         // Move onto next block
         boost::tie(ei, ei_end) = boost::out_edges(current_node, graph);
-        auto source = boost::source(*ei, graph);
+        //auto source = boost::source(*ei, graph);
         auto target = boost::target(*ei, graph);
         current_node = target;
 

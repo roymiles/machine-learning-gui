@@ -26,6 +26,17 @@ public:
     }
 };
 
+template<>
+class sink_run_impl<double>
+{
+public:
+    static void run(double in)
+    {
+        qDebug() << "Output = " << in;
+    }
+};
+
+
 template<typename T>
 class MyCustomSink : public Sink<T>
 {
@@ -35,7 +46,7 @@ public:
 
     void init() override
     {
-        qDebug() << "Initializing MyCustomSink";
+        //qDebug() << "Initializing MyCustomSink";
     }
 
     void run(T in) override

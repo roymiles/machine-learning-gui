@@ -66,17 +66,17 @@ public:
     QWidget* tabWidget() override
     {
         // The widget that is returned is dependant on the tab type only
-        return tab_type_impl<tab_type>::tabWidget(this);
+        return tab_type_impl<tab_type, in_type, out_type>::tabWidget(this);
     }
 
-    data_types getInType() override
+    const utility::data_types getInType() override
     {
-        return data_types_impl<in_type>::value;
+        return utility::type_info<in_type>::enumvalue;
     }
 
-    data_types getOutType() override
+    const utility::data_types getOutType() override
     {
-        return data_types_impl<out_type>::value;
+        return utility::type_info<out_type>::enumvalue;
     }
 };
 

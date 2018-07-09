@@ -12,7 +12,7 @@
 namespace je { namespace utility {
 
 using namespace boost::numeric::ublas;
-using namespace je::maths::linear;
+using namespace maths::linear;
 
 /*
  * This class offers an interface between the boost numeric structures (matrices) and QCustomPlot

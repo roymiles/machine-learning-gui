@@ -6,6 +6,7 @@
 #include <QString>
 #include "port.h"
 #include <chrono>
+#include "../Utility/utilities.h"
 
 namespace je { namespace graph {
 
@@ -17,33 +18,6 @@ enum click_types
     block,
     none
 };
-
-// All the supported template parameter types
-enum data_types : int // Must explicitely specify the integral type to allow in class initialization
-{
-    INT,
-    DOUBLE,
-    _VOID // For source/sinks (underscore to avoid naming collision with void)
-};
-
-template<typename T>
-struct type2enum
-{
-    static const data_types value = _VOID;
-};
-
-template<>
-struct type2enum<int>
-{
-    static const data_types value = INT;
-};
-
-template<>
-struct type2enum<double>
-{
-    static const data_types value = DOUBLE;
-};
-
 
 class IBlock
 {
@@ -75,14 +49,14 @@ public:
      * Get the in and out data types
      * This is so that the connection between two IBlocks can be verified
      * (based on matching data types)
+     * NOTE: Must return a const type as the value is evaluated at compile time
      */
-    virtual data_types getInType() = 0;
-    virtual data_types getOutType() = 0;
+    virtual const utility::data_types getInType() = 0;
+    virtual const utility::data_types getOutType() = 0;
 
     /*
      * This is called before the flow graph is run
      * This involve (for example) loading state information from a file
-     * *Training* from a dataset
      */
     virtual void init() = 0;
 
