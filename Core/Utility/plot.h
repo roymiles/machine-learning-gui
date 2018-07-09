@@ -108,6 +108,9 @@ public:
             y[i] = Y(i, 0);
         }
 
+        /*
+         * NOTE: Duplicate code in scatterPlotYX and drawFunction, can we do something about this?
+         */
         customPlot->addGraph();
         customPlot->graph(count)->setData(x, y);
         // Give the axes some labels:

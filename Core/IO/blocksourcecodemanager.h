@@ -10,6 +10,10 @@ namespace je { namespace io {
 /*
  * Responsible for creating the block source files (adding boilerplate code)
  * and validating file names
+ *
+ *
+ * THIS CLASS NAME IS CRAP DO SOMEN ABOUT PLUZ
+ * NEED TO MAKE IT GENERIC AND THEN THIS CAN BE A SPECIFIC IMPLEMENTATION OF...
  */
 class BlockSourceCodeManager
 {

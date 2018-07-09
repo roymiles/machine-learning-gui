@@ -311,6 +311,9 @@ void GraphWidget::run()
         prev_out = out;
     }
 
+    // e.g. To update the displayed execution times on the blocks
+    this->update();
+
         // All edges coming out of current node
         //std::pair<out_edge_iterator, out_edge_iterator> out_edge = boost::out_edges(current_node, graph);
        // vertex_t current_node = boost::target(*ei, graph); // Vertex connected to out-going edge of previous vertex

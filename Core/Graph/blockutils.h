@@ -6,6 +6,8 @@
 #include "blockbase.h"
 #include "../Utility/utilities.h"
 #include "../Utility/plot.h"
+#include "../Maths/Linear/regression.h"
+#include <sstream>
 
 namespace je { namespace graph {
 
@@ -56,8 +58,12 @@ public:
         block->getRect(rectangle);
         painter->fillRect(rectangle, Qt::white);
         painter->drawRect(rectangle);
-        painter->drawText(rectangle, Qt::AlignCenter, "BLOCK"); // Block type
+        painter->drawText(rectangle, Qt::AlignTop, "BLOCK"); // Block type
         painter->drawText(rectangle, Qt::AlignCenter, block->getName()); // Block name
+
+        std::ostringstream out;
+        out << block->getExecutionTime().count();
+        painter->drawText(rectangle, Qt::AlignBottom, QString::fromStdString(out.str())); // Previous execution time
 
         block->getPorts().first->draw(painter, utility::type_info<in_type>::colour());
         block->getPorts().second->draw(painter, utility::type_info<out_type>::colour());
@@ -89,8 +95,12 @@ public:
         block->getRect(rectangle);
         painter->fillRect(rectangle, Qt::white);
         painter->drawRect(rectangle);
-        painter->drawText(rectangle, Qt::AlignCenter, "SOURCE");
+        painter->drawText(rectangle, Qt::AlignTop, "SOURCE");
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());
+
+        std::ostringstream out;
+        out << block->getExecutionTime().count();
+        painter->drawText(rectangle, Qt::AlignBottom, QString::fromStdString(out.str()));
 
         block->getPorts().second->draw(painter, utility::type_info<out_type>::colour());
     }
@@ -119,8 +129,12 @@ public:
         block->getRect(rectangle);
         painter->fillRect(rectangle, Qt::white);
         painter->drawRect(rectangle);
-        painter->drawText(rectangle, Qt::AlignCenter, "SINK");
+        painter->drawText(rectangle, Qt::AlignTop, "SINK");
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());
+
+        std::ostringstream out;
+        out << block->getExecutionTime().count();
+        painter->drawText(rectangle, Qt::AlignBottom, QString::fromStdString(out.str()));
 
         block->getPorts().first->draw(painter, utility::type_info<in_type>::colour());
     }
@@ -149,8 +163,12 @@ public:
         block->getRect(rectangle);
         painter->fillRect(rectangle, Qt::white);
         painter->drawRect(rectangle);
-        painter->drawText(rectangle, Qt::AlignCenter, "BLANK");
+        painter->drawText(rectangle, Qt::AlignTop, "BLANK");
         painter->drawText(rectangle, Qt::AlignCenter, block->getName());
+
+        std::ostringstream out;
+        out << block->getExecutionTime().count();
+        painter->drawText(rectangle, Qt::AlignBottom, QString::fromStdString(out.str()));
     }
 
     static click_types mousePressEvent(QPoint &point, IBlock* block)
@@ -206,17 +224,22 @@ public:
         auto customPlot = new QCustomPlot();
 
         // Input and output types must be the same for a plot
-        assert(utility::is_same<in_type, out_type>::value);
+        bool b = utility::is_same<in_type, out_type>::value;
+        assert(b);
 
-        typedef in_type data_type; // Same as out_type
-        utility::Plot<data_type> p(customPlot);
+        typedef in_type dtype; // Same as out_type
+        utility::Plot<dtype> p(customPlot);
 
         // Draw the input training data as a scatter pot
+        matrix<dtype> X, Y; // NOTE: How do we get these from the base block class???
         p.scatterPlotYX(Y, X);
+
+        // NOTE: Need to get this from LinearRegressionBlock::regression. HOW?
+        auto f = new maths::linear::Regression<dtype>(Y, X);
 
         // And overlay the linear model prediction
         using namespace std::placeholders;  // For e.g. _1
-        calc_t<data_type> fptr = std::bind(&maths::linear::Regression<data_type>::calculate, f, _1);
+        auto fptr = std::bind(&maths::linear::Regression<dtype>::calculate, f, _1);
         p.drawFunction(0, 100, 1, fptr);
 
         return customPlot;

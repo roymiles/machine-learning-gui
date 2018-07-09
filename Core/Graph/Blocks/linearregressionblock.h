@@ -8,10 +8,10 @@ using namespace je;
 using namespace boost::numeric::ublas;
 
 template<typename T>
-class LinearRegressionBlock : public graph::Block<T> // In-type must be the same as out-type
+class LinearRegressionBlock : public graph::GraphBlock<T> // In-type must be the same as out-type
 {
 public:
-    LinearRegressionBlock() : graph::Block<T>() {}
+    LinearRegressionBlock() : graph::GraphBlock<T>() {}
     ~LinearRegressionBlock() {}
 
     void init() override

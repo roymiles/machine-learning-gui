@@ -152,6 +152,9 @@ using Source = _Block<source_t, void, T, editable_t>; // An output but no input
 template<typename T>
 using Block = _Block<block_t, T, T, editable_t>;
 
+template<typename T>
+using GraphBlock = _Block<block_t, T, T, graph_t>;
+
 using Blank = _Block<blank_t, void, void, editable_t>; // init will still be called for this type but run() won't be
 
 // For testing...

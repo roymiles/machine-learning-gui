@@ -77,11 +77,11 @@ public:
         // Generate the data
         for(int i = 0; i < N; i++)
         {
-            data(i, 0) = 1; // y-intercept
+            data(i, 0) = 1; // y-intercept (NOTE: B will have 2 coefficients for a 1-1 mapping due to this offset)
             data(i, 1) = i;
 
             // Here Y ~= -7*X
-            labels(i, 0) = -7*data(i, 1) + var_nor(); // Y = BX + e, where e ~ N(0, var)
+            labels(i, 0) = -7*data(i, 1) + 10 + var_nor(); // Y = BX + D + e, where e ~ N(0, var) and D is a constant
         }
 
         return true; // Would return false is failed to load source

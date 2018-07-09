@@ -41,7 +41,6 @@ SOURCES += \
     Dependencies/darkstyle/framelesswindow/framelesswindow.cpp \
     Dependencies/darkstyle/framelesswindow/windowdragger.cpp \
     Dependencies/darkstyle/DarkStyle.cpp \
-    Core/Maths/Linear/regression.cpp \
     Core/IO/datamanager.cpp
 
 
