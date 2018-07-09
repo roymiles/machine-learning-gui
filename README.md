@@ -1,37 +1,17 @@
-## Welcome to GitHub Pages
+## Welcome to the JumboEagle project
 
-You can use the [editor on GitHub](https://github.com/iyop45/JumboEagle/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+The aim of this project is build a graphical (flow-graph like) framework for ML.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Brief overview of the project structure
 
-### Markdown
+All custom blocks can be found in Core/Graph/Blocks and include some example sources, sinks, and blocks. 
+In these cases, the objects have been templated to allow different input/output data types (this has since become a very pain to organise).
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+All blocks/sources/sinks must inherit from Block<B,I,O,T> however there are some simple typedefs for common Block templates.
 
-```markdown
-Syntax highlighted code block
+The Block, in turn, inherits from \_BlockBase, which is follows the same template parameters and overrides common functionality such as draw, mousemoveevent, and getTabWidget. This class still has access to all the type information as Block.
 
-# Header 1
-## Header 2
-### Header 3
+The \_BlockBase class then inherits from IBlock which is the interface for all blocks. This is NOT a templated class and so any upcast to this interface loses all the type information. Fortunately, there are some virtual functions that are implemented in \_BlockBase to help infer the template parameters.
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/iyop45/JumboEagle/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+I will clean up this brief description as I aim to have a thorough documentation of the project structure. This is because the code is quite dense with a lot of tightly coupled components which makes it very hard to get involved with directly without a complete understanding of every part.
