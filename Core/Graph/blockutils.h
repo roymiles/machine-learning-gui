@@ -7,7 +7,28 @@
 #include "../Utility/utilities.h"
 #include "../Utility/plot.h"
 #include "../Maths/Linear/regression.h"
+#include "../Utility/utilities.h"
 #include <sstream>
+#include <map>
+#include <memory>
+
+/*
+ * Forward declare all the blocks.
+ * Don't need to unnecessarily include them as we are not calling
+ * any member function of the classes
+ * Note: these classes are outside the je namespace
+ */
+template<typename T>
+class LinearRegressionBlock;
+
+template<typename T>
+class MyCustomBlock;
+
+template<typename T>
+class MyCustomSink;
+
+template<typename T>
+class MyCustomSource;
 
 namespace je { namespace graph {
 
@@ -246,6 +267,91 @@ public:
     }
 };
 
+/*
+ * Convert data_types enum to the appropriate intrinsic type using a typedef
+ */
+template<utility::data_types D>
+struct enum2datatype
+{
+    // Default
+    typedef int inner_type;
+};
+
+// Class specializations
+template<>
+struct enum2datatype<utility::data_types::INT>
+{
+    typedef int inner_type;
+};
+
+template<>
+struct enum2datatype<utility::data_types::DOUBLE>
+{
+    typedef double inner_type;
+};
+
+template<>
+struct enum2datatype<utility::data_types::_VOID>
+{
+    typedef void inner_type;
+};
+
+/*
+ * This enum is used to populate the addblockdialog dropdown list of block types
+ * and is then used in enum2blocktype to map the dropdown values to typedefs of the block classes
+ */
+enum block_types
+{
+    BLOCK               = 0,
+    SOURCE              = 1,
+    SINK                = 2,
+    LINEAR_REGRESSION   = 3,
+    _MAXB               = 4 // Helps for iterating over the enum
+};
+
+/*
+ * The following template structs convert the block_type enum to a typedef required
+ * for instatiating the block type
+ */
+template<block_types B, utility::data_types D>
+struct enum2blocktype
+{
+    // Default
+    typedef typename enum2datatype<D>::inner_type T;
+    typedef MyCustomBlock<T> inner_type;
+};
+
+// Class specializations
+template<utility::data_types D>
+struct enum2blocktype<block_types::BLOCK, D>
+{
+    typedef typename enum2datatype<D>::inner_type T;
+    typedef MyCustomBlock<T> inner_type;
+};
+
+template<utility::data_types D>
+struct enum2blocktype<block_types::SOURCE, D>
+{
+    typedef typename enum2datatype<D>::inner_type T;
+    typedef MyCustomSource<T> inner_type;
+};
+
+template<utility::data_types D>
+struct enum2blocktype<block_types::SINK, D>
+{
+    typedef typename enum2datatype<D>::inner_type T;
+    typedef MyCustomSink<T> inner_type;
+};
+
+template<utility::data_types D>
+struct enum2blocktype<block_types::LINEAR_REGRESSION, D>
+{
+    typedef typename enum2datatype<D>::inner_type T;
+    typedef LinearRegressionBlock<T> inner_type;
+};
+
+// Factory function for generating new blocks. This must include all the possible blocks
+extern std::map<block_types, std::function<std::shared_ptr<IBlock>()>> block_factory;
 
 } } // graph, je
 

@@ -73,10 +73,29 @@ public:
     void setExecutionTime(std::chrono::duration<double> time);
     std::chrono::duration<double> getExecutionTime();
 
+    bool is_sink()
+    {
+        // A sink is defined as a block with an input and no output
+        return (has_input && !has_output);
+    }
+
+    bool is_source()
+    {
+        // A source is defined as a block with an output but no input
+        return (!has_input && has_output);
+    }
+
+    bool is_block()
+    {
+        return (has_input && has_output);
+    }
+
 private:
     int x, y, w, h;
     QString name;
     int tabIndex;
+
+    const bool has_input, has_output;
 
     // First -> Input, Second -> Output
     std::pair<PortPointer, PortPointer> ports;

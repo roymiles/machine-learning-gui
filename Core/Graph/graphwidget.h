@@ -20,10 +20,7 @@
 #include "port.h"
 
 // TODO: The following includes should be seperated into a loader
-#include "../Graph/Blocks/mycustomblock.h"
-#include "../Graph/Blocks/mycustomsink.h"
-#include "../Graph/Blocks/mycustomsource.h"
-#include "../Graph/Blocks/linearregressionblock.h"
+#include "blockloader.h"
 
 namespace je { namespace graph {
 
@@ -60,15 +57,20 @@ public:
     void GraphWidget::addBlock(QString name)
     {
         std::shared_ptr<IBlock> myBlock = std::make_shared<T>();
+        addBlock(myBlock, name);
+    }
+
+    void addBlock(std::shared_ptr<IBlock> myBlock, QString name)
+    {
         vertex_t vertex = boost::add_vertex(myBlock, graph);
 
         qDebug() << "Attempting to add new block";
-        qDebug() << "is_sink : " << T::is_sink();
-        qDebug() << "is_source : " << T::is_source();
+        qDebug() << "is_sink : " << myBlock->is_sink();
+        qDebug() << "is_source : " << myBlock->is_source();
         qDebug() << source << sink;
 
         // Only allow at most one source and one sink
-        if(T::is_sink())
+        if(myBlock->is_sink())
         {
             // Only add a sink/source if we haven't already got one in the graph
             if(sink != G::null_vertex())
@@ -82,7 +84,7 @@ public:
             }
         }
 
-        if(T::is_source())
+        if(myBlock->is_source())
         {
             if(source != G::null_vertex()){
                 boost::remove_vertex(vertex, graph);

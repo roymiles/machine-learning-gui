@@ -41,7 +41,8 @@ SOURCES += \
     Dependencies/darkstyle/framelesswindow/framelesswindow.cpp \
     Dependencies/darkstyle/framelesswindow/windowdragger.cpp \
     Dependencies/darkstyle/DarkStyle.cpp \
-    Core/IO/datamanager.cpp
+    Core/IO/datamanager.cpp \
+    Core/Graph/blockutils.cpp
 
 
 HEADERS += \
@@ -71,7 +72,8 @@ HEADERS += \
     Dependencies/matplotlibcpp/matplotlibcpp.h \
     Core/Maths/Linear/regression.h \
     Core/Graph/Blocks/linearregressionblock.h \
-    Core/IO/datamanager.h
+    Core/IO/datamanager.h \
+    Core/Graph/blockloader.h
 
 
 FORMS += \

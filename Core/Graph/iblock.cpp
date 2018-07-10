@@ -4,7 +4,7 @@
 
 namespace je { namespace graph {
 
-IBlock::IBlock(bool has_input, bool has_output)
+IBlock::IBlock(bool has_input, bool has_output) : has_input(has_input), has_output(has_output)
 {
     ports.first = nullptr;
     ports.second = nullptr;

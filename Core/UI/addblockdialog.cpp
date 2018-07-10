@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include "../IO/blocksourcecodemanager.h"
 #include "../Utility/utilities.h"
+#include "../Graph/blockutils.h"
 
 namespace je { namespace ui {
 
@@ -35,8 +36,8 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
     if(this->graphWidget != nullptr)
     {      
         // These are mapped to the block_type and data_type enums respectively
-        const auto selectedBlockType = ui->blockTypeComboBox->currentIndex();
-        const auto selectedDataType  = ui->dataTypeComboBox->currentIndex();
+        block_types selectedBlockType = (block_types)ui->blockTypeComboBox->currentIndex();
+        data_types selectedDataType  = (data_types)ui->dataTypeComboBox->currentIndex();
 
         const QString blockName = ui->BlockNameLineEdit->text();
         if(!utility::isValidBlockName(blockName))
@@ -46,28 +47,32 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
             return;
         }
 
-        /*
-         * This is a super bad way of doing it. Need to find a way of using prepopulated LUT or something
-         */
-        switch(selectedBlockType)
+        // block_factory returns a function for creating new blocks, hence () at end
+        std::shared_ptr<IBlock> b = graph::block_factory[selectedBlockType]();
+        graphWidget->addBlock(b, blockName);
+
+        /*switch(selectedBlockType)
         {
+            using namespace utility;
+            using namespace graph;
+
             case block_types::BLOCK:
-                typedef utility::enum2blocktype<block_types::BLOCK, data_types::DOUBLE>::inner_type blocktype1;
+                typedef enum2blocktype<block_types::BLOCK, data_types::DOUBLE>::inner_type blocktype1;
                 this->graphWidget->addBlock<blocktype1>(blockName);
                 break;
             case block_types::SINK:
-                typedef utility::enum2blocktype<block_types::SINK, data_types::DOUBLE>::inner_type blocktype2;
+                typedef enum2blocktype<block_types::SINK, data_types::DOUBLE>::inner_type blocktype2;
                 this->graphWidget->addBlock<blocktype2>(blockName);
                 break;
             case block_types::SOURCE:
-                typedef utility::enum2blocktype<block_types::SOURCE, data_types::DOUBLE>::inner_type blocktype3;
+                typedef enum2blocktype<block_types::SOURCE, data_types::DOUBLE>::inner_type blocktype3;
                 this->graphWidget->addBlock<blocktype3>(blockName);
                 break;
             case block_types::LINEAR_REGRESSION:
-                typedef utility::enum2blocktype<block_types::LINEAR_REGRESSION, data_types::DOUBLE>::inner_type blocktype4;
+                typedef enum2blocktype<block_types::LINEAR_REGRESSION, data_types::DOUBLE>::inner_type blocktype4;
                 this->graphWidget->addBlock<blocktype4>(blockName);
                 break;
-        }
+        }*/
 
         this->close();
 

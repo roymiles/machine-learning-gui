@@ -32,23 +32,6 @@ public:
 
     ~_BlockBase() {}
 
-    static bool is_sink()
-    {
-        // A sink is defined as a block with an input and no output
-        return (block_type::has_input && !block_type::has_output);
-    }
-
-    static bool is_source()
-    {
-        // A source is defined as a block with an output but no input
-        return (!block_type::has_input && block_type::has_output);
-    }
-
-    static bool is_block()
-    {
-        return (block_type::has_input && block_type::has_output);
-    }
-
     // Overridden members call upon the templated utility functions declared above
     void draw(QPainter *painter) override
     {

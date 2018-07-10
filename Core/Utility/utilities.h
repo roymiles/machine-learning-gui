@@ -17,42 +17,9 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 
-/*
- * Forward declare all the blocks.
- * Don't need to unnecessarily include them as we are not calling
- * any member function of the classes
- * Note: these classes are outside the je namespace
- */
-template<typename T>
-class LinearRegressionBlock;
-
-template<typename T>
-class MyCustomBlock;
-
-template<typename T>
-class MyCustomSink;
-
-template<typename T>
-class MyCustomSource;
-
 namespace je { namespace utility {
 
 using namespace boost::numeric::ublas;
-
-/*
- * is_same<T,U>::value is true iff T == U
- */
-template<typename T, typename U>
-struct is_same
-{
-    static const bool value = false;
-};
-
-template<typename T>
-struct is_same<T, T>
-{
-    static const bool value = true;
-};
 
 /*
  * All the supported template parameter types
@@ -67,32 +34,18 @@ enum data_types
 };
 
 /*
- * Convert data_types enum to the appropriate intrinsic type using a typedef
+ * is_same<T,U>::value is true iff T == U
  */
-template<data_types D>
-struct _enum2datatype
+template<typename T, typename U>
+struct is_same
 {
-    // Default
-    typedef int inner_type;
+    static const bool value = false;
 };
 
-// Class specializations
-template<>
-struct _enum2datatype<data_types::INT>
+template<typename T>
+struct is_same<T, T>
 {
-    typedef int inner_type;
-};
-
-template<>
-struct _enum2datatype<data_types::DOUBLE>
-{
-    typedef double inner_type;
-};
-
-template<>
-struct _enum2datatype<data_types::_VOID>
-{
-    typedef void inner_type;
+    static const bool value = true;
 };
 
 /*
@@ -120,60 +73,6 @@ struct type_info<double>
 {
     static QColor colour() { return Qt::green; }
     static const data_types enumvalue = data_types::DOUBLE;
-};
-
-/*
- * This enum is used to populate the addblockdialog dropdown list of block types
- * and is then used in enum2blocktype to map the dropdown values to typedefs of the block classes
- */
-enum block_types
-{
-    BLOCK               = 0,
-    SOURCE              = 1,
-    SINK                = 2,
-    LINEAR_REGRESSION   = 3,
-    _MAXB               = 4 // Helps for iterating over the enum
-};
-
-/*
- * The following template structs convert the block_type enum to a typedef required
- * for instatiating the block type
- */
-template<block_types B, data_types D>
-struct enum2blocktype
-{
-    // Default
-    typedef typename _enum2datatype<D>::inner_type T;
-    typedef MyCustomBlock<T> inner_type;
-};
-
-// Class specializations
-template<data_types D>
-struct enum2blocktype<block_types::BLOCK, D>
-{
-    typedef typename _enum2datatype<D>::inner_type T;
-    typedef MyCustomBlock<T> inner_type;
-};
-
-template<data_types D>
-struct enum2blocktype<block_types::SOURCE, D>
-{
-    typedef typename _enum2datatype<D>::inner_type T;
-    typedef MyCustomSource<T> inner_type;
-};
-
-template<data_types D>
-struct enum2blocktype<block_types::SINK, D>
-{
-    typedef typename _enum2datatype<D>::inner_type T;
-    typedef MyCustomSink<T> inner_type;
-};
-
-template<data_types D>
-struct enum2blocktype<block_types::LINEAR_REGRESSION, D>
-{
-    typedef typename _enum2datatype<D>::inner_type T;
-    typedef LinearRegressionBlock<T> inner_type;
 };
 
 /*
