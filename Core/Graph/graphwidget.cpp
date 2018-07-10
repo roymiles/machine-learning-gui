@@ -14,6 +14,9 @@ namespace je { namespace graph {
 
 GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(parent)
 {
+    // Widget accepts focus by clicking or by tabbing. This ensures keyPressEvent works.
+    setFocusPolicy(Qt::StrongFocus);
+
     setMouseTracking(false);
     curState = State::IDLE;
     this->tabWidget = tabWidget;
@@ -44,19 +47,19 @@ void GraphWidget::paintEvent(QPaintEvent* e)
     // Draw all edges
     for(auto edge : boost::make_iterator_range(boost::edges(graph)))
     {
-        if(clickedEdge != boost::none)
+        if(activeEdge != boost::none)
         {
             // Highlight active edge
-            if(edge == *clickedEdge)
+            if(edge == *activeEdge)
                 painter.setPen(Qt::red);
         }
 
         graph[edge]->draw(&painter);
 
-        if(clickedEdge != boost::none)
+        if(activeEdge != boost::none)
         {
             // Back to default pen
-            if(edge == *clickedEdge)
+            if(edge == *activeEdge)
                 painter.setPen(Qt::black);
         }
     }
@@ -64,12 +67,12 @@ void GraphWidget::paintEvent(QPaintEvent* e)
     // Draw all blocks (and internally the ports)
     for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
-        if(vertex == clickedVertex)
+        if(vertex == activeVertex)
             painter.setPen(Qt::red);
 
         graph[vertex]->draw(&painter);
 
-        if(vertex == clickedVertex)
+        if(vertex == activeVertex)
             painter.setPen(Qt::black);
     }
 
@@ -95,32 +98,9 @@ void GraphWidget::paintEvent(QPaintEvent* e)
  * If clicking on a block, want to be able to drag and move the block around
  * If clicking on a port (for the first time) want to enter the DRAWING state, where a line is drawn from the port to the mouse
  * Then, after clicking another port, create the link between these two ports.
- *
- * Another loop is for checking if the mouse press is on an edge
  */
 void GraphWidget::mousePressEvent(QMouseEvent* e)
 {
-    // Do not want to trigger clicking on an edge right after making the edge
-    if(curState != State::DRAWING_EDGE)
-    {
-        // Check if clicked on an edge
-        bool hit = false;
-        for(auto edge : boost::make_iterator_range(boost::edges(graph)))
-        {
-            if(graph[edge]->mousePressEvent(e->pos()))
-            {
-                clickedEdge = edge;
-                hit = true;
-                qDebug() << "Clicked on an edge";
-                break; // Do not check any other edges
-            }
-        }
-
-        // Did not click on an edge, so clear the active edge
-        if(!hit)
-            clickedEdge = boost::none;
-    }
-
     // Check if clicking on a block (or its ports)
     for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
@@ -130,7 +110,7 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
         switch(c)
         {
             case click_types::block:
-                clickedVertex = vertex;
+                movingVertex = vertex;
                 break;
 
             // The following click events have similar functionality, and so are grouped together
@@ -145,7 +125,7 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                     drawingEdge.first = vertex;
                 }
 
-                clickedVertex = G::null_vertex();
+                movingVertex = G::null_vertex();
                 // Clicking on port for first time
                 if(curState == State::IDLE){
                     curState = State::DRAWING_EDGE;
@@ -187,7 +167,7 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 break;
 
             case click_types::none:
-                clickedVertex = G::null_vertex();
+                movingVertex = G::null_vertex();
                 hit = false; // No click events triggered, go onto the next block
                 break;
         }
@@ -209,15 +189,15 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
         this->update(); // Re-draw canvas
     }
 
-    if(clickedVertex != G::null_vertex()) // Currently holding down mouse button on a block, so move it with the mouse
+    if(movingVertex != G::null_vertex()) // Currently holding down mouse button on a block, so move it with the mouse
     {
         // Need to offset the position by half the width and height of the box
         QPoint p = e->pos();
-        p.setX(p.x() - graph[clickedVertex]->getW()/2);
-        p.setY(p.y() - graph[clickedVertex]->getH()/2);
+        p.setX(p.x() - graph[movingVertex]->getW()/2);
+        p.setY(p.y() - graph[movingVertex]->getH()/2);
 
         // Move the block
-        graph[clickedVertex]->setPos(p);
+        graph[movingVertex]->setPos(p);
 
         // Redraw canvas
         this->update();
@@ -226,28 +206,32 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
 }
 
 /*
- * If user is releasing the mouse button on an empty space, remove the clickedVertex and clickedEdge
+ * When mouse button is released remove movingVertex (no longer moving any box around)
+ * If the mouse is over an edge or a block, set that block/edge to active
  */
 void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
 {
-    // TODO: cannot just keep clickedVertex else it moves around after releasing mouse and stuff, bad
+    movingVertex = G::null_vertex();
 
-    /*for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
+    for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
         // If release mouse on the block or any of its ports, keep as active/clicked vertex
         if(graph[vertex]->mousePressEvent(e->pos()) != click_types::none)
         {
-           clickedVertex = vertex;
+           activeVertex = vertex;
+           this->update();
            return; // Do not need to check any others
         }
-    }*/
+    }
 
     // Similarly for an edge
     // ...
 
     // If reached here, then mouse is not released on anything so clear the active/clicked vertex/edge
-    clickedVertex = G::null_vertex();
-    clickedEdge   = boost::none;
+    activeVertex = G::null_vertex();
+    activeEdge   = boost::none;
+
+    this->update();
 }
 
 /*
@@ -277,6 +261,29 @@ void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
             break;
         }
     }
+}
+
+void GraphWidget::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+        case Qt::Key_Delete:
+            if(activeVertex != G::null_vertex())
+            {
+                if(activeVertex == source)
+                    source = G::null_vertex();
+                else if(activeVertex == sink)
+                    sink = G::null_vertex();
+
+                // Now remove the vertex
+                boost::remove_vertex(activeVertex, graph);
+            }
+            break;
+        //default:
+            // Call base
+    }
+
+    this->update();
 }
 
 void GraphWidget::zoomIn()

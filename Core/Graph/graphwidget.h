@@ -49,7 +49,8 @@ class GraphWidget : public QWidget
   Q_OBJECT
 
 public:
-    GraphWidget(QWidget *parent=0, QTabWidget *tabWidget=0); // Takes in tabWidget, because need graphWidget to add new tabs and stuff
+    // Takes in tabWidget, because need graphWidget to add new tabs and stuff
+    GraphWidget(QWidget *parent=0, QTabWidget *tabWidget=0);
 
     void zoomIn();
     void zoomOut();
@@ -113,6 +114,7 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void mouseReleaseEvent(QMouseEvent*);
     virtual void mouseDoubleClickEvent(QMouseEvent*);
+    virtual void keyPressEvent(QKeyEvent *event);
 
 private:
     // Only allowed one sink and one source in the flow graph
@@ -124,8 +126,11 @@ private:
     GraphType graph; // Boost graph data type
 
     // The block that has been clicked on (before the mouse button has been released)
-    vertex_t clickedVertex;
-    boost::optional<edge_t> clickedEdge; // Similarly for an edge
+    vertex_t movingVertex;
+
+    // The highlighted edge/block (mouse click has been released on)
+    vertex_t activeVertex;
+    boost::optional<edge_t> activeEdge;
 
     State curState;
 
