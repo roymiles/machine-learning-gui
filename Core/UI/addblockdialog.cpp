@@ -51,29 +51,6 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
         std::shared_ptr<IBlock> b = graph::block_factory[selectedBlockType]();
         graphWidget->addBlock(b, blockName);
 
-        /*switch(selectedBlockType)
-        {
-            using namespace utility;
-            using namespace graph;
-
-            case block_types::BLOCK:
-                typedef enum2blocktype<block_types::BLOCK, data_types::DOUBLE>::inner_type blocktype1;
-                this->graphWidget->addBlock<blocktype1>(blockName);
-                break;
-            case block_types::SINK:
-                typedef enum2blocktype<block_types::SINK, data_types::DOUBLE>::inner_type blocktype2;
-                this->graphWidget->addBlock<blocktype2>(blockName);
-                break;
-            case block_types::SOURCE:
-                typedef enum2blocktype<block_types::SOURCE, data_types::DOUBLE>::inner_type blocktype3;
-                this->graphWidget->addBlock<blocktype3>(blockName);
-                break;
-            case block_types::LINEAR_REGRESSION:
-                typedef enum2blocktype<block_types::LINEAR_REGRESSION, data_types::DOUBLE>::inner_type blocktype4;
-                this->graphWidget->addBlock<blocktype4>(blockName);
-                break;
-        }*/
-
         this->close();
 
     }else{

@@ -244,24 +244,18 @@ public:
     {
         auto customPlot = new QCustomPlot();
 
-        // Input and output types must be the same for a plot
+        // Type checks : input and output types must be the same for a plot
         bool b = utility::is_same<in_type, out_type>::value;
         assert(b);
+
+        using namespace maths::linear;
+        auto f = block->getComponent<Regression<dtype>>();
 
         typedef in_type dtype; // Same as out_type
         utility::Plot<dtype> p(customPlot);
 
-        // Draw the input training data as a scatter pot
-        matrix<dtype> X, Y; // NOTE: How do we get these from the base block class???
-        p.scatterPlotYX(Y, X);
-
-        // NOTE: Need to get this from LinearRegressionBlock::regression. HOW?
-        auto f = new maths::linear::Regression<dtype>(Y, X);
-
-        // And overlay the linear model prediction
-        using namespace std::placeholders;  // For e.g. _1
-        auto fptr = std::bind(&maths::linear::Regression<dtype>::calculate, f, _1);
-        p.drawFunction(0, 100, 1, fptr);
+        // Delegate drawing to component
+        f->draw(p);
 
         return customPlot;
     }

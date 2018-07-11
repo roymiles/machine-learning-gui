@@ -30,7 +30,6 @@ SOURCES += \
     Core/Graph/inputport.cpp \
     Core/Graph/outputport.cpp \
     Core/IO/blocksourcecodemanager.cpp \
-    Core/Maths/histogram.cpp \
     Core/UI/addblockdialog.cpp \
     Core/Utility/utilities.cpp \
     Core/qcplinearcolormap.cpp \
@@ -42,7 +41,8 @@ SOURCES += \
     Dependencies/darkstyle/framelesswindow/windowdragger.cpp \
     Dependencies/darkstyle/DarkStyle.cpp \
     Core/IO/datamanager.cpp \
-    Core/Graph/blockutils.cpp
+    Core/Graph/blockutils.cpp \
+    Core/icomponent.cpp
 
 
 HEADERS += \
@@ -53,7 +53,6 @@ HEADERS += \
     Core/Graph/port.h \
     Core/Graph/Blocks/mycustomblock.h \
     Core/IO/blocksourcecodemanager.h \
-    Core/Maths/histogram.h \
     Core/UI/addblockdialog.h \
     Core/Utility/debug.h \
     Core/Utility/plot.h \
@@ -73,7 +72,8 @@ HEADERS += \
     Core/Maths/Linear/regression.h \
     Core/Graph/Blocks/linearregressionblock.h \
     Core/IO/datamanager.h \
-    Core/Graph/blockloader.h
+    Core/Graph/blockloader.h \
+    Core/icomponent.h
 
 
 FORMS += \

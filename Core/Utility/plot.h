@@ -1,13 +1,17 @@
-#ifndef PLOT_H
-#define PLOT_H
+#pragma once
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <algorithm>
-#include "../Maths/Linear/regression.h"
+//#include "../Maths/Linear/regression.h"
 #include <QVector>
 #include <qcustomplot-source/qcustomplot.h>
 #include <tuple>
 #include "../qcplinearcolormap.h"
+
+namespace je { namespace maths { namespace linear {
+template<typename T>
+class Regression;
+} } }
 
 namespace je { namespace utility {
 
@@ -178,5 +182,3 @@ private:
 };
 
 } } // utility, je
-
-#endif // PLOT_H

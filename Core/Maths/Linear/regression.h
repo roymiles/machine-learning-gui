@@ -3,36 +3,44 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include "../../Utility/utilities.h"
+#include "../../icomponent.h"
+#include <string>
 
 using namespace boost::numeric::ublas;
 
 namespace je { namespace maths { namespace linear {
+
+using namespace utility;
 
 // Find the linear relationship between an input vector and an output
 // The feature size is p+1, and the # outputs = N
 // This fixes the relationship to a linear model
 // TODO: Allow multi-output data
 template<typename T> // Output will be the same type as input because Y = XB
-class Regression
+class Regression : public IComponent
 {
 public:
-
     // If using default constructor, must remember to call train()
-    Regression()
+    Regression() : IComponent(REGRESSION_COMP)
     {
         hasTrained = false;
     }
 
-    Regression(matrix<T> &Y, matrix<T> &X)
+    Regression(matrix<T> &Y, matrix<T> &X) : IComponent(REGRESSION_COMP)
     {
         hasTrained = false;
         train(Y, X);
     }
 
+    static component_types componentType()
+    {
+        return REGRESSION_COMP;
+    }
+
     /*
      * Calculate Y based on the learnt coefficients
      */
-    matrix<T> calculate(const matrix<T> &X)
+    matrix<T> calculate(const matrix<T> &X) override
     {
         // Must run train() first
         assert(hasTrained == true);
@@ -78,6 +86,18 @@ public:
         B = prod(tmp, Y); // This is a unique solution
 
         hasTrained = true;
+    }
+
+    void draw(utility::Plot<T> &p) override
+    {
+        // Draw the input training data as a scatter pot
+        matrix<T> X, Y;
+        p.scatterPlotYX(Y, X);
+
+        // And overlay the linear model prediction
+        using namespace std::placeholders;  // For e.g. _1
+        auto fptr = std::bind(&Regression<T>::calculate, this, _1);
+        p.drawFunction(0, 100, 1, fptr);
     }
 
 private:

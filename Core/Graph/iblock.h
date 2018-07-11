@@ -1,5 +1,4 @@
-#ifndef IBLOCK_H
-#define IBLOCK_H
+#pragma once
 
 #include <utility> // std::pair
 #include <QPoint>
@@ -7,6 +6,7 @@
 #include "port.h"
 #include <chrono>
 #include "../Utility/utilities.h"
+#include "../icomponent.h"
 
 namespace je { namespace graph {
 
@@ -90,6 +90,22 @@ public:
         return (has_input && has_output);
     }
 
+    template<typename T>
+    void addComponent(std::shared_ptr<T> component)
+    {
+        // NOTE: need to check if component is of type IComponent
+        components.push_back(component);
+    }
+
+    template<typename T>
+    std::shared_ptr<IComponent> getComponent()
+    {
+        // Go through all the components and check if the component types are equal
+        for(auto &c : components)
+            if(c->getComponentType() == T::componentType())
+                return c;
+    }
+
 private:
     int x, y, w, h;
     QString name;
@@ -102,10 +118,11 @@ private:
 
     // The elapsed time of the previous execution
     std::chrono::duration<double> previousExecutionTimes;
+
+    // Any block can have a collection of components
+    std::vector<ComponentPointer> components;
 };
 
 typedef std::shared_ptr<IBlock> BlockPointer;
 
 } } // graph, je
-
-#endif // IBLOCK_H

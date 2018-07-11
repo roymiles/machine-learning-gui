@@ -34,6 +34,14 @@ enum data_types
 };
 
 /*
+ *
+ */
+enum component_types
+{
+    REGRESSION_COMP = 0
+};
+
+/*
  * is_same<T,U>::value is true iff T == U
  */
 template<typename T, typename U>
