@@ -4,13 +4,13 @@
 #include <QTextStream>
 #include <QTextCodec>
 
-namespace je { namespace io {
+namespace je { namespace component { namespace io {
 
-BlockSourceCodeManager::BlockSourceCodeManager()
+BlockSourceCodeManager::BlockSourceCodeManager() : IComponent(C_TEXT_EDITOR)
 {
 }
 
-BlockSourceCodeManager::BlockSourceCodeManager(QString fileName)
+BlockSourceCodeManager::BlockSourceCodeManager(QString fileName) : IComponent(C_TEXT_EDITOR)
 {
     this->fileName = fileName;
 }
@@ -67,5 +67,5 @@ bool BlockSourceCodeManager::loadSourceFile()
     return true;
 }
 
-} } // io, je
+} } } // io, component, je
 

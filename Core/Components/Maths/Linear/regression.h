@@ -2,13 +2,13 @@
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
-#include "../../Utility/utilities.h"
+#include "../../../Utility/utilities.h"
 #include "../../icomponent.h"
 #include <string>
 
 using namespace boost::numeric::ublas;
 
-namespace je { namespace maths { namespace linear {
+namespace je { namespace component { namespace maths { namespace linear {
 
 using namespace utility;
 
@@ -21,12 +21,12 @@ class Regression : public IComponent
 {
 public:
     // If using default constructor, must remember to call train()
-    Regression() : IComponent(REGRESSION_COMP)
+    Regression() : IComponent(C_REGRESSION)
     {
         hasTrained = false;
     }
 
-    Regression(matrix<T> &Y, matrix<T> &X) : IComponent(REGRESSION_COMP)
+    Regression(matrix<T> &Y, matrix<T> &X) : IComponent(C_REGRESSION)
     {
         hasTrained = false;
         train(Y, X);
@@ -34,7 +34,7 @@ public:
 
     static component_types componentType()
     {
-        return REGRESSION_COMP;
+        return C_REGRESSION;
     }
 
     /*
@@ -88,12 +88,8 @@ public:
         hasTrained = true;
     }
 
-    void draw(utility::Plot<T> &p) override
+    void draw(Plot<T> &p) override
     {
-        // Draw the input training data as a scatter pot
-        matrix<T> X, Y;
-        p.scatterPlotYX(Y, X);
-
         // And overlay the linear model prediction
         using namespace std::placeholders;  // For e.g. _1
         auto fptr = std::bind(&Regression<T>::calculate, this, _1);
@@ -105,7 +101,4 @@ private:
     matrix<T> B; // Regression coefficients
 };
 
-template<typename T>
-using calc_t = std::function<matrix<T>(matrix<T> const&)>;
-
-} } } // linear, maths, je
+} } } } // linear, maths, component, je

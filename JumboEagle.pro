@@ -29,7 +29,6 @@ SOURCES += \
     Core/Graph/graphwidget.cpp \
     Core/Graph/inputport.cpp \
     Core/Graph/outputport.cpp \
-    Core/IO/blocksourcecodemanager.cpp \
     Core/UI/addblockdialog.cpp \
     Core/Utility/utilities.cpp \
     Core/qcplinearcolormap.cpp \
@@ -40,9 +39,10 @@ SOURCES += \
     Dependencies/darkstyle/framelesswindow/framelesswindow.cpp \
     Dependencies/darkstyle/framelesswindow/windowdragger.cpp \
     Dependencies/darkstyle/DarkStyle.cpp \
-    Core/IO/datamanager.cpp \
     Core/Graph/blockutils.cpp \
-    Core/icomponent.cpp
+    Core/Components/icomponent.cpp \
+    Core/Components/IO/blocksourcecodemanager.cpp \
+    Core/Components/IO/datamanager.cpp
 
 
 HEADERS += \
@@ -52,10 +52,8 @@ HEADERS += \
     Core/Graph/outputport.h \
     Core/Graph/port.h \
     Core/Graph/Blocks/mycustomblock.h \
-    Core/IO/blocksourcecodemanager.h \
     Core/UI/addblockdialog.h \
     Core/Utility/debug.h \
-    Core/Utility/plot.h \
     Core/Utility/utilities.h \
     Core/Graph/block.h \
     Dependencies/qcustomplot-source/qcustomplot.h \
@@ -69,11 +67,13 @@ HEADERS += \
     Core/Graph/Blocks/mycustomsource.h \
     Core/Graph/blockbase.h \
     Dependencies/matplotlibcpp/matplotlibcpp.h \
-    Core/Maths/Linear/regression.h \
     Core/Graph/Blocks/linearregressionblock.h \
-    Core/IO/datamanager.h \
     Core/Graph/blockloader.h \
-    Core/icomponent.h
+    Core/Components/icomponent.h \
+    Core/Components/IO/blocksourcecodemanager.h \
+    Core/Components/IO/datamanager.h \
+    Core/Components/Maths/Linear/regression.h \
+    Core/Components/plot.h
 
 
 FORMS += \

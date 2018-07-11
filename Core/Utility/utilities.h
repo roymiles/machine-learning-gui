@@ -21,16 +21,19 @@ namespace je { namespace utility {
 
 using namespace boost::numeric::ublas;
 
+template<typename T>
+using calc_t = std::function<matrix<T>(matrix<T> const&)>;
+
 /*
  * All the supported template parameter types
  * This is used to populate the dropdown list in addblockdialog
  */
 enum data_types
 {
-    INT     = 0,
-    DOUBLE  = 1,
-    _VOID   = 2, // For source/sinks (underscore to avoid naming collision with void)
-    _MAXD   = 3
+    T_INT     = 0,
+    T_DOUBLE  = 1,
+    T_VOID    = 2, // For source/sinks (underscore to avoid naming collision with void)
+    T_MAX     = 3
 };
 
 /*
@@ -38,7 +41,10 @@ enum data_types
  */
 enum component_types
 {
-    REGRESSION_COMP = 0
+    C_REGRESSION   = 0,
+    C_DATA_MANAGER = 1,
+    C_PLOT         = 2,
+    C_TEXT_EDITOR  = 3
 };
 
 /*
@@ -65,7 +71,7 @@ template<typename T>
 struct type_info
 {
     static QColor colour() { return Qt::gray; } // Default type colour
-    static const data_types enumvalue = data_types::INT;
+    static const data_types enumvalue = T_INT;
 };
 
 // Class specializations
@@ -73,14 +79,14 @@ template<>
 struct type_info<int>
 {
     static QColor colour() { return Qt::red; }
-    static const data_types enumvalue = data_types::INT;
+    static const data_types enumvalue = T_INT;
 };
 
 template<>
 struct type_info<double>
 {
     static QColor colour() { return Qt::green; }
-    static const data_types enumvalue = data_types::DOUBLE;
+    static const data_types enumvalue = T_DOUBLE;
 };
 
 /*
@@ -130,9 +136,8 @@ inline bool invertMatrix (const matrix<T>& input, matrix<T>& inverse)
 
 bool isValidBlockName(const QString fileName);
 
-// The following should not be in utilities!!
+// The following should not be in utilities!
 bool testInvertMatrix();
-void testLinearRegression(QTabWidget *tabWidget);
 
 } } // utility, je
 

@@ -10,8 +10,9 @@
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/random.hpp>
 #include <boost/random/normal_distribution.hpp>
+#include "../icomponent.h"
 
-namespace je { namespace io {
+namespace je { namespace component { namespace io {
 
 using namespace boost::numeric::ublas;
 
@@ -20,15 +21,27 @@ using namespace boost::numeric::ublas;
  * The class will have a specialized load function for each source
  */
 enum DataSources {
-    GOVUK = 1 // www.example.com
+    D_GOVUK = 1 // www.example.com
 };
 
 template<typename T>
-class DataManagerBase
+class DataManagerBase : public IComponent
 {
 public:
-    DataManagerBase() {}
+    DataManagerBase() : IComponent(C_DATA_MANAGER) {}
 
+    static component_types componentType()
+    {
+        return C_DATA_MANAGER;
+    }
+
+    void getLabels(matrix<T> &mat) override { mat = labels; } // Y
+    void getData(matrix<T> &mat) override { mat = data; } // X
+
+    matrix<T> getLabels() { return labels; }
+    matrix<T> getData() { return data; }
+
+protected:
     int N; // Number of data points
     int p; // Data dimensionality (number of columns)
 
@@ -55,7 +68,7 @@ public:
 
 // Class specializations (currently just testing)
 template<>
-class DataManager<double, GOVUK> : public DataManagerBase<double>
+class DataManager<double, D_GOVUK> : public DataManagerBase<double>
 {
 public:
     DataManager() : DataManagerBase()
@@ -88,4 +101,4 @@ public:
     }
 };
 
-} } // io, je
+} } } // io, component, je

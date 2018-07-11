@@ -1,12 +1,12 @@
 #pragma once
 
 #include "../block.h"
-#include "../../Maths/Linear/regression.h"
-#include "../../IO/datamanager.h"
+#include "../../Components/Maths/Linear/regression.h"
+#include "../../Components/IO/datamanager.h"
 
 using namespace je;
 using namespace boost::numeric::ublas;
-using namespace je::maths::linear;
+using namespace je::component;
 
 template<typename T>
 class LinearRegressionBlock : public graph::GraphBlock<T> // In-type must be the same as out-type
@@ -15,11 +15,16 @@ public:
     LinearRegressionBlock() : graph::GraphBlock<T>()
     {
         // Initialise all the components
-        // NOTE: for now just the regression block
-        auto r = std::make_shared<Regression<T>>();
-        dataManager.load("example.dat"); // Load the data
-        r->train(dataManager.labels, dataManager.data); // Y, X
+        auto r = std::make_shared<maths::linear::Regression<T>>();
+        auto d = std::make_shared<io::DataManager<T, io::D_GOVUK>>();
+
+        // Load the data and then perform regression
+        d->load("example.dat");
+        r->train(d->getLabels(), d->getData()); // Y, X
+
+        // Add the components to the block
         addComponent(r);
+        addComponent(d);
     }
     ~LinearRegressionBlock() {}
 
@@ -39,12 +44,12 @@ public:
         mat_in(0, 1) = in;
 
         //matrix<T> mat_out = regression.calculate(mat_in);
-        matrix<T> mat_out = getComponent<Regression<T>>()->calculate(mat_in); //regression.calculate(mat_in);
+        matrix<T> mat_out = getComponent<maths::linear::Regression<T>>()->calculate(mat_in); //regression.calculate(mat_in);
 
         return mat_out(0, 0);
     }
 
 private:
-    io::DataManager<T, io::GOVUK> dataManager;
+    //io::DataManager<T, io::GOVUK> dataManager;
     //maths::linear::Regression<T> regression;
 };

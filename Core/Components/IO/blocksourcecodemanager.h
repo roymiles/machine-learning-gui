@@ -1,11 +1,11 @@
-#ifndef BLOCKSOURCECODEMANAGER_H
-#define BLOCKSOURCECODEMANAGER_H
+#pragma once
 
 #include <QString>
 #include <QPlainTextEdit>
 #include <memory>
+#include "../icomponent.h"
 
-namespace je { namespace io {
+namespace je { namespace component { namespace io {
 
 /*
  * Responsible for creating the block source files (adding boilerplate code)
@@ -14,8 +14,9 @@ namespace je { namespace io {
  *
  * THIS CLASS NAME IS CRAP DO SOMEN ABOUT PLUZ
  * NEED TO MAKE IT GENERIC AND THEN THIS CAN BE A SPECIFIC IMPLEMENTATION OF...
+ * MAYBE JUST "TEXTEDITOR"?
  */
-class BlockSourceCodeManager
+class BlockSourceCodeManager : public IComponent
 {
 public:
     BlockSourceCodeManager();
@@ -28,11 +29,14 @@ public:
     bool loadSourceFile(); // Attempt to load the source file (and place in textEdit)
     QPlainTextEdit* getContent() const; // getter for textEdit
 
+    static component_types componentType()
+    {
+        return C_TEXT_EDITOR;
+    }
+
 private:
     QString fileName;
     QPlainTextEdit* plainTextEdit;
 };
 
-} } // io, je
-
-#endif // BLOCKSOURCECODEMANAGER_H
+} } } // io, component, je

@@ -2,28 +2,23 @@
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <algorithm>
-//#include "../Maths/Linear/regression.h"
 #include <QVector>
 #include <qcustomplot-source/qcustomplot.h>
 #include <tuple>
 #include "../qcplinearcolormap.h"
+#include "../Utility/utilities.h"
+#include "icomponent.h"
 
-namespace je { namespace maths { namespace linear {
-template<typename T>
-class Regression;
-} } }
-
-namespace je { namespace utility {
+namespace je { namespace component {
 
 using namespace boost::numeric::ublas;
-using namespace maths::linear;
 
 /*
  * This class offers an interface between the boost numeric structures (matrices) and QCustomPlot
  * It can take Boost::Matrix data and plot them on a QCustomPlot instance
  */
 template<typename T>
-class Plot
+class Plot : public IComponent
 {
 public:
     /*
@@ -31,10 +26,15 @@ public:
      * done using this object. See QCustomPlot documentation online
      */
     Plot() = delete;
-    Plot(QCustomPlot *customPlot)
+    Plot(QCustomPlot *customPlot) : IComponent(C_PLOT)
     {
         this->customPlot = customPlot;
         this->count      = 0;
+    }
+
+    static utility::component_types componentType()
+    {
+        return C_PLOT;
     }
 
     /*
@@ -144,7 +144,7 @@ public:
      * --- PARAMS ---
      * f    : A function pointer to calculate the output value
      */
-    void drawFunction(T xStart, T xEnd, T xStep, calc_t<T> f)
+    void drawFunction(T xStart, T xEnd, T xStep, utility::calc_t<T> f)
     {
         assert(xStep > 0); // Ensures the loop ends and no division by zero
 
@@ -181,4 +181,4 @@ private:
     int count; // Keeps track of the number of graphs to enable multiple plot calls ->graph(count)
 };
 
-} } // utility, je
+} } // component, je

@@ -5,8 +5,9 @@
 #include "iblock.h"
 #include "blockbase.h"
 #include "../Utility/utilities.h"
-#include "../Utility/plot.h"
-#include "../Maths/Linear/regression.h"
+#include "../Components/plot.h"
+#include "../Components/Maths/Linear/regression.h"
+#include "../Components/IO/datamanager.h"
 #include "../Utility/utilities.h"
 #include <sstream>
 #include <map>
@@ -249,10 +250,17 @@ public:
         assert(b);
 
         using namespace maths::linear;
+        typedef in_type dtype; // Same as out_type
         auto f = block->getComponent<Regression<dtype>>();
 
-        typedef in_type dtype; // Same as out_type
-        utility::Plot<dtype> p(customPlot);
+        component::Plot<dtype> p(customPlot);
+
+        // Draw the input training data as a scatter pot
+        auto d = block->getComponent<io::DataManagerBase<dtype>>();
+        matrix<dtype> X, Y;
+        d->getLabels(Y);
+        d->getData(X);
+        p.scatterPlotYX(Y, X);
 
         // Delegate drawing to component
         f->draw(p);
@@ -273,19 +281,19 @@ struct enum2datatype
 
 // Class specializations
 template<>
-struct enum2datatype<utility::data_types::INT>
+struct enum2datatype<T_INT>
 {
     typedef int inner_type;
 };
 
 template<>
-struct enum2datatype<utility::data_types::DOUBLE>
+struct enum2datatype<T_DOUBLE>
 {
     typedef double inner_type;
 };
 
 template<>
-struct enum2datatype<utility::data_types::_VOID>
+struct enum2datatype<T_VOID>
 {
     typedef void inner_type;
 };
@@ -296,11 +304,11 @@ struct enum2datatype<utility::data_types::_VOID>
  */
 enum block_types
 {
-    MYCUSTOMBLOCK               = 0,
-    MYCUSTOMSOURCE              = 1,
-    MYCUSTOMSINK                = 2,
-    LINEARREGRESSIONBLOCK       = 3,
-    _MAXB                       = 4 // Helps for iterating over the enum
+    B_MYCUSTOMBLOCK               = 0,
+    B_MYCUSTOMSOURCE              = 1,
+    B_MYCUSTOMSINK                = 2,
+    B_LINEARREGRESSIONBLOCK       = 3,
+    B_MAX                         = 4 // Helps for iterating over the enum
 };
 
 /*
@@ -317,28 +325,28 @@ struct enum2blocktype
 
 // Class specializations
 template<utility::data_types D>
-struct enum2blocktype<block_types::MYCUSTOMBLOCK, D>
+struct enum2blocktype<B_MYCUSTOMBLOCK, D>
 {
     typedef typename enum2datatype<D>::inner_type T;
     typedef MyCustomBlock<T> inner_type;
 };
 
 template<utility::data_types D>
-struct enum2blocktype<block_types::MYCUSTOMSOURCE, D>
+struct enum2blocktype<B_MYCUSTOMSOURCE, D>
 {
     typedef typename enum2datatype<D>::inner_type T;
     typedef MyCustomSource<T> inner_type;
 };
 
 template<utility::data_types D>
-struct enum2blocktype<block_types::MYCUSTOMSINK, D>
+struct enum2blocktype<B_MYCUSTOMSINK, D>
 {
     typedef typename enum2datatype<D>::inner_type T;
     typedef MyCustomSink<T> inner_type;
 };
 
 template<utility::data_types D>
-struct enum2blocktype<block_types::LINEARREGRESSIONBLOCK, D>
+struct enum2blocktype<B_LINEARREGRESSIONBLOCK, D>
 {
     typedef typename enum2datatype<D>::inner_type T;
     typedef LinearRegressionBlock<T> inner_type;

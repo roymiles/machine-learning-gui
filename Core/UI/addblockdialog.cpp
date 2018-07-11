@@ -3,7 +3,7 @@
 
 #include <QDebug>
 #include <QMessageBox>
-#include "../IO/blocksourcecodemanager.h"
+#include "../Components/IO/blocksourcecodemanager.h"
 #include "../Utility/utilities.h"
 #include "../Graph/blockutils.h"
 
@@ -28,8 +28,6 @@ void AddBlockDialog::on_AddBlockDialog_finished(int result)
 {
     // Just before dialog closes, after either confirm or reject.
 }
-
-
 
 void AddBlockDialog::on_AddBlockConfirmButton_accepted()
 {

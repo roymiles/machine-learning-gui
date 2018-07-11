@@ -6,9 +6,11 @@
 #include "port.h"
 #include <chrono>
 #include "../Utility/utilities.h"
-#include "../icomponent.h"
+#include "../Components/icomponent.h"
 
 namespace je { namespace graph {
+
+using namespace component;
 
 // Checks where a click takes place
 enum click_types
@@ -94,7 +96,8 @@ public:
     void addComponent(std::shared_ptr<T> component)
     {
         // NOTE: need to check if component is of type IComponent
-        components.push_back(component);
+        //if(typeid(IComponent) == typeid(T))
+            components.push_back(component);
     }
 
     template<typename T>
@@ -102,8 +105,14 @@ public:
     {
         // Go through all the components and check if the component types are equal
         for(auto &c : components)
-            if(c->getComponentType() == T::componentType())
+        {
+            const auto t1 = c->getComponentType();
+            const auto t2 = T::componentType();
+            if(t1 == t2)
                 return c;
+        }
+
+        return nullptr;
     }
 
 private:

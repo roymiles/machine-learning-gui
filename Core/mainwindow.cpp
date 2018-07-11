@@ -20,8 +20,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->setTabsClosable(true);
     graphWidget = new je::graph::GraphWidget(this, ui->tabWidget);
     ui->tabWidget->addTab(graphWidget, "Flow graph");
-
-    utility::testLinearRegression(ui->tabWidget);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)

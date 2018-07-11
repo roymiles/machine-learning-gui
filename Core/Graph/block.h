@@ -11,7 +11,7 @@
 
 #include "../Utility/utilities.h"
 #include "port.h"
-#include "../IO/blocksourcecodemanager.h"
+#include "../Components/IO/blocksourcecodemanager.h"
 #include "../Utility/utilities.h"
 #include "iblock.h"
 #include "blockutils.h"
