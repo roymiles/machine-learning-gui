@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../block.h"
+#include "../../Components/IO/texteditor.h"
 
 using namespace je::graph;
 
@@ -27,12 +28,16 @@ public:
 
 
 template<typename T>
-class MyCustomBlock : public Block<T>
+class MyCustomBlock : public Block1<T>
 {
 public:
-    MyCustomBlock() : Block<T>()
+    MyCustomBlock() : Block1<T>()
     {
+        // Initialise all the components
+        auto t = std::make_shared<io::TextEditor>(this->getName());
 
+        // Add the components to the block
+        addComponent(t);
     }
 
     void init() override

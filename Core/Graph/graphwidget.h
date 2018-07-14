@@ -107,6 +107,7 @@ public:
     std::shared_ptr<IBlock> getBlock(const vertex_t vertex);
 
     void run();
+    void forwardPass(); // Call run() on all blocks from source to sink
 
 protected:
     void paintEvent(QPaintEvent*);

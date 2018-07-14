@@ -17,13 +17,14 @@ GraphWidget::GraphWidget(QWidget *parent, QTabWidget *tabWidget) : QWidget(paren
     // Widget accepts focus by clicking or by tabbing. This ensures keyPressEvent works.
     setFocusPolicy(Qt::StrongFocus);
 
-    setMouseTracking(false);
+    setMouseTracking(true);
     curState = State::IDLE;
     this->tabWidget = tabWidget;
     this->drawingEdge = std::make_pair(G::null_vertex(), G::null_vertex());
 
     source = G::null_vertex();
     sink   = G::null_vertex();
+    movingVertex = G::null_vertex();
 }
 
 /*
@@ -43,7 +44,7 @@ void GraphWidget::paintEvent(QPaintEvent* e)
         for(int y = 0; y < this->height(); y += height)
             painter.drawPixmap(x, y, width, height, pixmap);
 
-    // NOTE: The order of drawing is important
+    // NOTE: The order of drawing is important. Edges should be drawn before (below) blocks
     // Draw all edges
     for(auto edge : boost::make_iterator_range(boost::edges(graph)))
     {
@@ -67,6 +68,7 @@ void GraphWidget::paintEvent(QPaintEvent* e)
     // Draw all blocks (and internally the ports)
     for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
+    //for (auto vertex = boost::make_reverse_iterator(boost::vertices(graph)); vertex != my_vector.rend(); ++i ) {
         if(vertex == activeVertex)
             painter.setPen(Qt::red);
 
@@ -129,12 +131,12 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 // Clicking on port for first time
                 if(curState == State::IDLE){
                     curState = State::DRAWING_EDGE;
-                    setMouseTracking(true); // Trigger mouse event without mouse click when in drawing state
+                    //setMouseTracking(true); // Trigger mouse event without mouse click when in drawing state
                 }
                 // Clicking on port for second time, making the edge
                 else if(curState == State::DRAWING_EDGE){
                     curState = State::IDLE;
-                    setMouseTracking(false);
+                    //setMouseTracking(false);
 
                     if(drawingEdge.first != G::null_vertex() && drawingEdge.second != G::null_vertex())
                     { // Only create the edge if we have both the input and outport ports
@@ -202,6 +204,23 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
         // Redraw canvas
         this->update();
 
+    }
+
+    // If not in drawing state or if moving a block
+    if(movingVertex == G::null_vertex() && curState != State::DRAWING_EDGE)
+    {
+        // Check if hovering over a port
+        for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
+        {
+            click_types c = graph[vertex]->mousePressEvent(e->pos());
+            switch(c)
+            {
+            case click_types::inPort:
+            case click_types::outPort:
+                //qDebug() << "Hovering over a port";
+                break;
+            }
+        }
     }
 }
 
@@ -322,6 +341,8 @@ void GraphWidget::run()
     for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
         graph[vertex]->init();
 
+    //while(graph[source]->isFinished())
+
     // Go through each vertex and execute its function.
     // The output of a preceeding vertex is fed into the next vertex
     //void* source_out = graph[source].run();
@@ -329,6 +350,7 @@ void GraphWidget::run()
     vertex_t current_node = source;
     void* out;
     void* prev_out;
+    boost::any out2, prev_out2;
     // Run through all the vertices untill a sink is found
     bool at_sink = false;
     while(true)
@@ -339,12 +361,15 @@ void GraphWidget::run()
         auto t1 = std::chrono::system_clock::now();
         // Run the current block
         if(current_node == source) {
-            out = graph[current_node]->_run(prev_out);
+            //out = graph[current_node]->run_v(prev_out);
+            out2 = graph[current_node]->run_v2(prev_out2);
         } else if(current_node == sink) {
-            graph[current_node]->_run(prev_out);
+            //graph[current_node]->run_v(prev_out);
+            graph[current_node]->run_v2(prev_out2);
             at_sink = true; // Reached the end
         } else {
-            out = graph[current_node]->_run(prev_out);
+            //out = graph[current_node]->run_v(prev_out);
+            out2 = graph[current_node]->run_v2(prev_out2);
         }
         auto t2 = std::chrono::system_clock::now();
 
@@ -365,12 +390,15 @@ void GraphWidget::run()
         auto target = boost::target(*ei, graph);
         current_node = target;
 
-        prev_out = out;
+        //prev_out = out;
+        prev_out2 = out2;
     }
 
     // e.g. To update the displayed execution times on the blocks
     this->update();
 
 }
+
+
 
 } } // graph, je

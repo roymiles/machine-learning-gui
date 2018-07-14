@@ -1,4 +1,4 @@
-#include "blocksourcecodemanager.h"
+#include "texteditor.h"
 #include <QRegularExpression>
 #include <QFile>
 #include <QTextStream>
@@ -6,28 +6,24 @@
 
 namespace je { namespace component { namespace io {
 
-BlockSourceCodeManager::BlockSourceCodeManager() : IComponent(C_TEXT_EDITOR)
-{
-}
-
-BlockSourceCodeManager::BlockSourceCodeManager(QString fileName) : IComponent(C_TEXT_EDITOR)
+TextEditor::TextEditor(QString fileName) : IComponent(C_TEXT_EDITOR)
 {
     this->fileName = fileName;
 }
 
-BlockSourceCodeManager::~BlockSourceCodeManager()
+TextEditor::~TextEditor()
 {
     // Free up memory
     delete plainTextEdit;
 }
 
-inline const QString BlockSourceCodeManager::getCompleteFilePath() const
+inline const QString TextEditor::getCompleteFilePath() const
 {
     // TODO: This needs to be changed
     return "C:\\Users\\Roy\\Documents\\JumboEagle\\" + this->fileName + ".txt";
 }
 
-bool BlockSourceCodeManager::createSourceFile()
+bool TextEditor::createSourceFile()
 {
 
     QFile file(getCompleteFilePath());
@@ -39,12 +35,12 @@ bool BlockSourceCodeManager::createSourceFile()
     return true;
 }
 
-QPlainTextEdit* BlockSourceCodeManager::getContent() const
+QPlainTextEdit* TextEditor::getContent() const
 {
     return plainTextEdit;
 }
 
-bool BlockSourceCodeManager::loadSourceFile()
+bool TextEditor::loadSourceFile()
 {
     QString completeFilePath = getCompleteFilePath();
     if (!QFile::exists(completeFilePath))

@@ -10,24 +10,19 @@ namespace je { namespace component { namespace io {
 /*
  * Responsible for creating the block source files (adding boilerplate code)
  * and validating file names
- *
- *
- * THIS CLASS NAME IS CRAP DO SOMEN ABOUT PLUZ
- * NEED TO MAKE IT GENERIC AND THEN THIS CAN BE A SPECIFIC IMPLEMENTATION OF...
- * MAYBE JUST "TEXTEDITOR"?
  */
-class BlockSourceCodeManager : public IComponent
+class TextEditor : public IComponent
 {
 public:
-    BlockSourceCodeManager();
-    BlockSourceCodeManager(QString fileName);
-    ~BlockSourceCodeManager();
+    TextEditor() = delete;
+    TextEditor(QString fileName);
+    ~TextEditor();
 
     const QString getCompleteFilePath() const;
-    bool createSourceFile();
+    bool createSourceFile() override;
 
-    bool loadSourceFile(); // Attempt to load the source file (and place in textEdit)
-    QPlainTextEdit* getContent() const; // getter for textEdit
+    bool loadSourceFile() override; // Attempt to load the source file (and place in textEdit)
+    QPlainTextEdit* getContent() const override; // getter for textEdit
 
     static component_types componentType()
     {

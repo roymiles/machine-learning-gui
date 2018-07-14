@@ -71,6 +71,39 @@
       </widget>
      </item>
      <item>
+      <widget class="QToolBox" name="toolBox">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="page">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>109</width>
+          <height>247</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Page 1</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="page_2">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>109</width>
+          <height>247</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Page 2</string>
+        </attribute>
+       </widget>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="exampleLayoutButton">
        <property name="text">
         <string>Example Layout</string>
@@ -138,37 +171,6 @@
     <property name="title">
      <string>File</string>
     </property>
-    <widget class="QMenu" name="menuAatina_smells">
-     <property name="title">
-      <string>Aatina smells</string>
-     </property>
-     <widget class="QMenu" name="menua_bit">
-      <property name="title">
-       <string>a bit</string>
-      </property>
-      <widget class="QMenu" name="menuand">
-       <property name="title">
-        <string>and</string>
-       </property>
-       <widget class="QMenu" name="menualso_smells">
-        <property name="title">
-         <string>also smells</string>
-        </property>
-        <widget class="QMenu" name="menuof_stuff">
-         <property name="title">
-          <string>of stuff</string>
-         </property>
-         <addaction name="actionthat_is_smelly"/>
-        </widget>
-        <addaction name="menuof_stuff"/>
-       </widget>
-       <addaction name="menualso_smells"/>
-      </widget>
-      <addaction name="menuand"/>
-     </widget>
-     <addaction name="menua_bit"/>
-    </widget>
-    <addaction name="menuAatina_smells"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">

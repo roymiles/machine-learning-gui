@@ -7,6 +7,8 @@
 #include <chrono>
 #include "../Utility/utilities.h"
 #include "../Components/icomponent.h"
+#include "../Utility/jvector.h"
+#include <boost/any.hpp>
 
 namespace je { namespace graph {
 
@@ -66,7 +68,8 @@ public:
      * The templated Block class will cast the void* to the appropriate types
      * and then call the user made run functions
      */
-    virtual void* _run(void* in) = 0;
+    virtual void* run_v(void* in) = 0;
+    virtual boost::any run_v2(boost::any in) = 0;
 
     /*
      * The previous execution times of the current block are recorded
@@ -130,6 +133,9 @@ private:
 
     // Any block can have a collection of components
     std::vector<ComponentPointer> components;
+
+    // Test alternative approach
+    //utility::JVector<
 };
 
 typedef std::shared_ptr<IBlock> BlockPointer;

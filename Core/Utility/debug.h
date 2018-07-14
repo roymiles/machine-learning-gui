@@ -1,9 +1,9 @@
-#ifndef _DEBUG_HPP_
-#define _DEBUG_HPP_
+#pragma once
 
 #include <iostream>
 #include <sstream>
 
+// [[ deprecated ]] use qDebug() << ... instead
 namespace je {
 
 class Debug
@@ -17,5 +17,3 @@ public:
 };
 
 } // je
-
-#endif

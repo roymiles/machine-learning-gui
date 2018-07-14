@@ -42,6 +42,11 @@ public:
     virtual void getData(matrix<int> &mat) {}
     virtual void getData(matrix<double> &mat) {}
 
+    // IO/TextEditor
+    virtual bool createSourceFile() { return false;}
+    virtual bool loadSourceFile() { return false; }
+    virtual QPlainTextEdit* getContent() const { return nullptr; }
+
 private:
     component_types component_type;
 };

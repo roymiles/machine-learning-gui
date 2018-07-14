@@ -7,17 +7,17 @@
 namespace je { namespace graph {
 
 /*
- * _BlockBase contains some function/member definitions that are common
- * for all _Block specializations
+ * BlockBase contains some function/member definitions that are common
+ * for all Block specializations
  */
 template<typename block_type,
          typename in_type,
          typename out_type,
          typename tab_type>
-class _BlockBase : public IBlock
+class BlockBase : public IBlock
 {
 public:
-    _BlockBase() : IBlock(block_type::has_input, block_type::has_output)
+    BlockBase() : IBlock(block_type::has_input, block_type::has_output)
     {
         // Some type assertions
         if(is_sink() && utility::is_same<out_type, void>::value && !utility::is_same<in_type, void>::value) // Must have void output and non-void input
@@ -30,7 +30,7 @@ public:
             assert("Invalid block template parameters");
     }
 
-    ~_BlockBase() {}
+    ~BlockBase() {}
 
     // Overridden members call upon the templated utility functions declared above
     void draw(QPainter *painter) override

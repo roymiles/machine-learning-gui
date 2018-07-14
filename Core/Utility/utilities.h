@@ -1,5 +1,4 @@
-#ifndef UTILITIES_H
-#define UTILITIES_H
+#pragma once
 
 #include <QRect>
 #include <QPoint>
@@ -140,5 +139,3 @@ bool isValidBlockName(const QString fileName);
 bool testInvertMatrix();
 
 } } // utility, je
-
-#endif

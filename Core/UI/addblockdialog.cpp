@@ -3,7 +3,7 @@
 
 #include <QDebug>
 #include <QMessageBox>
-#include "../Components/IO/blocksourcecodemanager.h"
+#include "../Components/IO/texteditor.h"
 #include "../Utility/utilities.h"
 #include "../Graph/blockutils.h"
 

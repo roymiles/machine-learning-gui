@@ -8,6 +8,7 @@
 #include "../Components/plot.h"
 #include "../Components/Maths/Linear/regression.h"
 #include "../Components/IO/datamanager.h"
+#include "../Components/IO/texteditor.h"
 #include "../Utility/utilities.h"
 #include <sstream>
 #include <map>
@@ -221,18 +222,13 @@ class tab_type_impl<editable_t, in_type, out_type>
 public:
     static QWidget* tabWidget(IBlock* block)
     {
-        // First time opening tab, so create an instance of the file manager
-        /*if(blockSourceCodeManager == nullptr)
-            blockSourceCodeManager = std::make_unique<io::BlockSourceCodeManager>(this->getName());
+        auto t = block->getComponent<io::TextEditor>();
 
         // Attempt to load the source file. If file does not exist, create it
-        if(!blockSourceCodeManager->loadSourceFile())
-            blockSourceCodeManager->createSourceFile(); // Create the source file, build boiler plate code
+        if(!t->loadSourceFile())
+            t->createSourceFile(); // Create the source file, build boiler plate code
 
-        return blockSourceCodeManager->getContent();*/
-
-
-        return nullptr;
+        return t->getContent();
     }
 };
 
