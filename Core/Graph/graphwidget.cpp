@@ -272,6 +272,7 @@ void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
                 this->tabWidget->setCurrentIndex(tabIndex);
             }
 
+            // Don't bother checking for click on other blocks
             break;
         }
     }

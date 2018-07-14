@@ -64,7 +64,7 @@ public:
 
     boost::any run_v(boost::any in) override
     {
-        if(!utility::is_same<in_type, void>::value && !utility::is_same<out_type, void>::value) {
+        if(!utility::is_same<in_type, boost::blank>::value && !utility::is_same<out_type, boost::blank>::value) {
             // Cast the input argument and call the users function
             in_type in_cast = boost::any_cast<in_type>(in);
             out_type out = run(in_cast);
@@ -101,7 +101,7 @@ public:
 
     boost::any run_v(boost::any in) override
     {
-        if(utility::is_same<in_type, void>::value) {
+        if(utility::is_same<in_type, boost::blank>::value) {
             // No input, therefore a source
             boost::blank b; // Empty input
             out_type out = run(b);
@@ -134,7 +134,7 @@ public:
 
     boost::any run_v(boost::any in) override
     {
-        if(utility::is_same<out_type, void>::value) {
+        if(utility::is_same<out_type, boost::blank>::value) {
             // No output, therefore a sink
             in_type in_cast = boost::any_cast<in_type>(in);
             prev_in = in_cast; // Save input
@@ -151,7 +151,7 @@ public:
 // Some common block types
 
 template <typename T>
-using Sink = Block<sink_t, T, boost::blank, editable_t>; // An input but no output (void_t)
+using Sink = Block<sink_t, T, boost::blank, editable_t>; // An input but no output (boost::blank)
 
 template <typename T>
 using Source = Block<source_t, boost::blank, T, editable_t>; // An output but no input

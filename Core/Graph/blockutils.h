@@ -105,14 +105,20 @@ public:
 
     template<typename in_type,
              typename out_type>
-    static void mouseHoverEvent(block_part_e part, QPoint &point, utility::data_t prev_in, utility::data_t prev_out)
+    static void mouseHoverEvent(block_part_e part, QPoint &point, utility::data_t prev_in,
+                                                                  utility::data_t prev_out)
     {
         QString tooltip;
 
         if(part == block_part_e::in_port)
-            tooltip = QString::number(boost::get<in_type>(prev_in));
+        {
+            in_type i = boost::get<in_type>(prev_in);
+            tooltip = QString::number(i);
+        }
         else if(part == block_part_e::out_port)
+        {
             tooltip = QString::number(boost::get<out_type>(prev_out));
+        }
 
         QToolTip::showText(point, tooltip);
     }
@@ -153,7 +159,8 @@ public:
 
     template<typename in_type,
              typename out_type>
-    static void mouseHoverEvent(block_part_e part, QPoint &point, utility::data_t prev_in, utility::data_t prev_out)
+    static void mouseHoverEvent(block_part_e part, QPoint &point, utility::data_t prev_in,
+                                                                  utility::data_t prev_out)
     {
         QString tooltip;
 
@@ -200,7 +207,8 @@ public:
 
     template<typename in_type,
              typename out_type>
-    static void mouseHoverEvent(block_part_e part, QPoint &point, utility::data_t prev_in, utility::data_t prev_out)
+    static void mouseHoverEvent(block_part_e part, QPoint &point, utility::data_t prev_in,
+                                                                  utility::data_t prev_out)
     {
         QString tooltip;
 
@@ -242,7 +250,8 @@ public:
 
     template<typename in_type,
              typename out_type>
-    static void mouseHoverEvent(block_part_e part, QPoint &point, utility::data_t prev_in, utility::data_t prev_out)
+    static void mouseHoverEvent(block_part_e part, QPoint &point, utility::data_t prev_in,
+                                                                  utility::data_t prev_out)
     {
         // No ports so nothing to do
     }
