@@ -3,7 +3,7 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include "../../../Utility/utilities.h"
-#include "../../icomponent.h"
+#include "../../plot.h"
 #include <string>
 
 using namespace boost::numeric::ublas;
@@ -17,30 +17,25 @@ using namespace utility;
 // This fixes the relationship to a linear model
 // TODO: Allow multi-output data
 template<typename T> // Output will be the same type as input because Y = XB
-class Regression : public IComponent
+class Regression
 {
 public:
     // If using default constructor, must remember to call train()
-    Regression() : IComponent(C_REGRESSION)
+    Regression()
     {
         hasTrained = false;
     }
 
-    Regression(matrix<T> &Y, matrix<T> &X) : IComponent(C_REGRESSION)
+    Regression(matrix<T> &Y, matrix<T> &X)
     {
         hasTrained = false;
         train(Y, X);
     }
 
-    static component_types componentType()
-    {
-        return C_REGRESSION;
-    }
-
     /*
      * Calculate Y based on the learnt coefficients
      */
-    matrix<T> calculate(const matrix<T> &X) override
+    matrix<T> calculate(const matrix<T> &X)
     {
         // Must run train() first
         assert(hasTrained == true);
@@ -88,7 +83,7 @@ public:
         hasTrained = true;
     }
 
-    void draw(Plot<T> &p) override
+    void draw(Plot<T> &p)
     {
         // And overlay the linear model prediction
         using namespace std::placeholders;  // For e.g. _1

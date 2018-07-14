@@ -16,7 +16,7 @@ public:
     {
         // Initialise all the components
         auto r = std::make_shared<maths::linear::Regression<T>>();
-        auto d = std::make_shared<io::DataManager<T, io::D_GOVUK>>();
+        auto d = std::make_shared<io::DataManager<T>>();
 
         // Load the data and then perform regression
         d->load("example.dat");

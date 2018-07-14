@@ -42,8 +42,7 @@ public:
     ~Block() {}
 
     virtual void init() override {}    
-    void* run_v(void* in) override {}
-    boost::any run_v2(boost::any in) override {}
+    boost::any run_v(boost::any in) override {}
 };
 
 /*
@@ -63,22 +62,7 @@ public:
 
     virtual out_type run(in_type in) = 0; // Block
 
-    void* run_v(void* in) override
-    {
-        if(!utility::is_same<in_type, void>::value && !utility::is_same<out_type, void>::value) {
-            // Cast the input argument and call the users function
-            out_type out = run(*((in_type *)in));
-            // Dynamically allocate memory for output (because returning a pointer)
-            out_type* retval = (out_type*)malloc(sizeof(out_type));
-            *retval = out;
-            return retval;
-        } else {
-            qFatal("Invalid template parameters in run_v()");
-            return nullptr;
-        }
-    }
-
-    boost::any run_v2(boost::any in) override
+    boost::any run_v(boost::any in) override
     {
         if(!utility::is_same<in_type, void>::value && !utility::is_same<out_type, void>::value) {
             // Cast the input argument and call the users function
@@ -109,21 +93,7 @@ public:
 
     virtual out_type run() = 0; // Source
 
-    void* run_v(void* in) override
-    {
-        if(utility::is_same<in_type, void>::value) {
-            // No input, therefore a source
-            out_type out = run();
-            out_type* retval = (out_type*)malloc(sizeof(out_type));
-            *retval = out;
-            return retval;
-        } else {
-            qFatal("Invalid template parameters in run_v()");
-            return nullptr;
-        }
-    }
-
-    boost::any run_v2(boost::any in) override
+    boost::any run_v(boost::any in) override
     {
         if(utility::is_same<in_type, void>::value) {
             // No input, therefore a source
@@ -154,19 +124,7 @@ public:
 
     virtual void run(in_type in) = 0; // Source
 
-    void* run_v(void* in) override
-    {
-        if(utility::is_same<out_type, void>::value) {
-            // No output, therefore a sink
-            run(*((in_type *)in));
-        } else {
-            qFatal("Invalid template parameters in run_v()");
-        }
-
-        return nullptr;
-    }
-
-    boost::any run_v2(boost::any in) override
+    boost::any run_v(boost::any in) override
     {
         if(utility::is_same<out_type, void>::value) {
             // No output, therefore a sink

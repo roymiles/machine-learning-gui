@@ -4,7 +4,6 @@
 #include <QPainter>
 #include "iblock.h"
 #include "blockbase.h"
-#include "../Utility/utilities.h"
 #include "../Components/plot.h"
 #include "../Components/Maths/Linear/regression.h"
 #include "../Components/IO/datamanager.h"
@@ -239,7 +238,7 @@ class tab_type_impl<graph_t, in_type, out_type>
 public:
     static QWidget* tabWidget(IBlock * block)
     {
-        auto customPlot = new QCustomPlot();
+        auto customPlot = new QCustomPlot(); // Remember to call delete at some point
 
         // Type checks : input and output types must be the same for a plot
         bool b = utility::is_same<in_type, out_type>::value;
@@ -252,7 +251,7 @@ public:
         component::Plot<dtype> p(customPlot);
 
         // Draw the input training data as a scatter pot
-        auto d = block->getComponent<io::DataManagerBase<dtype>>();
+        auto d = block->getComponent<io::DataManager<dtype>>();
         matrix<dtype> X, Y;
         d->getLabels(Y);
         d->getData(X);
@@ -277,19 +276,19 @@ struct enum2datatype
 
 // Class specializations
 template<>
-struct enum2datatype<T_INT>
+struct enum2datatype<utility::T_INT>
 {
     typedef int inner_type;
 };
 
 template<>
-struct enum2datatype<T_DOUBLE>
+struct enum2datatype<utility::T_DOUBLE>
 {
     typedef double inner_type;
 };
 
 template<>
-struct enum2datatype<T_VOID>
+struct enum2datatype<utility::T_VOID>
 {
     typedef void inner_type;
 };

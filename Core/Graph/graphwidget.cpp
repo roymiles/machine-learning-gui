@@ -348,9 +348,7 @@ void GraphWidget::run()
     //void* source_out = graph[source].run();
     typename G::out_edge_iterator ei, ei_end;
     vertex_t current_node = source;
-    void* out;
-    void* prev_out;
-    boost::any out2, prev_out2;
+    boost::any out, prev_out;
     // Run through all the vertices untill a sink is found
     bool at_sink = false;
     while(true)
@@ -361,15 +359,12 @@ void GraphWidget::run()
         auto t1 = std::chrono::system_clock::now();
         // Run the current block
         if(current_node == source) {
-            //out = graph[current_node]->run_v(prev_out);
-            out2 = graph[current_node]->run_v2(prev_out2);
+            out = graph[current_node]->run_v(prev_out);
         } else if(current_node == sink) {
-            //graph[current_node]->run_v(prev_out);
-            graph[current_node]->run_v2(prev_out2);
+            graph[current_node]->run_v(prev_out);
             at_sink = true; // Reached the end
         } else {
-            //out = graph[current_node]->run_v(prev_out);
-            out2 = graph[current_node]->run_v2(prev_out2);
+            out = graph[current_node]->run_v(prev_out);
         }
         auto t2 = std::chrono::system_clock::now();
 
@@ -390,8 +385,7 @@ void GraphWidget::run()
         auto target = boost::target(*ei, graph);
         current_node = target;
 
-        //prev_out = out;
-        prev_out2 = out2;
+        prev_out = out;
     }
 
     // e.g. To update the displayed execution times on the blocks

@@ -40,10 +40,8 @@ SOURCES += \
     Dependencies/darkstyle/framelesswindow/windowdragger.cpp \
     Dependencies/darkstyle/DarkStyle.cpp \
     Core/Graph/blockutils.cpp \
-    Core/Components/icomponent.cpp \
     Core/Components/IO/datamanager.cpp \
-    Core/Components/IO/texteditor.cpp \
-    Core/Utility/jvector.cpp
+    Core/Components/IO/texteditor.cpp
 
 
 HEADERS += \
@@ -70,12 +68,10 @@ HEADERS += \
     Dependencies/matplotlibcpp/matplotlibcpp.h \
     Core/Graph/Blocks/linearregressionblock.h \
     Core/Graph/blockloader.h \
-    Core/Components/icomponent.h \
     Core/Components/IO/datamanager.h \
     Core/Components/Maths/Linear/regression.h \
     Core/Components/plot.h \
-    Core/Components/IO/texteditor.h \
-    Core/Utility/jvector.h
+    Core/Components/IO/texteditor.h
 
 
 FORMS += \

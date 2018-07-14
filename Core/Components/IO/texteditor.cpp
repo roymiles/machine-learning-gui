@@ -6,7 +6,7 @@
 
 namespace je { namespace component { namespace io {
 
-TextEditor::TextEditor(QString fileName) : IComponent(C_TEXT_EDITOR)
+TextEditor::TextEditor(QString fileName)
 {
     this->fileName = fileName;
 }

@@ -6,13 +6,9 @@
 #include "port.h"
 #include <chrono>
 #include "../Utility/utilities.h"
-#include "../Components/icomponent.h"
-#include "../Utility/jvector.h"
 #include <boost/any.hpp>
 
 namespace je { namespace graph {
-
-using namespace component;
 
 // Checks where a click takes place
 enum click_types
@@ -65,11 +61,10 @@ public:
     virtual void init() = 0;
 
     /*
-     * The templated Block class will cast the void* to the appropriate types
+     * The templated Block class will cast the boost::any to the appropriate types
      * and then call the user made run functions
      */
-    virtual void* run_v(void* in) = 0;
-    virtual boost::any run_v2(boost::any in) = 0;
+    virtual boost::any run_v(boost::any in) = 0;
 
     /*
      * The previous execution times of the current block are recorded
@@ -98,21 +93,17 @@ public:
     template<typename T>
     void addComponent(std::shared_ptr<T> component)
     {
-        // NOTE: need to check if component is of type IComponent
-        //if(typeid(IComponent) == typeid(T))
-            components.push_back(component);
+        components.push_back(component);
     }
 
     template<typename T>
-    std::shared_ptr<IComponent> getComponent()
+    std::shared_ptr<T> getComponent()
     {
         // Go through all the components and check if the component types are equal
         for(auto &c : components)
         {
-            const auto t1 = c->getComponentType();
-            const auto t2 = T::componentType();
-            if(t1 == t2)
-                return c;
+            if(c.type() == typeid(std::shared_ptr<T>))
+                return boost::any_cast<std::shared_ptr<T>>(c);
         }
 
         return nullptr;
@@ -131,11 +122,17 @@ private:
     // The elapsed time of the previous execution
     std::chrono::duration<double> previousExecutionTimes;
 
-    // Any block can have a collection of components
-    std::vector<ComponentPointer> components;
-
-    // Test alternative approach
-    //utility::JVector<
+    /*
+     * Vector of any type of class component.
+     * As components are typically templated and don't show
+     * any particular hierarchy, it does not make sense to have
+     * an IComponent type.
+     *
+     * The type of the components are only called inside the Block
+     * class implementation, of which the component cast is known at compile
+     * time. So there are no issues with invalid casts.
+     */
+    std::vector<boost::any> components;
 };
 
 typedef std::shared_ptr<IBlock> BlockPointer;

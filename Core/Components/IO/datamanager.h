@@ -10,7 +10,6 @@
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/random.hpp>
 #include <boost/random/normal_distribution.hpp>
-#include "../icomponent.h"
 
 namespace je { namespace component { namespace io {
 
@@ -18,63 +17,29 @@ using namespace boost::numeric::ublas;
 
 /*
  * List all the data sources that the DataManager supports
- * The class will have a specialized load function for each source
+ * The class will have a specialized load function for each data source
+ *
+ * NOTE: NOTE USED AT THE MOMENT, JUST AN IDEA
  */
 enum DataSources {
     D_GOVUK = 1 // www.example.com
 };
 
+
+// Handles the loading of data to and from .txt/.csv formats and boost::ublas::matrix
 template<typename T>
-class DataManagerBase : public IComponent
+class DataManager
 {
 public:
-    DataManagerBase() : IComponent(C_DATA_MANAGER) {}
+    DataManager() {}
 
-    static component_types componentType()
-    {
-        return C_DATA_MANAGER;
-    }
-
-    void getLabels(matrix<T> &mat) override { mat = labels; } // Y
-    void getData(matrix<T> &mat) override { mat = data; } // X
+    void getLabels(matrix<T> &mat) { mat = labels; } // Y
+    void getData(matrix<T> &mat) { mat = data; } // X
 
     matrix<T> getLabels() { return labels; }
     matrix<T> getData() { return data; }
 
-protected:
-    int N; // Number of data points
-    int p; // Data dimensionality (number of columns)
-
-    matrix<T> data;   // X
-    matrix<T> labels; // Y
-    std::vector<std::string> columnNames;
-};
-
-/*
- * Handles the loading of data to and from .txt/.csv formats and boost::ublas::matrix
- */
-template<typename T,     // Data type, e.g. int, double
-         DataSources S>  // Data source e.g. GOVUK, EXAMPLECOM
-class DataManager : public DataManagerBase<T>
-{
-public:
-    DataManager() : DataManagerBase()
-    {
-        assert("Invalid type parameters"); // This class will be instatiated if all other class specializations fail
-    }
-
-    bool load(std::string path) { return false; }
-};
-
-// Class specializations (currently just testing)
-template<>
-class DataManager<double, D_GOVUK> : public DataManagerBase<double>
-{
-public:
-    DataManager() : DataManagerBase()
-    {
-    }
-
+    // This should be templated for the source
     bool load(std::string path)
     {
         // Example with a feature size of 2 (= p)
@@ -99,6 +64,14 @@ public:
 
         return true; // Would return false is failed to load source
     }
+
+private:
+    int N; // Number of data points
+    int p; // Data dimensionality (number of columns)
+
+    matrix<T> data;   // X
+    matrix<T> labels; // Y
+    std::vector<std::string> columnNames;
 };
 
 } } } // io, component, je

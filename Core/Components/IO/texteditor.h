@@ -3,7 +3,6 @@
 #include <QString>
 #include <QPlainTextEdit>
 #include <memory>
-#include "../icomponent.h"
 
 namespace je { namespace component { namespace io {
 
@@ -11,7 +10,7 @@ namespace je { namespace component { namespace io {
  * Responsible for creating the block source files (adding boilerplate code)
  * and validating file names
  */
-class TextEditor : public IComponent
+class TextEditor
 {
 public:
     TextEditor() = delete;
@@ -19,15 +18,10 @@ public:
     ~TextEditor();
 
     const QString getCompleteFilePath() const;
-    bool createSourceFile() override;
+    bool createSourceFile();
 
-    bool loadSourceFile() override; // Attempt to load the source file (and place in textEdit)
-    QPlainTextEdit* getContent() const override; // getter for textEdit
-
-    static component_types componentType()
-    {
-        return C_TEXT_EDITOR;
-    }
+    bool loadSourceFile(); // Attempt to load the source file (and place in textEdit)
+    QPlainTextEdit* getContent() const; // getter for textEdit
 
 private:
     QString fileName;

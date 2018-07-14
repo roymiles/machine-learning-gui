@@ -7,7 +7,6 @@
 #include <tuple>
 #include "../qcplinearcolormap.h"
 #include "../Utility/utilities.h"
-#include "icomponent.h"
 
 namespace je { namespace component {
 
@@ -18,7 +17,7 @@ using namespace boost::numeric::ublas;
  * It can take Boost::Matrix data and plot them on a QCustomPlot instance
  */
 template<typename T>
-class Plot : public IComponent
+class Plot
 {
 public:
     /*
@@ -26,15 +25,10 @@ public:
      * done using this object. See QCustomPlot documentation online
      */
     Plot() = delete;
-    Plot(QCustomPlot *customPlot) : IComponent(C_PLOT)
+    Plot(QCustomPlot *customPlot)
     {
         this->customPlot = customPlot;
         this->count      = 0;
-    }
-
-    static utility::component_types componentType()
-    {
-        return C_PLOT;
     }
 
     /*
