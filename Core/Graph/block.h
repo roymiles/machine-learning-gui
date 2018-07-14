@@ -66,11 +66,17 @@ public:
     {
         if(!utility::is_same<in_type, void>::value && !utility::is_same<out_type, void>::value) {
             // Cast the input argument and call the users function
-            out_type out = run(boost::any_cast<in_type>(in));
+            in_type in_cast = boost::any_cast<in_type>(in);
+            out_type out = run(in_cast);
+
+            // Save input/output
+            prev_in = in_cast;
+            prev_out = out;
+
             boost::any retval = out;
             return retval;
         } else {
-            qFatal("Invalid template parameters in run_v2()");
+            qFatal("Invalid template parameters in run_v()");
             return nullptr;
         }
     }
@@ -91,17 +97,19 @@ public:
     // User may optionally override this function
     virtual void init() override {}
 
-    virtual out_type run() = 0; // Source
+    virtual out_type run(boost::blank in) = 0; // Source
 
     boost::any run_v(boost::any in) override
     {
         if(utility::is_same<in_type, void>::value) {
             // No input, therefore a source
-            out_type out = run();
+            boost::blank b; // Empty input
+            out_type out = run(b);
+            prev_out = out; // Save output
             boost::any retval = out;
             return retval;
         } else {
-            qFatal("Invalid template parameters in run_v2()");
+            qFatal("Invalid template parameters in run_v()");
             return nullptr;
         }
     }
@@ -122,17 +130,20 @@ public:
     // User may optionally override this function
     virtual void init() override {}
 
-    virtual void run(in_type in) = 0; // Source
+    virtual boost::blank run(in_type in) = 0; // Source
 
     boost::any run_v(boost::any in) override
     {
         if(utility::is_same<out_type, void>::value) {
             // No output, therefore a sink
-            run(boost::any_cast<in_type>(in));
+            in_type in_cast = boost::any_cast<in_type>(in);
+            prev_in = in_cast; // Save input
+            run(in_cast);
         } else {
-            qFatal("Invalid template parameters in run_v2()");
-            return nullptr;
+            qFatal("Invalid template parameters in run_v()");
         }
+
+        return nullptr; // Sinks never return anything
     }
 };
 
@@ -140,10 +151,10 @@ public:
 // Some common block types
 
 template <typename T>
-using Sink = Block<sink_t, T, void, editable_t>; // An input but no output (void_t)
+using Sink = Block<sink_t, T, boost::blank, editable_t>; // An input but no output (void_t)
 
 template <typename T>
-using Source = Block<source_t, void, T, editable_t>; // An output but no input
+using Source = Block<source_t, boost::blank, T, editable_t>; // An output but no input
 
 template<typename T>
 using Block1 = Block<block_t, T, T, editable_t>;
@@ -151,7 +162,7 @@ using Block1 = Block<block_t, T, T, editable_t>;
 template<typename T>
 using GraphBlock = Block<block_t, T, T, graph_t>;
 
-using Blank = Block<blank_t, void, void, editable_t>; // init will still be called for this type but run() won't be
+using Blank = Block<blank_t, boost::blank, boost::blank, editable_t>; // init will still be called for this type but run() won't be
 
 // For testing...
 typedef Block<block_t, int, double, editable_t> test_t;

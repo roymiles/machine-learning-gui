@@ -16,21 +16,14 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <boost/variant.hpp>
-#include <boost/any.hpp>
 
 namespace je { namespace utility {
 
 using namespace boost::numeric::ublas;
 
-// N must be evaluated at compile time, so can use to force computation at compile time
-// Usage: force_compute_at_compile_time<func()>();
-template <int N> constexpr int force_compute_at_compile_time();
-
 // All the data types that are supported
-using data_t = boost::variant<int, double, boost::blank>;
+using data_type = boost::variant<int, double, void>;
 
-// A calculation function that operates on the known data types
-//template<data_t T> // TODO
 template<typename T>
 using calc_t = std::function<matrix<T>(matrix<T> const&)>;
 
@@ -38,18 +31,18 @@ using calc_t = std::function<matrix<T>(matrix<T> const&)>;
  * All the supported template parameter types
  * This is used to populate the dropdown list in addblockdialog
  */
-enum data_type_e
+enum data_types
 {
     T_INT     = 0,
     T_DOUBLE  = 1,
-    T_BLANK   = 2, // For source/sinks
+    T_VOID    = 2, // For source/sinks (underscore to avoid naming collision with void)
     T_MAX     = 3
 };
 
 /*
  *
  */
-enum component_type_e
+enum component_types
 {
     C_REGRESSION   = 0,
     C_DATA_MANAGER = 1,
@@ -81,7 +74,7 @@ template<typename T>
 struct type_info
 {
     static QColor colour() { return Qt::gray; } // Default type colour
-    static const data_type_e enumvalue = T_INT;
+    static const data_types enumvalue = T_INT;
 };
 
 // Class specializations
@@ -89,50 +82,14 @@ template<>
 struct type_info<int>
 {
     static QColor colour() { return Qt::red; }
-    static const data_type_e enumvalue = T_INT;
+    static const data_types enumvalue = T_INT;
 };
 
 template<>
 struct type_info<double>
 {
     static QColor colour() { return Qt::green; }
-    static const data_type_e enumvalue = T_DOUBLE;
-};
-
-template<>
-struct type_info<boost::blank>
-{
-    static QColor colour() { return Qt::transparent; }
-    static const data_type_e enumvalue = T_BLANK;
-};
-
-/*
- * Convert data_type_e enum to the appropriate intrinsic type using a typedef
- */
-template<data_type_e D>
-struct enum2datatype
-{
-    // Default
-    typedef void inner_type;
-};
-
-// Class specializations
-template<>
-struct enum2datatype<T_INT>
-{
-    typedef int inner_type;
-};
-
-template<>
-struct enum2datatype<T_DOUBLE>
-{
-    typedef double inner_type;
-};
-
-template<>
-struct enum2datatype<T_BLANK>
-{
-    typedef boost::blank inner_type;
+    static const data_types enumvalue = T_DOUBLE;
 };
 
 /*
@@ -168,7 +125,7 @@ inline bool invertMatrix (const matrix<T>& input, matrix<T>& inverse)
    pmatrix pm(A.size1());
 
    // Perform LU-factorization
-   auto res = lu_factorize(A,pm);
+   int res = lu_factorize(A,pm);
        if( res != 0 ) return false;
 
    // Create identity matrix of "inverse"

@@ -34,8 +34,8 @@ void AddBlockDialog::on_AddBlockConfirmButton_accepted()
     if(this->graphWidget != nullptr)
     {      
         // These are mapped to the block_type and data_type enums respectively
-        block_types selectedBlockType = (block_types)ui->blockTypeComboBox->currentIndex();
-        data_types selectedDataType  = (data_types)ui->dataTypeComboBox->currentIndex();
+        auto selectedBlockType = (block_type_e)ui->blockTypeComboBox->currentIndex();
+        auto selectedDataType  = (data_type_e)ui->dataTypeComboBox->currentIndex();
 
         const QString blockName = ui->BlockNameLineEdit->text();
         if(!utility::isValidBlockName(blockName))

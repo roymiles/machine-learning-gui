@@ -39,11 +39,16 @@ public:
         block_type_impl<block_type>::draw<in_type, out_type>(painter, this);
     }
 
-    click_types mousePressEvent(QPoint &point) override
+    block_part_e mousePressEvent(QPoint &point) override
     {
         // The mouse press event check searches through all its ports and
         // therefore is block type dependant
         return block_type_impl<block_type>::mousePressEvent(point, this);
+    }
+
+    void mouseHoverEvent(block_part_e part, QPoint &point) override
+    {
+        block_type_impl<block_type>::mouseHoverEvent<in_type, out_type>(part, point, prev_in, prev_out);
     }
 
     QWidget* tabWidget() override
@@ -52,12 +57,12 @@ public:
         return tab_type_impl<tab_type, in_type, out_type>::tabWidget(this);
     }
 
-    const utility::data_types getInType() override
+    const utility::data_type_e getInType() override
     {
         return utility::type_info<in_type>::enumvalue;
     }
 
-    const utility::data_types getOutType() override
+    const utility::data_type_e getOutType() override
     {
         return utility::type_info<out_type>::enumvalue;
     }

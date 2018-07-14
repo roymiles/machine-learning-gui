@@ -9,7 +9,7 @@ template<typename T>
 class source_run_impl
 {
 public:
-    static T run(T in)
+    static T run(boost::blank in)
     {
         qFatal("The non-specialised source_run_impl functions should not be used.");
         return static_cast<T>(0);
@@ -20,7 +20,7 @@ template<>
 class source_run_impl<int>
 {
 public:
-    static int run()
+    static int run(boost::blank in)
     {
         qDebug() << "Input = " << 5;
         return 5;
@@ -31,7 +31,7 @@ template<>
 class source_run_impl<double>
 {
 public:
-    static int run()
+    static int run(boost::blank in)
     {
         qDebug() << "Input = " << 5.0;
         return 5.0;
@@ -50,9 +50,9 @@ public:
         //qDebug() << "Initializing MyCustomSource";
     }
 
-    T run() override
+    T run(boost::blank in) override
     {
-        return source_run_impl<T>::run();
+        return source_run_impl<T>::run(in);
     }
 };
 

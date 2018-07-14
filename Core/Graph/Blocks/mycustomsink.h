@@ -9,10 +9,13 @@ template<typename T>
 class sink_run_impl
 {
 public:
-    static T run(T in)
+    static boost::blank run(T in)
     {
         qFatal("The non-specialised sink_run_impl functions should not be used.");
-        return static_cast<T>(0);
+
+        // Won't actually ever make it here, this just keeps compiler happy
+        boost::blank b;
+        return b;
     }
 };
 
@@ -20,9 +23,12 @@ template<>
 class sink_run_impl<int>
 {
 public:
-    static void run(int in)
+    static boost::blank run(int in)
     {
         qDebug() << "Output = " << in;
+
+        boost::blank b;
+        return b;
     }
 };
 
@@ -30,9 +36,12 @@ template<>
 class sink_run_impl<double>
 {
 public:
-    static void run(double in)
+    static boost::blank run(double in)
     {
         qDebug() << "Output = " << in;
+
+        boost::blank b;
+        return b;
     }
 };
 
@@ -49,9 +58,9 @@ public:
         //qDebug() << "Initializing MyCustomSink";
     }
 
-    void run(T in) override
+    boost::blank run(T in) override
     {
-        sink_run_impl<T>::run(in);
+        return sink_run_impl<T>::run(in);
     }
 };
 

@@ -10,11 +10,12 @@
 
 namespace je { namespace graph {
 
-// Checks where a click takes place
-enum click_types
+// These are all the parts that can make up a block
+// The enum is used to identify where a click has taken place, where the mouse is hovering etc
+enum block_part_e
 {
-    inPort,
-    outPort,
+    in_port,
+    out_port,
     block,
     none
 };
@@ -26,6 +27,7 @@ public:
     IBlock(bool has_input, bool has_output);
     ~IBlock();
 
+    // -- Common getters and setters ---
     void setX(int x);
     void setY(int y);
     void setPos(QPoint &point);
@@ -40,9 +42,19 @@ public:
     void setTabIndex(int tabIndex);
     int getTabIndex() const;
 
-    // Virtual methods
+    // --- Virtual methods ---
+
+    // Draw the this block and all its ports
     virtual void draw(QPainter *painter) = 0;
-    virtual click_types mousePressEvent(QPoint &point) = 0;
+
+    // Name implies it handles the event, but it does not. It just returns the part the mouse is on.
+    virtual block_part_e mousePressEvent(QPoint &point) = 0;
+
+    // Mouse is hovering over the block or its ports.
+    // Can handle this by showing dialog, showing previous data values if hovering over port etc
+    virtual void mouseHoverEvent(block_part_e part, QPoint &point) = 0;
+
+    // When double clicking on a block, will open this QWidget in a new tab
     virtual QWidget* tabWidget() = 0;
 
     /*
@@ -51,8 +63,8 @@ public:
      * (based on matching data types)
      * NOTE: Must return a const type as the value is evaluated at compile time
      */
-    virtual const utility::data_types getInType() = 0;
-    virtual const utility::data_types getOutType() = 0;
+    virtual const utility::data_type_e getInType() = 0;
+    virtual const utility::data_type_e getOutType() = 0;
 
     /*
      * This is called before the flow graph is run
@@ -63,6 +75,7 @@ public:
     /*
      * The templated Block class will cast the boost::any to the appropriate types
      * and then call the user made run functions
+     * NOTE: We kow all the types at compile time (as in data_type_e) and so should be using Boost.Variant (todo)
      */
     virtual boost::any run_v(boost::any in) = 0;
 
@@ -99,7 +112,7 @@ public:
     template<typename T>
     std::shared_ptr<T> getComponent()
     {
-        // Go through all the components and check if the component types are equal
+        // Go through all the components and find the matching type
         for(auto &c : components)
         {
             if(c.type() == typeid(std::shared_ptr<T>))
@@ -108,6 +121,10 @@ public:
 
         return nullptr;
     }
+
+    // Store the last input and output values (to show when hover over port)
+    utility::data_t prev_in;
+    utility::data_t prev_out;
 
 private:
     int x, y, w, h;

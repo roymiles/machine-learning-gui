@@ -22,6 +22,9 @@ IBlock::IBlock(bool has_input, bool has_output) : has_input(has_input), has_outp
     y = 50;
     w = 100;
     h = 100;
+
+    prev_in = 0;
+    prev_out = 0;
 }
 
 IBlock::~IBlock()

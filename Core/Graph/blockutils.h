@@ -17,7 +17,7 @@
  * Forward declare all the blocks.
  * Don't need to unnecessarily include them as we are not calling
  * any member function of the classes
- * Note: these classes are outside the je namespace
+ * Note: these classes are outside the je namespace for user convenience
  */
 template<typename T>
 class LinearRegressionBlock;
@@ -59,10 +59,10 @@ public:
         qFatal("The non-specialised block_type_impl functions should not be used.");
     }
 
-    static click_types mousePressEvent(QPoint &point, IBlock* block)
+    static block_part_e mousePressEvent(QPoint &point, IBlock* block)
     {
         qFatal("The non-specialised block_type_impl functions should not be used.");
-        return click_types::none;
+        return block_part_e::none;
     }
 };
 
@@ -91,16 +91,30 @@ public:
         block->getPorts().second->draw(painter, utility::type_info<out_type>::colour());
     }
 
-    static click_types mousePressEvent(QPoint &point, IBlock* block)
+    static block_part_e mousePressEvent(QPoint &point, IBlock* block)
     {
         if(utility::insideRect(block, point))
-            return click_types::block;
+            return block_part_e::block;
         else if(utility::insideRect(block->getPorts().first, point))
-            return click_types::inPort;
+            return block_part_e::in_port;
         else if(utility::insideRect(block->getPorts().second, point))
-            return click_types::outPort;
+            return block_part_e::out_port;
         else
-            return click_types::none;
+            return block_part_e::none;
+    }
+
+    template<typename in_type,
+             typename out_type>
+    static void mouseHoverEvent(block_part_e part, QPoint &point, utility::data_t prev_in, utility::data_t prev_out)
+    {
+        QString tooltip;
+
+        if(part == block_part_e::in_port)
+            tooltip = QString::number(boost::get<in_type>(prev_in));
+        else if(part == block_part_e::out_port)
+            tooltip = QString::number(boost::get<out_type>(prev_out));
+
+        QToolTip::showText(point, tooltip);
     }
 };
 
@@ -127,15 +141,28 @@ public:
         block->getPorts().second->draw(painter, utility::type_info<out_type>::colour());
     }
 
-    static click_types mousePressEvent(QPoint &point, IBlock* block)
+    static block_part_e mousePressEvent(QPoint &point, IBlock* block)
     {
         if(utility::insideRect(block, point))
-            return click_types::block;
+            return block_part_e::block;
         else if(utility::insideRect(block->getPorts().second, point))
-            return click_types::outPort;
+            return block_part_e::out_port;
         else
-            return click_types::none;
+            return block_part_e::none;
     }
+
+    template<typename in_type,
+             typename out_type>
+    static void mouseHoverEvent(block_part_e part, QPoint &point, utility::data_t prev_in, utility::data_t prev_out)
+    {
+        QString tooltip;
+
+        if(part == block_part_e::out_port)
+            tooltip = QString::number(boost::get<out_type>(prev_out));
+
+        QToolTip::showText(point, tooltip);
+    }
+
 };
 
 // ------- SINK -------
@@ -161,14 +188,26 @@ public:
         block->getPorts().first->draw(painter, utility::type_info<in_type>::colour());
     }
 
-    static click_types mousePressEvent(QPoint &point, IBlock* block)
+    static block_part_e mousePressEvent(QPoint &point, IBlock* block)
     {
         if(utility::insideRect(block, point))
-            return click_types::block;
+            return block_part_e::block;
         else if(utility::insideRect(block->getPorts().first, point))
-            return click_types::inPort;
+            return block_part_e::in_port;
         else
-            return click_types::none;
+            return block_part_e::none;
+    }
+
+    template<typename in_type,
+             typename out_type>
+    static void mouseHoverEvent(block_part_e part, QPoint &point, utility::data_t prev_in, utility::data_t prev_out)
+    {
+        QString tooltip;
+
+        if(part == block_part_e::in_port)
+            tooltip = QString::number(boost::get<in_type>(prev_in));
+
+        QToolTip::showText(point, tooltip);
     }
 };
 
@@ -193,12 +232,19 @@ public:
         painter->drawText(rectangle, Qt::AlignBottom, QString::fromStdString(out.str()));
     }
 
-    static click_types mousePressEvent(QPoint &point, IBlock* block)
+    static block_part_e mousePressEvent(QPoint &point, IBlock* block)
     {
         if(utility::insideRect(block, point))
-            return click_types::block;
+            return block_part_e::block;
         else
-            return click_types::none;
+            return block_part_e::none;
+    }
+
+    template<typename in_type,
+             typename out_type>
+    static void mouseHoverEvent(block_part_e part, QPoint &point, utility::data_t prev_in, utility::data_t prev_out)
+    {
+        // No ports so nothing to do
     }
 };
 
@@ -265,39 +311,10 @@ public:
 };
 
 /*
- * Convert data_types enum to the appropriate intrinsic type using a typedef
- */
-template<utility::data_types D>
-struct enum2datatype
-{
-    // Default
-    typedef int inner_type;
-};
-
-// Class specializations
-template<>
-struct enum2datatype<utility::T_INT>
-{
-    typedef int inner_type;
-};
-
-template<>
-struct enum2datatype<utility::T_DOUBLE>
-{
-    typedef double inner_type;
-};
-
-template<>
-struct enum2datatype<utility::T_VOID>
-{
-    typedef void inner_type;
-};
-
-/*
  * This enum is used to populate the addblockdialog dropdown list of block types
  * and is then used in enum2blocktype to map the dropdown values to typedefs of the block classes
  */
-enum block_types
+enum block_type_e
 {
     B_MYCUSTOMBLOCK               = 0,
     B_MYCUSTOMSOURCE              = 1,
@@ -310,45 +327,46 @@ enum block_types
  * The following template structs convert the block_type enum to a typedef required
  * for instatiating the block type
  */
-template<block_types B, utility::data_types D>
+template<block_type_e B, utility::data_type_e D>
 struct enum2blocktype
 {
     // Default
-    typedef typename enum2datatype<D>::inner_type T;
+    typedef typename utility::enum2datatype<D>::inner_type T;
     typedef MyCustomBlock<T> inner_type;
 };
 
 // Class specializations
-template<utility::data_types D>
+template<utility::data_type_e D>
 struct enum2blocktype<B_MYCUSTOMBLOCK, D>
 {
-    typedef typename enum2datatype<D>::inner_type T;
+    typedef typename utility::enum2datatype<D>::inner_type T;
     typedef MyCustomBlock<T> inner_type;
 };
 
-template<utility::data_types D>
+template<utility::data_type_e D>
 struct enum2blocktype<B_MYCUSTOMSOURCE, D>
 {
-    typedef typename enum2datatype<D>::inner_type T;
+    typedef typename utility::enum2datatype<D>::inner_type T;
     typedef MyCustomSource<T> inner_type;
 };
 
-template<utility::data_types D>
+template<utility::data_type_e D>
 struct enum2blocktype<B_MYCUSTOMSINK, D>
 {
-    typedef typename enum2datatype<D>::inner_type T;
+    typedef typename utility::enum2datatype<D>::inner_type T;
     typedef MyCustomSink<T> inner_type;
 };
 
-template<utility::data_types D>
+template<utility::data_type_e D>
 struct enum2blocktype<B_LINEARREGRESSIONBLOCK, D>
 {
-    typedef typename enum2datatype<D>::inner_type T;
+    typedef typename utility::enum2datatype<D>::inner_type T;
     typedef LinearRegressionBlock<T> inner_type;
 };
 
 // Factory function for generating new blocks. This must include all the possible blocks
-extern std::map<block_types, std::function<std::shared_ptr<IBlock>()>> block_factory;
+// TODO: MAKE THIS CONST WITHOUT COMPILER COMPLAINING PLEASE
+extern std::map<block_type_e, std::function<std::shared_ptr<IBlock>()>> block_factory;
 
 } } // graph, je
 

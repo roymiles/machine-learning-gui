@@ -108,20 +108,20 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
     {
 
         bool hit = true; // Once a click event has been triggered (on either a block or a port), exit out of the loop
-        click_types c = graph[vertex]->mousePressEvent(e->pos());
+        block_part_e c = graph[vertex]->mousePressEvent(e->pos());
         switch(c)
         {
-            case click_types::block:
+            case block_part_e::block:
                 movingVertex = vertex;
                 break;
 
             // The following click events have similar functionality, and so are grouped together
             // Can connect either way round. e.g. in to and out, or an out to an in
-            case click_types::inPort:
-            case click_types::outPort:
+            case block_part_e::in_port:
+            case block_part_e::out_port:
 
                 // Set the start and end port depending on the click event
-                if(c == click_types::inPort) {
+                if(c == block_part_e::in_port) {
                     drawingEdge.second = vertex;
                 }else{
                     drawingEdge.first = vertex;
@@ -139,7 +139,7 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                     //setMouseTracking(false);
 
                     if(drawingEdge.first != G::null_vertex() && drawingEdge.second != G::null_vertex())
-                    { // Only create the edge if we have both the input and outport ports
+                    { // Only create the edge if we have both the input and out_port ports
 
                         // Verify the data types of the input and output ports
                         if(graph[drawingEdge.first]->getOutType() != graph[drawingEdge.second]->getInType())
@@ -168,7 +168,7 @@ void GraphWidget::mousePressEvent(QMouseEvent* e)
                 }
                 break;
 
-            case click_types::none:
+            case block_part_e::none:
                 movingVertex = G::null_vertex();
                 hit = false; // No click events triggered, go onto the next block
                 break;
@@ -212,14 +212,9 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* e)
         // Check if hovering over a port
         for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
         {
-            click_types c = graph[vertex]->mousePressEvent(e->pos());
-            switch(c)
-            {
-            case click_types::inPort:
-            case click_types::outPort:
-                //qDebug() << "Hovering over a port";
-                break;
-            }
+            // NOTE: cannot draw to screen outside draw() function
+            block_part_e p = graph[vertex]->mousePressEvent(e->pos());
+            graph[vertex]->mouseHoverEvent(p, e->pos());
         }
     }
 }
@@ -235,7 +230,7 @@ void GraphWidget::mouseReleaseEvent(QMouseEvent* e)
     for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
         // If release mouse on the block or any of its ports, keep as active/clicked vertex
-        if(graph[vertex]->mousePressEvent(e->pos()) != click_types::none)
+        if(graph[vertex]->mousePressEvent(e->pos()) != block_part_e::none)
         {
            activeVertex = vertex;
            this->update();
@@ -260,7 +255,7 @@ void GraphWidget::mouseDoubleClickEvent(QMouseEvent* e)
 {
     for(auto vertex : boost::make_iterator_range(boost::vertices(graph)))
     {
-        if(graph[vertex]->mousePressEvent(e->pos()) == click_types::block)
+        if(graph[vertex]->mousePressEvent(e->pos()) == block_part_e::block)
         {
             // Check if the source is not already open
             const int tabIndex = graph[vertex]->getTabIndex();

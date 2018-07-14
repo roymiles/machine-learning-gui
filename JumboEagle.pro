@@ -41,7 +41,8 @@ SOURCES += \
     Dependencies/darkstyle/DarkStyle.cpp \
     Core/Graph/blockutils.cpp \
     Core/Components/IO/datamanager.cpp \
-    Core/Components/IO/texteditor.cpp
+    Core/Components/IO/texteditor.cpp \
+    Core/Components/Maths/Linear/ridgeregression.cpp
 
 
 HEADERS += \
@@ -71,7 +72,8 @@ HEADERS += \
     Core/Components/IO/datamanager.h \
     Core/Components/Maths/Linear/regression.h \
     Core/Components/plot.h \
-    Core/Components/IO/texteditor.h
+    Core/Components/IO/texteditor.h \
+    Core/Components/Maths/Linear/ridgeregression.h
 
 
 FORMS += \
