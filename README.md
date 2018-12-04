@@ -1,4 +1,6 @@
-# Jumbo Eagle
+# Visual Machine Learning
+
+This project acted as an introduction to Qt and machine learning. The development has since been put on hold due to other commitments.
 
 The aim of this project is build a graphical (flow-graph like) framework for ML.
 As the block data types are generic, graphs can be made to manipulate images, audio, matrices etc.
