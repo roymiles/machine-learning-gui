@@ -1,6 +1,8 @@
 # Visual Machine Learning
 
-This project acted as an introduction to Qt and machine learning. The development has since been put on hold due to other commitments.
+This project acted as an introduction to Qt and machine learning. I learnt a lot about templates, GUIs, and machine learning fundementals along with their practical implementations. I put a focus on rigurously understanding the modern C++ (11/14/17) specification and the mathematics of ML. This project was developed alongside my reading of "The Elements of Statistical Machine Learning". 
+
+Unfortunately, the development of this project has since been put on hold due to other commitments.
 
 The aim of this project is build a graphical (flow-graph like) framework for ML.
 As the block data types are generic, graphs can be made to manipulate images, audio, matrices etc.
